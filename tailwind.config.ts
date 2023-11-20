@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     colors: {
       white: "#FFFFFF",
+      lightgray: "#FAFAFA",
       gray: "#737373",
       blue: {
         light: "#00509D",
