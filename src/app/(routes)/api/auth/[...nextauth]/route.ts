@@ -2,9 +2,9 @@ import connectDb from "@/app/_lib/connect-db";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/app/_models/User";
 import { compare } from "bcryptjs";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 
-export const authOptions: any = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",
