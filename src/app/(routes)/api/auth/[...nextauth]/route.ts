@@ -32,7 +32,7 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  secret: process.env.JWT_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
