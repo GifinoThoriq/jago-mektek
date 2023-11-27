@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "./_components/Navbar";
+import Footer from "./_components/Footer";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/app/_lib/SessionProvider";
 
@@ -25,6 +26,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <Navbar />
           {children}
+          <Footer />
         </SessionProvider>
       </body>
     </html>

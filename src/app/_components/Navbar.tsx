@@ -1,9 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Button } from "../_ui/Button";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
+
+  const [pathname, setPathname] = useState<string>(usePathname());
+
   return (
-    <nav className="bg-lightgray">
+    <nav
+      className={`bg-lightgray ${
+        pathname === "/login" && "/register" ? "hidden" : "block"
+      }`}
+    >
       <div className="max-w-7xl mx-auto py-4 flex items-center">
         <div className="flex-none">
           <span className="text-blue-dark text-xl font-bold">JagoMektek</span>
@@ -22,8 +34,17 @@ export default function Navbar() {
           </ul>
         </div>
         <div className="flex-none flex gap-3">
-          <Button type="outline">Login</Button>
-          <Button type="solid">Daftar</Button>
+          <Button
+            style="outline"
+            onClick={() => {
+              window.location.href = "/login";
+            }}
+          >
+            Login
+          </Button>
+          <Link href={"/register"}>
+            <Button style="solid">Daftar</Button>
+          </Link>
         </div>
       </div>
     </nav>
