@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <nav
       className={`bg-lightgray ${
-        pathname === "/login" && "/register" ? "hidden" : "block"
+        pathname === "/login" || pathname === "/register" ? "hidden" : "block"
       }`}
     >
       <div className="max-w-7xl mx-auto py-4 flex items-center">
@@ -42,9 +42,14 @@ export default function Navbar() {
           >
             Login
           </Button>
-          <Link href={"/register"}>
-            <Button style="solid">Daftar</Button>
-          </Link>
+          <Button
+            style="solid"
+            onClick={() => {
+              window.location.href = "/register";
+            }}
+          >
+            Daftar
+          </Button>
         </div>
       </div>
     </nav>

@@ -7,7 +7,9 @@ export default function Footer() {
   const [pathname, setPathname] = useState<string>(usePathname());
   return (
     <footer
-      className={`${pathname === "/login" && "/register" ? "hidden" : ""}`}
+      className={`${
+        pathname === "/login" || pathname === "/register" ? "hidden" : ""
+      }`}
     >
       <div className="max-w-7xl mx-auto flex flex-row  py-14">
         <div className="basis-1/3">
