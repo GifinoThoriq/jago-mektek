@@ -1,11 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { Button } from "../_ui/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+
+interface NavbarComponent {
+  pathname: string;
+}
 
 function MobileNavbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -63,17 +67,32 @@ function MobileNavbar() {
   );
 }
 
-function DesktopNavbar() {
+const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
   return (
     <div className="w-full flex flex-row ml-8">
       <ul className="flex items-center gap-3.5">
-        <li className="text-sm text-gray font-bold">
+        <li
+          className={`text-sm ${
+            pathname === "/materi-belajar" ||
+            pathname === "/materi-belajar/detail"
+              ? "text-blue-dark"
+              : "text-gray "
+          } font-bold`}
+        >
           <Link href={"/materi-belajar"}>Materi Belajar</Link>
         </li>
-        <li className="text-sm text-gray font-bold">
+        <li
+          className={`text-sm ${
+            pathname === "/sumber-belajar" ? "text-blue-dark" : "text-gray "
+          } font-bold`}
+        >
           <Link href={"/sumber-belajar"}>Sumber Belajar</Link>
         </li>
-        <li className="text-sm text-gray font-bold">
+        <li
+          className={`text-sm ${
+            pathname === "/tanya-jawab" ? "text-blue-dark" : "text-gray "
+          } font-bold`}
+        >
           <Link href={"/tanya-jawab"}>Tanya Jawab</Link>
         </li>
       </ul>
@@ -97,7 +116,7 @@ function DesktopNavbar() {
       </div>
     </div>
   );
-}
+};
 
 export default function Navbar() {
   const router = useRouter();
@@ -129,7 +148,11 @@ export default function Navbar() {
         </div>
 
         {windowWidth !== undefined &&
-          (windowWidth > 800 ? <DesktopNavbar /> : <MobileNavbar />)}
+          (windowWidth > 800 ? (
+            <DesktopNavbar pathname={pathname} />
+          ) : (
+            <MobileNavbar />
+          ))}
       </div>
     </nav>
   );

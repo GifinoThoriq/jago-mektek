@@ -5,6 +5,7 @@ import Navbar from "./_components/Navbar";
 import Footer from "./_components/Footer";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/app/_lib/SessionProvider";
+import { headers } from "next/headers";
 
 const monstserrat = Montserrat({ weight: ["400", "700"], subsets: ["latin"] });
 
@@ -19,6 +20,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession();
+
+  const headersList = headers();
+  const referer = headersList.get("referer");
+
+  console.log(referer);
 
   return (
     <html lang="en">
