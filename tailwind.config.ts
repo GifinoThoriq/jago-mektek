@@ -24,6 +24,10 @@ const config: Config = {
       "3xl": "2.5rem",
       "4xl": "3.75rem",
     },
+    screens: {
+      sm: "576px",
+      md: "960px",
+    },
     extend: {},
   },
   plugins: [],

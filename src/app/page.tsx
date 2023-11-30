@@ -13,13 +13,13 @@ export default function Home() {
   return (
     <>
       <section id="hero" className="bg-lightgray">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 pt-16">
-            <div>
-              <h1 className="text-4xl text-blue-dark font-bold mb-8 leading-normal">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 pt-16">
+            <div className="text-center md:text-start ">
+              <h1 className="text-3xl md:text-4xl text-blue-dark font-bold mb-2 md:mb-8 leading-tight">
                 A Great Place to Receive Care
               </h1>
-              <h3 className="text-xl text-gray mb-8">
+              <h3 className="text-base md:text-xl text-gray mb-2 md:mb-8">
                 Medical Recover is most focused in helping you discover your
                 most beauiful smile
               </h3>
@@ -38,7 +38,7 @@ export default function Home() {
       </section>
       <section id="about">
         <div className="max-w-7xl mx-auto  my-32">
-          <div className="grid grid-cols-2 pt-16">
+          <div className="grid grid-cols-2 pt-16 px-8">
             <div>
               <hr
                 className="mb-8 border-t-8 border-blue-light"
@@ -65,8 +65,8 @@ export default function Home() {
         </div>
       </section>
       <section id="materi-belajar" className="bg-blue-light">
-        <div className="max-w-7xl mx-auto py-16">
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto py-16 px-8">
+          <div className="mb-8 text-center md:text-start">
             <span className="text-sm text-white font-bold">Kelas 10</span>
             <h2 className="text-3xl text-white font-bold">Materi Belajar</h2>
             <span className="text-base text-white" style={{ maxWidth: 320 }}>
@@ -74,7 +74,7 @@ export default function Home() {
               realms of Classical physics: Newtonian mechanics{" "}
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
             <Card />
             <Card />
             <Card />
