@@ -17,11 +17,11 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 pt-16">
             <div className="text-center md:text-start ">
               <h1 className="text-3xl md:text-4xl text-blue-dark font-bold mb-2 md:mb-8 leading-tight">
-                A Great Place to Receive Care
+                Siap Belajar Mekanika Teknik?
               </h1>
               <h3 className="text-base md:text-xl text-gray mb-2 md:mb-8">
-                Medical Recover is most focused in helping you discover your
-                most beauiful smile
+                Mari kita jelajahi dunia mekanika teknik bersama. Ayo, mari kita
+                berpetualang dalam dunia mekanika teknik yang menyenangkan!
               </h3>
               <Button style="solid">Mulai dari sini</Button>
             </div>
@@ -45,11 +45,19 @@ export default function Home() {
                 style={{ maxWidth: "30%" }}
               />
               <h2 className="text-3xl text-blue-dark font-bold mb-8 ">
-                About Jago Mektek
+                Tentang Jago MekTek
               </h2>
               <h3 className="text-xl text-gray mb-8">
-                Medical Recover is most focused in helping you discover your
-                most beauiful smile
+                Selamat datang di website yang menjadi sumber belajar bagi siswa
+                Sekolah Menengah Kejuruan untuk mata pelajaran Mekanika Teknik.
+                Website kami menyajikan materi pembelajaran yang komprehensif,
+                mulai dari dasar-dasar mekanika hingga konsep-konsep yang lebih
+                tinggi.
+              </h3>
+              <h3 className="text-xl text-gray mb-8">
+                Materi pembelajaran disusun secara sistematis untuk memastikan
+                pemahaman yang baik, dengan penjelasan yang jelas dan contoh
+                kasus nyata yang relevan dengan dunia industri.
               </h3>
             </div>
             <div>
@@ -67,11 +75,11 @@ export default function Home() {
       <section id="materi-belajar" className="bg-blue-light">
         <div className="max-w-7xl mx-auto py-16 px-8">
           <div className="mb-8 text-center md:text-start">
-            <span className="text-sm text-white font-bold">Kelas 10</span>
-            <h2 className="text-3xl text-white font-bold">Materi Belajar</h2>
+            <h2 className="text-3xl text-white font-bold">
+              Materi Belajar yang #BikinCerdas beneran!
+            </h2>
             <span className="text-base text-white" style={{ maxWidth: 320 }}>
-              Problems trying to resolve the conflict between the two major
-              realms of Classical physics: Newtonian mechanics{" "}
+              Pilihlah menu belajar sesuai dengan keinginan kalian!{" "}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">

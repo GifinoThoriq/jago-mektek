@@ -39,7 +39,7 @@ export default function Footer() {
                 height={20}
                 alt={"phone icon"}
               />
-              +480 555-0103
+              (+62) 8569-5740-104
             </li>
             <li className="flex gap-2 text-base text-gray font-bold mb-2 justify-center md:justify-start w-[200px] md:w-auto">
               <Image
@@ -48,7 +48,8 @@ export default function Footer() {
                 height={20}
                 alt={"phone icon"}
               />
-              4517 Washington Ave. Manchester, Kentucky 39495
+              Jl. Cakrawala No.5, Sumbersari, Kec. Lowokwaru, Kota Malang, Jawa
+              Timur 65145
             </li>
             <li className="flex gap-2 text-base text-gray font-bold mb-2 justify-center md:justify-start">
               <Image
@@ -57,13 +58,13 @@ export default function Footer() {
                 height={20}
                 alt={"phone icon"}
               />
-              wilga@example.com
+              wilgaclaryan@gmail.com
             </li>
           </ul>
         </div>
         <div className="justify-self-center md:justify-self-start mb-4 md:mb-0">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63453.2161579522!2d106.6901330582031!3d-6.286587699999992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f18360960497%3A0x368faab0d4ca9f19!2sAyam%20Gepuk%20Pak%20Gembus!5e0!3m2!1sen!2sid!4v1700736040664!5m2!1sen!2sid"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.3712557114663!2d112.61266287744077!3d-7.960530871602127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e788281bdd08839%3A0xc915f268bffa831f!2sUniversitas%20Negeri%20Malang!5e0!3m2!1sen!2sid!4v1701851746574!5m2!1sen!2sid"
             loading="lazy"
             className="border-4 rounded border-blue-light ml-auto"
           ></iframe>
