@@ -4,11 +4,42 @@ import { useSession } from "next-auth/react";
 import { Button } from "./_ui/Button";
 import { Card } from "./_ui/Card";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+interface Materis {
+  _id: string;
+  title: string;
+  description: string;
+  image: string;
+}
 
 export default function Home() {
   const { status } = useSession();
 
   console.log(status);
+
+  const [materis, setMateris] = useState<Materis[]>([]);
+
+  console.log(materis);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/materi");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch documents");
+        }
+
+        const data = await response.json();
+        setMateris(data.materis);
+      } catch (error: any) {
+        console.error("Error fetching documents:", error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -82,11 +113,18 @@ export default function Home() {
               Pilihlah menu belajar sesuai dengan keinginan kalian!{" "}
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
-            <Card />
-            <Card />
-            <Card />
-          </div>
+          {materis.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+              {materis.map((mat) => (
+                <Card
+                  key={mat._id}
+                  title={mat.title}
+                  description={mat.description}
+                  image={mat.image}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

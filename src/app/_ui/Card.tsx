@@ -1,18 +1,23 @@
 import { FC } from "react";
 import { Button } from "./Button";
+import { CldImage } from "next-cloudinary";
 
 interface CardComponent {
   title?: string;
-  subTitle?: string;
+  description?: string;
   url?: string;
+  image?: string;
 }
 
-export const Card: FC<CardComponent> = ({ title, subTitle, url }) => {
+export const Card: FC<CardComponent> = ({ title, description, url, image }) => {
   return (
     <div className="bg-white" style={{ height: 620 }}>
       <div
-        className="bg-[url('/images/materi-bab1.png')] bg-cover"
-        style={{ height: 320 }}
+        className="bg-cover bg-center"
+        style={{
+          height: 320,
+          backgroundImage: `url(${image})`,
+        }}
       ></div>
       <div
         className="bg-white p-[24px] flex flex-col justify-between"
@@ -20,11 +25,8 @@ export const Card: FC<CardComponent> = ({ title, subTitle, url }) => {
       >
         <div className="flex flex-col">
           <span className="text-sm text-blue-light font-bold">kelas 10</span>
-          <span className="text-base text-blue-dark font-bold">Judul Bab</span>
-          <span className="text-base text-gray">
-            We focus on ergonomics and meeting you where you work. It's only a
-            keystroke away.
-          </span>
+          <span className="text-base text-blue-dark font-bold">{title}</span>
+          <span className="text-base text-gray">{description}</span>
         </div>
         <div>
           <Button style="outline">Pelajari Lanjut</Button>

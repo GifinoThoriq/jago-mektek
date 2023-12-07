@@ -13,7 +13,6 @@ export default function TanyaJawab() {
           rows={4}
           cols={50}
           className="p-2 rounded border-2 border-gray"
-          type="text"
           placeholder="tulis pertanyaanmu"
         />
         <div>
