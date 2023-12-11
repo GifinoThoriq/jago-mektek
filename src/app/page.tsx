@@ -6,20 +6,14 @@ import { Card } from "./_ui/Card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import GetMateri from "./_lib/GetMateri";
-
-interface Materis {
-  _id: string;
-  title: string;
-  description: string;
-  image: string;
-}
+import { MateriClientTypes } from "./_types/ClientTypes";
 
 export default function Home() {
   const { status } = useSession();
 
   console.log(status);
 
-  const materis: Materis[] = GetMateri();
+  const materis: MateriClientTypes[] = GetMateri();
 
   return (
     <>
