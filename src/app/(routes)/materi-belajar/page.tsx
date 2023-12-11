@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/app/_ui/Button";
 import { CardHorizontal } from "@/app/_ui/CardHorizontal";
 export default function materiBelajar() {

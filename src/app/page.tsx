@@ -5,6 +5,7 @@ import { Button } from "./_ui/Button";
 import { Card } from "./_ui/Card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import GetMateri from "./_lib/GetMateri";
 
 interface Materis {
   _id: string;
@@ -18,28 +19,7 @@ export default function Home() {
 
   console.log(status);
 
-  const [materis, setMateris] = useState<Materis[]>([]);
-
-  console.log(materis);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/materi");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch documents");
-        }
-
-        const data = await response.json();
-        setMateris(data.materis);
-      } catch (error: any) {
-        console.error("Error fetching documents:", error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const materis: Materis[] = GetMateri();
 
   return (
     <>
