@@ -30,7 +30,7 @@ export const Button: FC<ButtonComponent> = ({
   if (style === "outline") {
     return (
       <button
-        className={`border border-blue-light px-8 py-3 text-sm text-blue-light font-bold rounded ${className} `}
+        className={`border border-blue-light px-8 py-3 text-sm text-blue-light font-bold rounded ${className} hover:bg-blue-light hover:text-white `}
         onClick={onClick}
       >
         {children}

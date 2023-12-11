@@ -7,7 +7,7 @@ export default function Footer() {
   const [pathname, setPathname] = useState<string>(usePathname());
   return (
     <footer
-      className={` px-4${
+      className={`mt-40 ${
         pathname === "/login" || pathname === "/register" ? "hidden" : ""
       }`}
     >

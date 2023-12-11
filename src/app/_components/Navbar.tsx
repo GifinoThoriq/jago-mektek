@@ -11,6 +11,24 @@ interface NavbarComponent {
   pathname: string;
 }
 
+const nav = [
+  {
+    id: 1,
+    title: "Materi Belajar",
+    pathname: "/materi-belajar",
+  },
+  {
+    id: 2,
+    title: "Sumber Belajar",
+    pathname: "/sumber-belajar",
+  },
+  {
+    id: 3,
+    title: "Tanya Jawab",
+    pathname: "/tanya-jawab",
+  },
+];
+
 function MobileNavbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -34,15 +52,16 @@ function MobileNavbar() {
           onClick={() => setIsOpen(!isOpen)}
         />
         <ul className="flex flex-col pt-12 items-center gap-3.5">
-          <li className="text-sm text-gray font-bold">
-            <Link href={"/materi-belajar"}>Materi Belajar</Link>
-          </li>
-          <li className="text-sm text-gray font-bold">
-            <Link href={"/sumber-belajar"}>Sumber Belajar</Link>
-          </li>
-          <li className="text-sm text-gray font-bold">
-            <Link href={"/tanya-jawab"}>Tanya Jawab</Link>
-          </li>
+          {nav.map((n) => (
+            <li
+              className="text-sm text-gray font-bold"
+              onClick={() => {
+                window.location.href = n.pathname;
+              }}
+            >
+              {n.title}
+            </li>
+          ))}
         </ul>
         <div className="flex gap-3 flex-col px-8 mt-8">
           <Button
@@ -71,30 +90,20 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
   return (
     <div className="w-full flex flex-row ml-8">
       <ul className="flex items-center gap-3.5">
-        <li
-          className={`text-sm ${
-            pathname === "/materi-belajar" ||
-            pathname === "/materi-belajar/detail"
-              ? "text-blue-dark"
-              : "text-gray "
-          } font-bold`}
-        >
-          <Link href={"/materi-belajar"}>Materi Belajar</Link>
-        </li>
-        <li
-          className={`text-sm ${
-            pathname === "/sumber-belajar" ? "text-blue-dark" : "text-gray "
-          } font-bold`}
-        >
-          <Link href={"/sumber-belajar"}>Sumber Belajar</Link>
-        </li>
-        <li
-          className={`text-sm ${
-            pathname === "/tanya-jawab" ? "text-blue-dark" : "text-gray "
-          } font-bold`}
-        >
-          <Link href={"/tanya-jawab"}>Tanya Jawab</Link>
-        </li>
+        {nav.map((n) => (
+          <li
+            className={`text-sm cursor-pointer ${
+              pathname === n.pathname || pathname === `${n.pathname}/detail`
+                ? "text-blue-dark"
+                : "text-gray "
+            } font-bold`}
+            onClick={() => {
+              window.location.href = n.pathname;
+            }}
+          >
+            {n.title}
+          </li>
+        ))}
       </ul>
       <div className="flex gap-3 ml-auto">
         <Button
