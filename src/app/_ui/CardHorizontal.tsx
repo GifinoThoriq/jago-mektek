@@ -1,11 +1,14 @@
+"use client";
+
 import { FC } from "react";
 import { Button } from "./Button";
+import Link from "next/link";
 
 interface CardComponent {
   materiTitle?: string;
   title?: string;
   description?: string;
-  url?: string;
+  id?: string;
   image?: string;
 }
 
@@ -13,7 +16,7 @@ export const CardHorizontal: FC<CardComponent> = ({
   materiTitle,
   title,
   description,
-  url,
+  id,
   image,
 }) => {
   return (
@@ -37,7 +40,9 @@ export const CardHorizontal: FC<CardComponent> = ({
           </span>
         </div>
         <div className="mt-4 sm:mt-0">
-          <Button style="outline">Pelajari Lanjut</Button>
+          <Link href={`/materi-belajar/${id}`}>
+            <Button style="outline">Pelajari Lanjut</Button>
+          </Link>
         </div>
       </div>
     </div>

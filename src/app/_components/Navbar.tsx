@@ -54,6 +54,7 @@ function MobileNavbar() {
         <ul className="flex flex-col pt-12 items-center gap-3.5">
           {nav.map((n) => (
             <li
+              key={n.id}
               className="text-sm text-gray font-bold"
               onClick={() => {
                 window.location.href = n.pathname;
@@ -92,6 +93,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
       <ul className="flex items-center gap-3.5">
         {nav.map((n) => (
           <li
+            key={n.id}
             className={`text-sm cursor-pointer ${
               pathname === n.pathname || pathname === `${n.pathname}/detail`
                 ? "text-blue-dark"

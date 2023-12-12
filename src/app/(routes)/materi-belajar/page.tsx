@@ -9,7 +9,7 @@ import {
 } from "@/app/_types/ClientTypes";
 import GetSubMateri from "@/app/_lib/GetSubMateri";
 
-export default function materiBelajar() {
+export default function materiBelajar(props: any) {
   const materis: MateriClientTypes[] = GetMateri();
 
   const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
@@ -30,7 +30,6 @@ export default function materiBelajar() {
       (sub) => sub.id_materi === e.target.value
     );
 
-    console.log(subMaterisFilter);
     setSubMateris(subMaterisFilter);
   }
 
@@ -65,6 +64,7 @@ export default function materiBelajar() {
               materiTitle={sub.materi_title}
               image={sub.image}
               description={sub.description}
+              id={sub._id}
             />
           ))}
       </div>
