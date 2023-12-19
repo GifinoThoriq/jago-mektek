@@ -1,7 +1,15 @@
+"use client";
+
 import { Button } from "@/app/_ui/Button";
 import Image from "next/image";
+import GetTanyaJawab from "@/app/_lib/GetTanyaJawab";
+import { TanyaJawabClientTypes } from "@/app/_types/ClientTypes";
 
 export default function TanyaJawab() {
+  const aselole: TanyaJawabClientTypes[] = GetTanyaJawab();
+
+  console.log(aselole);
+
   return (
     <div className="max-w-7xl mx-auto px-4">
       <h1 className="text-3xl font-bold text-blue-dark text-center">

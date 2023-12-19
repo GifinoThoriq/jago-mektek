@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { useState, useEffect, FC } from "react";
+import { useSession } from "next-auth/react";
+import { useState, useEffect, FC, useContext } from "react";
 import { Button } from "../_ui/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { Bars3Icon } from "@heroicons/react/24/solid";
@@ -95,9 +95,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
           <li
             key={n.id}
             className={`text-sm cursor-pointer ${
-              pathname === n.pathname || pathname === `${n.pathname}/detail`
-                ? "text-blue-dark"
-                : "text-gray "
+              pathname === n.pathname ? "text-blue-dark" : "text-gray "
             } font-bold`}
             onClick={() => {
               window.location.href = n.pathname;
@@ -107,6 +105,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
           </li>
         ))}
       </ul>
+
       <div className="flex gap-3 ml-auto">
         <Button
           style="outline"

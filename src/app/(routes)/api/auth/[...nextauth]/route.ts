@@ -16,7 +16,7 @@ const authOptions: NextAuthOptions = {
       async authorize(credentials: any) {
         await connectDb();
         try {
-          const user = await User.findOne({ email: credentials.email });
+          const user = await User.findOne({ username: credentials.username });
           if (user) {
             const isPasswordCorrect = await compare(
               credentials.password,
@@ -33,6 +33,15 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    jwt({ token, trigger, session }) {
+      if (trigger === "update" && session?.name) {
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.name = session.name;
+      }
+      return token;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

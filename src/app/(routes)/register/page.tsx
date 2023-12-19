@@ -35,7 +35,7 @@ export default function register() {
   return (
     <div className="">
       <div className="flex flex-row" style={{ minHeight: "100vh" }}>
-        <div className="basis-full lg:basis-1/2 px-20 self-center">
+        <div className="basis-full md:basis-1/2 px-20 self-center">
           <div
             onClick={() => (window.location.href = "/")}
             className="flex flex-row"
@@ -92,7 +92,7 @@ export default function register() {
             </div>
           </form>
         </div>
-        <div className="hidden lg:block basis-1/2 bg-blue-light px-20">
+        <div className="hidden md:block basis-1/2 bg-blue-light px-20">
           <div className="flex h-full items-center">
             <Image
               src={"/images/logreg.png"}

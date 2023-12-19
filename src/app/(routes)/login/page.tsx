@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { signIn, useSession, signOut } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/app/_ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
@@ -34,7 +34,7 @@ export default function login() {
     if (res?.error) {
       console.log("error di signin");
       if (res?.url) {
-        router.replace("/admin");
+        router.replace("/");
       }
     }
   };
@@ -42,7 +42,7 @@ export default function login() {
   return (
     <div className="">
       <div className="flex flex-row" style={{ minHeight: "100vh" }}>
-        <div className="basis-full lg:basis-1/2 px-20 self-center">
+        <div className="basis-full md:basis-1/2 px-20 self-center">
           <div
             onClick={() => (window.location.href = "/")}
             className="flex flex-row"
@@ -99,7 +99,7 @@ export default function login() {
             </div>
           </form>
         </div>
-        <div className="hidden lg:block basis-1/2 bg-blue-light px-20">
+        <div className="hidden md:block basis-1/2 bg-blue-light px-20">
           <div className="flex h-full items-center">
             <Image
               src={"/images/logreg.png"}

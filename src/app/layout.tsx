@@ -21,11 +21,6 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession();
 
-  const headersList = headers();
-  const referer = headersList.get("referer");
-
-  console.log(referer);
-
   return (
     <html lang="en">
       <body className={monstserrat.className}>

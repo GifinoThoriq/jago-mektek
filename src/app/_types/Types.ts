@@ -19,3 +19,9 @@ export interface SubMateriTypes extends mongoose.Document {
   image: string;
   materi_detail: string;
 }
+
+export interface TanyaJawabTypes extends mongoose.Document {
+  id_user_post: string;
+  post: string;
+  reply: { id_user_reply: string; reply: string }[];
+}

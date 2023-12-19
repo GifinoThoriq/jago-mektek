@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             </h1>
           </div>
           <div className="max-w-7xl px-4 mt-16 mx-auto">
-            {/* <div>
+            <div>
               <h2 className="text-xl font-bold text-blue-dark">Sub Judul</h2>
               <span className="text-base text-blue-dark mt-4">
                 Pengertian dan Contoh Konstruksi Rangka Batang adalahconsectetur
@@ -58,13 +58,13 @@ export default function Page({ params }: { params: { slug: string } }) {
                 nulla pariatur. Excepteur sint occaecat cupidatat non proident,
                 sunt in culpa qui officia deserunt mollit anim id est laborum.
               </span>
-            </div> */}
+            </div>
 
-            <div
+            {/* <div
               dangerouslySetInnerHTML={{
                 __html: submateriDetail.materi_detail,
               }}
-            />
+            /> */}
 
             <div>
               <h2 className="text-xl font-bold text-center text-blue-dark mt-4">

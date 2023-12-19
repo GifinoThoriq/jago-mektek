@@ -16,3 +16,9 @@ export interface SubMateriClientTypes {
   image: string;
   materi_detail: string;
 }
+
+export interface TanyaJawabClientTypes {
+  _id: string;
+  post: string;
+  reply: { _id: string; reply: string; id_user_repy: string }[];
+}
