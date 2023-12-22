@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 export interface MateriClientTypes {
   _id: string;
   title: string;
@@ -19,6 +17,19 @@ export interface SubMateriClientTypes {
 
 export interface TanyaJawabClientTypes {
   _id: string;
+  id_user_post: string;
   post: string;
-  reply: { _id: string; reply: string; id_user_repy: string }[];
+}
+
+export interface UserClientTypes {
+  _id: string;
+  username: string;
+  role: string;
+}
+
+export interface ReplyTypes {
+  _id: string;
+  id_tanyajawab: string;
+  id_user_reply: string;
+  reply: string;
 }
