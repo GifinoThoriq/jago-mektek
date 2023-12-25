@@ -15,6 +15,7 @@ const config: Config = {
         light: "#00509D",
         dark: "#252B42",
       },
+      red: "#D40000",
     },
     fontSize: {
       sm: "0.875rem",

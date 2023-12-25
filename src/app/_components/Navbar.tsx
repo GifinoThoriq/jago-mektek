@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect, FC, useContext } from "react";
 import { Button } from "../_ui/Button";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,11 +8,14 @@ import { Bars3Icon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import UserContext from "../_context/UserContext";
 import Image from "next/image";
+import DropdownProfile from "../_ui/DropdownProfile";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/20/solid";
 
 interface NavbarComponent {
   pathname: string;
   username: string | undefined;
   status: string;
+  onClick: () => void;
 }
 
 const nav = [
@@ -33,7 +36,12 @@ const nav = [
   },
 ];
 
-function MobileNavbar() {
+const MobileNavbar: FC<NavbarComponent> = ({
+  pathname,
+  username,
+  status,
+  onClick,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -68,30 +76,68 @@ function MobileNavbar() {
             </li>
           ))}
         </ul>
-        <div className="flex gap-3 flex-col px-8 mt-8">
-          <Button
-            style="outline"
-            onClick={() => {
-              window.location.href = "/login";
-            }}
-          >
-            Login
-          </Button>
-          <Button
-            style="solid"
-            onClick={() => {
-              window.location.href = "/register";
-            }}
-          >
-            Daftar
-          </Button>
+        <div
+          className={`flex gap-3 flex-col px-8 ${
+            status !== "authenticated" ? "mt-8" : "mt-auto"
+          }`}
+        >
+          {status !== "authenticated" ? (
+            <>
+              <Button
+                style="outline"
+                onClick={() => {
+                  window.location.href = "/login";
+                }}
+              >
+                Login
+              </Button>
+              <Button
+                style="solid"
+                onClick={() => {
+                  window.location.href = "/register";
+                }}
+              >
+                Daftar
+              </Button>
+            </>
+          ) : (
+            <div className=" mb-8">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <Image
+                  src={"/icons/avatar.svg"}
+                  width={36}
+                  height={36}
+                  alt="avatar"
+                />
+                <span className="text-sm cursor-pointer text-gray font-bold">
+                  Hello, {username} !
+                </span>
+              </div>
+              <div>
+                <button className="inline-flex gap-2 items-center">
+                  <ArrowLeftOnRectangleIcon className="h-6 w-6 text-red" />
+                  <span
+                    className="text-red font-bold text-sm"
+                    onClick={onClick}
+                  >
+                    Logout
+                  </span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
-const DesktopNavbar: FC<NavbarComponent> = ({ pathname, username, status }) => {
+const DesktopNavbar: FC<NavbarComponent> = ({
+  pathname,
+  username,
+  status,
+  onClick,
+}) => {
   return (
     <div className="w-full flex flex-row ml-8">
       <ul className="flex items-center gap-3.5">
@@ -132,15 +178,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname, username, status }) => {
           </>
         ) : (
           <>
-            <Image
-              src={"/icons/avatar.svg"}
-              width={36}
-              height={36}
-              alt="avatar"
-            />
-            <span className="text-sm cursor-pointer text-gray capitalize font-bold self-center">
-              Hello {username} !
-            </span>
+            <DropdownProfile options={[username!]} onClick={onClick} />
           </>
         )}
       </div>
@@ -159,8 +197,13 @@ export default function Navbar() {
 
   const [windowWidth, setWindowWidth] = useState<number>();
 
-  console.log(ctx?.username);
-  console.log(status);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      typeof window !== "undefined"
+        ? window.sessionStorage.removeItem("username")
+        : "";
+    }
+  }, [status]);
 
   useEffect(() => {
     function handleResize() {
@@ -190,9 +233,19 @@ export default function Navbar() {
               pathname={pathname}
               username={ctx?.username}
               status={status}
+              onClick={() => {
+                signOut({ callbackUrl: "/" });
+              }}
             />
           ) : (
-            <MobileNavbar />
+            <MobileNavbar
+              pathname={pathname}
+              username={ctx?.username}
+              status={status}
+              onClick={() => {
+                signOut({ callbackUrl: "/" });
+              }}
+            />
           ))}
       </div>
     </nav>
