@@ -1,24 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/app/_ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
+import UserContext from "@/app/_context/UserContext";
 
 export default function login() {
   const router = useRouter();
-  const session = useSession();
+
+  const ctx = useContext(UserContext);
 
   const { status } = useSession();
   console.log(status);
-
-  useEffect(() => {
-    if (session?.status === "authenticated") {
-      router.replace("/admin");
-    }
-  }, [session, router]);
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -31,11 +27,11 @@ export default function login() {
       password,
     });
 
-    if (res?.error) {
-      console.log("error di signin");
-      if (res?.url) {
-        router.replace("/");
-      }
+    if (res?.status === 200) {
+      ctx?.setUser(username);
+      window.location.href = "/";
+    } else if (res?.status === 401) {
+      console.log("salah dha pokoknya");
     }
   };
 

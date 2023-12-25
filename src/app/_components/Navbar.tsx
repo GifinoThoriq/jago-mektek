@@ -6,9 +6,13 @@ import { Button } from "../_ui/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import UserContext from "../_context/UserContext";
+import Image from "next/image";
 
 interface NavbarComponent {
   pathname: string;
+  username: string | undefined;
+  status: string;
 }
 
 const nav = [
@@ -87,7 +91,7 @@ function MobileNavbar() {
   );
 }
 
-const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
+const DesktopNavbar: FC<NavbarComponent> = ({ pathname, username, status }) => {
   return (
     <div className="w-full flex flex-row ml-8">
       <ul className="flex items-center gap-3.5">
@@ -107,22 +111,38 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
       </ul>
 
       <div className="flex gap-3 ml-auto">
-        <Button
-          style="outline"
-          onClick={() => {
-            window.location.href = "/login";
-          }}
-        >
-          Login
-        </Button>
-        <Button
-          style="solid"
-          onClick={() => {
-            window.location.href = "/register";
-          }}
-        >
-          Daftar
-        </Button>
+        {status !== "authenticated" ? (
+          <>
+            <Button
+              style="outline"
+              onClick={() => {
+                window.location.href = "/login";
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              style="solid"
+              onClick={() => {
+                window.location.href = "/register";
+              }}
+            >
+              Daftar
+            </Button>
+          </>
+        ) : (
+          <>
+            <Image
+              src={"/icons/avatar.svg"}
+              width={36}
+              height={36}
+              alt="avatar"
+            />
+            <span className="text-sm cursor-pointer text-gray capitalize font-bold self-center">
+              Hello {username} !
+            </span>
+          </>
+        )}
       </div>
     </div>
   );
@@ -131,9 +151,16 @@ const DesktopNavbar: FC<NavbarComponent> = ({ pathname }) => {
 export default function Navbar() {
   const router = useRouter();
 
+  const { status } = useSession();
+
+  const ctx = useContext(UserContext);
+
   const [pathname, setPathname] = useState<string>(usePathname());
 
   const [windowWidth, setWindowWidth] = useState<number>();
+
+  console.log(ctx?.username);
+  console.log(status);
 
   useEffect(() => {
     function handleResize() {
@@ -159,7 +186,11 @@ export default function Navbar() {
 
         {windowWidth !== undefined &&
           (windowWidth > 800 ? (
-            <DesktopNavbar pathname={pathname} />
+            <DesktopNavbar
+              pathname={pathname}
+              username={ctx?.username}
+              status={status}
+            />
           ) : (
             <MobileNavbar />
           ))}

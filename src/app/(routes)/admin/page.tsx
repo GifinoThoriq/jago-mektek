@@ -9,6 +9,7 @@ export default function admin() {
   console.log(status);
 
   const logoutHandler = () => {
+    sessionStorage.removeItem("username");
     signOut({ callbackUrl: "/" });
   };
 

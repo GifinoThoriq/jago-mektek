@@ -5,6 +5,7 @@ import Navbar from "./_components/Navbar";
 import Footer from "./_components/Footer";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/app/_lib/SessionProvider";
+import UserProvider from "./_context/UserProvider";
 import { headers } from "next/headers";
 
 const monstserrat = Montserrat({ weight: ["400", "700"], subsets: ["latin"] });
@@ -24,11 +25,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={monstserrat.className}>
-        <SessionProvider session={session}>
-          <Navbar />
-          {children}
-          <Footer />
-        </SessionProvider>
+        <UserProvider>
+          <SessionProvider session={session}>
+            <Navbar />
+            {children}
+            <Footer />
+          </SessionProvider>
+        </UserProvider>
       </body>
     </html>
   );
