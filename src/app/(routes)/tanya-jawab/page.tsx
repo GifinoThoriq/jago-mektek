@@ -10,7 +10,9 @@ import {
   UserClientTypes,
   ReplyTypes,
 } from "@/app/_types/ClientTypes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { useSession } from "next-auth/react";
+import UserContext from "@/app/_context/UserContext";
 
 interface ReplyType {
   _id: string;
@@ -34,6 +36,9 @@ export default function TanyaJawab() {
   const repliesFetch: ReplyTypes[] = GetReply();
 
   const [tanyajawabs, setTanyaJawabs] = useState<TanyaJawabUpdatedType[]>([]);
+
+  const ctx = useContext(UserContext);
+  const { status } = useSession();
 
   useEffect(() => {
     if (
@@ -67,24 +72,59 @@ export default function TanyaJawab() {
     }
   }, [tanyajawabsFetch, usersFetch, repliesFetch]);
 
+  const postSubmitHandler = async (e: any) => {
+    e.preventDefault();
+
+    const post = e.target["post"].value;
+
+    if (status !== "authenticated") {
+      window.location.href = "/login";
+    }
+
+    const user = usersFetch.find((u) => u.username === ctx?.username);
+
+    if (user && post !== "") {
+      try {
+        const res = await fetch("/api/tanyajawab", {
+          method: "POST",
+          headers: {
+            "Content-type": "application-json",
+          },
+          body: JSON.stringify({
+            id_user_post: user._id,
+            post,
+          }),
+        });
+        console.log(res);
+        if (res.status === 200) {
+          console.log("masuk");
+        }
+      } catch (e) {}
+    }
+  };
+
   if (tanyajawabs.length > 0) {
     return (
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-blue-dark text-center">
           Tanya Jawab
         </h1>
-
-        <div className="text-center flex mx-auto flex-col max-w-[500px] mt-4 gap-4">
-          <textarea
-            rows={4}
-            cols={50}
-            className="p-2 rounded border-2 border-gray"
-            placeholder="tulis pertanyaanmu"
-          />
-          <div>
-            <Button style="solid">Post</Button>
+        <form onSubmit={postSubmitHandler}>
+          <div className="text-center flex mx-auto flex-col max-w-[500px] mt-4 gap-4">
+            <textarea
+              rows={4}
+              cols={50}
+              name="post"
+              className="p-2 rounded border-2 border-gray"
+              placeholder="tulis pertanyaanmu"
+            />
+            <div>
+              <Button type="submit" style="solid">
+                Post
+              </Button>
+            </div>
           </div>
-        </div>
+        </form>
         {tanyajawabs.map((item) => (
           <div key={item._id}>
             <div className="">
