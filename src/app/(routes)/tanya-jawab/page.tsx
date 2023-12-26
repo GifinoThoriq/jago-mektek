@@ -79,6 +79,7 @@ export default function TanyaJawab() {
 
     if (status !== "authenticated") {
       window.location.href = "/login";
+      return;
     }
 
     const user = usersFetch.find((u) => u.username === ctx?.username);
@@ -93,6 +94,40 @@ export default function TanyaJawab() {
           body: JSON.stringify({
             id_user_post: user._id,
             post,
+          }),
+        });
+        console.log(res);
+        if (res.status === 200) {
+          console.log("masuk");
+        }
+      } catch (e) {}
+    }
+  };
+
+  const replySubmitHandler = async (e: any) => {
+    e.preventDefault();
+
+    const reply = e.target["reply"].value;
+    const id_post = e.target["id_post"].value;
+
+    if (status !== "authenticated") {
+      window.location.href = "/login";
+      return;
+    }
+
+    const user = usersFetch.find((u) => u.username === ctx?.username);
+
+    if (user && reply !== "") {
+      try {
+        const res = await fetch("/api/reply", {
+          method: "POST",
+          headers: {
+            "Content-type": "application-json",
+          },
+          body: JSON.stringify({
+            id_tanyajawab: id_post,
+            id_user_reply: user._id,
+            reply,
           }),
         });
         console.log(res);
@@ -160,16 +195,22 @@ export default function TanyaJawab() {
                   </div>
                 ))}
 
-                <div className="flex flex-col gap-2 my-2">
-                  <input
-                    className="p-2 rounded border-2 border-gray"
-                    type="text"
-                    placeholder="tulis balasan"
-                  />
-                  <div className="self-end">
-                    <Button style="solid">Reply</Button>
+                <form onSubmit={replySubmitHandler}>
+                  <div className="flex flex-col gap-2 my-2">
+                    <input type="hidden" name="id_post" value={item._id} />
+                    <input
+                      className="p-2 rounded border-2 border-gray"
+                      type="text"
+                      name="reply"
+                      placeholder="tulis balasan"
+                    />
+                    <div className="self-end">
+                      <Button type="submit" style="solid">
+                        Reply
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
