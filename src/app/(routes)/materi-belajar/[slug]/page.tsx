@@ -12,12 +12,21 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [submateriDetail, setSubmateriDetail] =
     useState<SubMateriClientTypes>();
 
+  const [submateriRecom, setSubmateriRecom] = useState<SubMateriClientTypes[]>(
+    []
+  );
+
   useEffect(() => {
     const submaterisFilter = submateris.filter(
       (sub) => sub._id === params.slug
     );
 
+    const submaterisFilterRecom = submateris
+      .filter((sub) => sub._id !== params.slug)
+      .slice(0, 2);
+
     setSubmateriDetail(submaterisFilter[0]);
+    setSubmateriRecom(submaterisFilterRecom);
   }, [submateris]);
 
   return (
@@ -151,9 +160,18 @@ export default function Page({ params }: { params: { slug: string } }) {
               <h2 className="text-xl font-bold text-blue-dark mt-8">
                 Rekomendasi Materi Lainnya
               </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 mb-8">
-                <CardHorizontal />
-                <CardHorizontal />
+                {submateriRecom.map((sub) => (
+                  <CardHorizontal
+                    key={sub._id}
+                    title={sub.title}
+                    materiTitle={sub.materi_title}
+                    image={sub.image}
+                    description={sub.description}
+                    id={sub._id}
+                  />
+                ))}
               </div>
             </div>
           </div>

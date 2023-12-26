@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Button } from "./Button";
-import { CldImage } from "next-cloudinary";
 
 interface CardComponent {
   title?: string;

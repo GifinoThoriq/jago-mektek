@@ -20,7 +20,7 @@ export const CardHorizontal: FC<CardComponent> = ({
   image,
 }) => {
   return (
-    <div className="w-full flex flex-col sm:flex-row mt-12 h-[360px] sm:h-[242px]">
+    <div className="w-full flex flex-col sm:flex-row mt-12 h-[360px] sm:h-[280px]">
       <div
         className="basis-1/2 sm:basis-1/3 bg-cover bg-center"
         style={{
