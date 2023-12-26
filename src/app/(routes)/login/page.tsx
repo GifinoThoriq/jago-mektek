@@ -7,6 +7,7 @@ import { Button } from "@/app/_ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import UserContext from "@/app/_context/UserContext";
+import Modal from "@/app/_components/Modal";
 
 export default function login() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function login() {
   const ctx = useContext(UserContext);
 
   const { status } = useSession();
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   console.log(status);
 
   const submitHandler = async (e: any) => {
@@ -31,12 +34,18 @@ export default function login() {
       ctx?.setUser(username);
       window.location.href = "/";
     } else if (res?.status === 401) {
-      console.log("salah dha pokoknya");
+      setErrorMsg("username atau password salah");
+      setModalIsOpen(true);
     }
   };
 
   return (
     <div className="">
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={() => setModalIsOpen(false)}
+        message={errorMsg}
+      />
       <div className="flex flex-row" style={{ minHeight: "100vh" }}>
         <div className="basis-full md:basis-1/2 px-20 self-center">
           <div

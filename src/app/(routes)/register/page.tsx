@@ -4,9 +4,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/app/_ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import Modal from "@/app/_components/Modal";
+import { useState } from "react";
 
 export default function register() {
   const router = useRouter();
+
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -28,12 +33,24 @@ export default function register() {
       console.log(res);
       if (res.status === 200) {
         router.push("/login");
+      } else if (res.status === 400) {
+        setErrorMsg("Akun sudah terdaftar");
+        setModalIsOpen(true);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+      setErrorMsg("Ada sesuatu yang error, mohon daftar ulang kembali");
+      setModalIsOpen(true);
+    }
   };
 
   return (
     <div className="">
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={() => setModalIsOpen(false)}
+        message={errorMsg}
+      />
       <div className="flex flex-row" style={{ minHeight: "100vh" }}>
         <div className="basis-full md:basis-1/2 px-20 self-center">
           <div
