@@ -26,6 +26,14 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  const mulaiHandler = () => {
+    if (status === "authenticated") {
+      window.location.href = "/materi-belajar";
+    } else {
+      window.location.href = "/login";
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -45,7 +53,9 @@ export default function Home() {
                     kita berpetualang dalam dunia mekanika teknik yang
                     menyenangkan!
                   </h3>
-                  <Button style="solid">Mulai dari sini</Button>
+                  <Button style="solid" onClick={mulaiHandler} loading={false}>
+                    Mulai dari sini
+                  </Button>
                 </div>
                 <div>
                   <Image

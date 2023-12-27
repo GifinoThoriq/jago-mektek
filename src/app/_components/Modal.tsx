@@ -29,7 +29,7 @@ const Modal: FC<ModalType> = ({ isOpen, onClose, message }) => {
           </div>
         </div>
         <div className="text-center">
-          <Button style="solid" onClick={onClose}>
+          <Button style="solid" onClick={onClose} loading={false}>
             Tutup
           </Button>
         </div>

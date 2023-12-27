@@ -28,7 +28,9 @@ export const Card: FC<CardComponent> = ({ title, description, url, image }) => {
           <span className="text-base text-gray">{description}</span>
         </div>
         <div>
-          <Button style="outline">Pelajari Lanjut</Button>
+          <Button loading={false} style="outline">
+            Pelajari Lanjut
+          </Button>
         </div>
       </div>
     </div>

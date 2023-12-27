@@ -17,7 +17,14 @@ export default function login() {
   const { status } = useSession();
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   console.log(status);
+
+  useEffect(() => {
+    if (status === "authenticated" || ctx?.username) {
+      window.location.href = "/";
+    }
+  }, []);
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -30,12 +37,15 @@ export default function login() {
       password,
     });
 
+    setLoading(true);
+
     if (res?.status === 200) {
       ctx?.setUser(username);
       window.location.href = "/";
     } else if (res?.status === 401) {
       setErrorMsg("username atau password salah");
       setModalIsOpen(true);
+      setLoading(false);
     }
   };
 
@@ -97,6 +107,7 @@ export default function login() {
                   style="solid"
                   type="submit"
                   className="w-full lg:w-auto"
+                  loading={loading}
                 >
                   Login
                 </Button>

@@ -88,6 +88,7 @@ const MobileNavbar: FC<NavbarComponent> = ({
                 onClick={() => {
                   window.location.href = "/login";
                 }}
+                loading={false}
               >
                 Login
               </Button>
@@ -96,6 +97,7 @@ const MobileNavbar: FC<NavbarComponent> = ({
                 onClick={() => {
                   window.location.href = "/register";
                 }}
+                loading={false}
               >
                 Daftar
               </Button>
@@ -164,6 +166,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({
               onClick={() => {
                 window.location.href = "/login";
               }}
+              loading={false}
             >
               Login
             </Button>
@@ -172,6 +175,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({
               onClick={() => {
                 window.location.href = "/register";
               }}
+              loading={false}
             >
               Daftar
             </Button>

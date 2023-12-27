@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 
 interface ButtonComponent {
   children: ReactNode;
@@ -6,6 +6,7 @@ interface ButtonComponent {
   style: "solid" | "outline";
   type?: "submit" | "reset" | "button";
   className?: string;
+  loading: boolean;
 }
 
 export const Button: FC<ButtonComponent> = ({
@@ -14,6 +15,7 @@ export const Button: FC<ButtonComponent> = ({
   style,
   type,
   className,
+  loading,
 }) => {
   if (style === "solid") {
     return (
@@ -21,8 +23,17 @@ export const Button: FC<ButtonComponent> = ({
         className={`border border-blue bg-blue-light px-8 py-3 text-sm text-white font-bold rounded transition-opacity hover:bg-opacity-80 ${className}`}
         onClick={onClick}
         type={type}
+        disabled={loading}
       >
-        {children}
+        {loading ? (
+          <div className="flex justify-center gap-2">
+            <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div className="h-2 w-2 bg-white rounded-full animate-bounce"></div>
+          </div>
+        ) : (
+          children
+        )}
       </button>
     );
   }

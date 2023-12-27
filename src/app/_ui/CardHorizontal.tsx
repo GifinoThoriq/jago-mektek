@@ -41,7 +41,9 @@ export const CardHorizontal: FC<CardComponent> = ({
         </div>
         <div className="mt-4 sm:mt-0">
           <Link href={`/materi-belajar/${id}`}>
-            <Button style="outline">Pelajari Lanjut</Button>
+            <Button style="outline" loading={false}>
+              Pelajari Lanjut
+            </Button>
           </Link>
         </div>
       </div>

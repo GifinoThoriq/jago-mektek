@@ -14,6 +14,7 @@ import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import UserContext from "@/app/_context/UserContext";
 import Loading from "@/app/_components/Loading";
+import { useRouter } from "next/navigation";
 
 interface ReplyType {
   _id: string;
@@ -32,6 +33,8 @@ interface TanyaJawabUpdatedType {
 }
 
 export default function TanyaJawab() {
+  const router = useRouter();
+
   const tanyajawabsFetch: TanyaJawabClientTypes[] = GetTanyaJawab();
   const usersFetch: UserClientTypes[] = GetUser();
   const repliesFetch: ReplyTypes[] = GetReply();
@@ -42,6 +45,8 @@ export default function TanyaJawab() {
   const { status } = useSession();
 
   const [loading, setLoading] = useState<boolean>(true);
+
+  const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -107,10 +112,14 @@ export default function TanyaJawab() {
             post,
           }),
         });
-        console.log(res);
+
+        setLoadingBtn(true);
+
         if (res.status === 200) {
-          console.log("masuk");
+          window.location.reload();
         }
+
+        setLoading(false);
       } catch (e) {}
     }
   };
@@ -141,10 +150,14 @@ export default function TanyaJawab() {
             reply,
           }),
         });
-        console.log(res);
+
+        setLoadingBtn(true);
+
         if (res.status === 200) {
-          console.log("masuk");
+          window.location.reload();
         }
+
+        setLoading(false);
       } catch (e) {}
     }
   };
@@ -169,7 +182,7 @@ export default function TanyaJawab() {
                   placeholder="tulis pertanyaanmu"
                 />
                 <div>
-                  <Button type="submit" style="solid">
+                  <Button type="submit" style="solid" loading={loadingBtn}>
                     Post
                   </Button>
                 </div>
@@ -220,7 +233,11 @@ export default function TanyaJawab() {
                           placeholder="tulis balasan"
                         />
                         <div className="self-end">
-                          <Button type="submit" style="solid">
+                          <Button
+                            type="submit"
+                            loading={loadingBtn}
+                            style="solid"
+                          >
                             Reply
                           </Button>
                         </div>

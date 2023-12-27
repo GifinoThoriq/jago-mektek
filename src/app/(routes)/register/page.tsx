@@ -12,6 +12,7 @@ export default function register() {
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -30,17 +31,20 @@ export default function register() {
           role: "siswa",
         }),
       });
-      console.log(res);
+      setLoading(true);
       if (res.status === 200) {
+        setLoading(false);
         router.push("/login");
       } else if (res.status === 400) {
         setErrorMsg("Akun sudah terdaftar");
         setModalIsOpen(true);
+        setLoading(false);
       }
     } catch (e) {
       console.log(e);
       setErrorMsg("Ada sesuatu yang error, mohon daftar ulang kembali");
       setModalIsOpen(true);
+      setLoading(false);
     }
   };
 
@@ -102,6 +106,7 @@ export default function register() {
                   style="solid"
                   type="submit"
                   className="w-full lg:w-auto"
+                  loading={loading}
                 >
                   Register
                 </Button>
