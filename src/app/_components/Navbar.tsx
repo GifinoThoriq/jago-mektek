@@ -204,23 +204,22 @@ export default function Navbar() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      typeof window !== "undefined"
-        ? window.sessionStorage.removeItem("username")
-        : "";
-    }
-  }, [status]);
-
-  useEffect(() => {
     const user =
       typeof window !== "undefined"
         ? window.sessionStorage.getItem("username")
         : "";
 
+    if (status === "unauthenticated") {
+      typeof window !== "undefined"
+        ? window.sessionStorage.removeItem("username")
+        : "";
+    }
+
     if (user === "" && status === "authenticated") {
+      console.log("masuk");
       signOut({ callbackUrl: "/" });
     }
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     function handleResize() {
