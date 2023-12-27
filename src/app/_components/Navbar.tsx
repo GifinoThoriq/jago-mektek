@@ -217,10 +217,10 @@ export default function Navbar() {
         ? window.sessionStorage.getItem("username")
         : "";
 
-    if (user === "") {
+    if (user === "" && status === "authenticated") {
       signOut({ callbackUrl: "/" });
     }
-  });
+  }, []);
 
   useEffect(() => {
     function handleResize() {
