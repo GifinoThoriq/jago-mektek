@@ -36,6 +36,7 @@ export default function Home() {
                 width={"1252"}
                 height={"1020"}
                 alt="hero"
+                priority
               />
             </div>
           </div>

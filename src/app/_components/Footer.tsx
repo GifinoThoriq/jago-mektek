@@ -2,6 +2,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import {
+  PhoneIcon,
+  MapPinIcon,
+  EnvelopeIcon,
+} from "@heroicons/react/24/outline";
 
 export default function Footer() {
   const [pathname, setPathname] = useState<string>(usePathname());
@@ -33,31 +38,16 @@ export default function Footer() {
           </span>
           <ul className="mt-4">
             <li className="flex gap-2 text-base text-gray font-bold mb-2 justify-center md:justify-start">
-              <Image
-                src={"/icons/phone.svg"}
-                width={20}
-                height={20}
-                alt={"phone icon"}
-              />
+              <PhoneIcon className="h-6 w-6 text-blue-light" />
               (+62) 8569-5740-104
             </li>
             <li className="flex gap-2 text-base text-gray font-bold mb-2 justify-center md:justify-start w-[200px] md:w-auto">
-              <Image
-                src={"/icons/location.svg"}
-                width={20}
-                height={20}
-                alt={"phone icon"}
-              />
+              <MapPinIcon className="h-10 w-10 text-blue-light" />
               Jl. Cakrawala No.5, Sumbersari, Kec. Lowokwaru, Kota Malang, Jawa
               Timur 65145
             </li>
             <li className="flex gap-2 text-base text-gray font-bold mb-2 justify-center md:justify-start">
-              <Image
-                src={"/icons/email.svg"}
-                width={20}
-                height={20}
-                alt={"phone icon"}
-              />
+              <EnvelopeIcon className="h-6 w-6 text-blue-light" />
               wilgaclaryan@gmail.com
             </li>
           </ul>
@@ -87,14 +77,14 @@ export default function Footer() {
                 src={"/icons/instagram.svg"}
                 width={24}
                 height={24}
-                alt="facebook"
+                alt="instagram"
               />
             </li>
             <li>
               <Image
                 src={"/icons/twitter.svg"}
                 width={24}
-                height={24}
+                height={20}
                 alt="facebook"
               />
             </li>
