@@ -212,6 +212,15 @@ export default function Navbar() {
   }, [status]);
 
   useEffect(() => {
+    const user =
+      typeof window !== "undefined"
+        ? window.sessionStorage.getItem("username")
+        : "";
+
+    console.log(user);
+  });
+
+  useEffect(() => {
     function handleResize() {
       setWindowWidth(window.innerWidth);
     }
