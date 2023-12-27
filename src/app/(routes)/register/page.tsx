@@ -19,6 +19,22 @@ export default function register() {
     const username = e.target["username"].value;
     const password = e.target["password"].value;
 
+    const regex = /^[a-zA-Z0-9]{1,25}$/;
+
+    if (!regex.test(username)) {
+      setErrorMsg(
+        "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 25 character"
+      );
+      setModalIsOpen(true);
+      return;
+    }
+
+    if (password === "") {
+      setErrorMsg("password tidak boleh kosong");
+      setModalIsOpen(true);
+      return;
+    }
+
     try {
       const res = await fetch("/api/register", {
         method: "POST",
@@ -37,6 +53,10 @@ export default function register() {
         router.push("/login");
       } else if (res.status === 400) {
         setErrorMsg("Akun sudah terdaftar");
+        setModalIsOpen(true);
+        setLoading(false);
+      } else {
+        setErrorMsg("Ada sesuatu yang error, mohon daftar ulang kembali");
         setModalIsOpen(true);
         setLoading(false);
       }

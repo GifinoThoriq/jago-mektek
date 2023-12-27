@@ -15,6 +15,7 @@ import { useSession } from "next-auth/react";
 import UserContext from "@/app/_context/UserContext";
 import Loading from "@/app/_components/Loading";
 import { useRouter } from "next/navigation";
+import Modal from "@/app/_components/Modal";
 
 interface ReplyType {
   _id: string;
@@ -47,6 +48,10 @@ export default function TanyaJawab() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
+
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -95,6 +100,12 @@ export default function TanyaJawab() {
 
     if (status !== "authenticated") {
       window.location.href = "/login";
+      return;
+    }
+
+    if (post.length >= 500) {
+      setErrorMsg("tidak boleh lebih dari 500 character");
+      setModalIsOpen(true);
       return;
     }
 
@@ -169,6 +180,11 @@ export default function TanyaJawab() {
           <Loading />
         ) : (
           <div className="max-w-7xl mx-auto px-4">
+            <Modal
+              isOpen={modalIsOpen}
+              onClose={() => setModalIsOpen(false)}
+              message={errorMsg}
+            />
             <h1 className="text-3xl font-bold text-blue-dark text-center">
               Tanya Jawab
             </h1>
