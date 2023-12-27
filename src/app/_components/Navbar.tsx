@@ -217,7 +217,9 @@ export default function Navbar() {
         ? window.sessionStorage.getItem("username")
         : "";
 
-    console.log(user);
+    if (user === "") {
+      signOut({ callbackUrl: "/" });
+    }
   });
 
   useEffect(() => {
