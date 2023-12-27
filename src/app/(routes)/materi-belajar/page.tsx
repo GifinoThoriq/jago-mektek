@@ -8,6 +8,7 @@ import {
   SubMateriClientTypes,
 } from "@/app/_types/ClientTypes";
 import GetSubMateri from "@/app/_lib/GetSubMateri";
+import Loading from "@/app/_components/Loading";
 
 export default function materiBelajar(props: any) {
   const materis: MateriClientTypes[] = GetMateri();
@@ -15,6 +16,7 @@ export default function materiBelajar(props: any) {
   const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
 
   const subMaterisFetch: SubMateriClientTypes[] = GetSubMateri();
+  const [loading, setLoading] = useState<boolean>(true);
 
   function getMateriTitle(id: string) {
     return materis.filter((m) => m._id === id).map((m) => m.title);
@@ -33,41 +35,57 @@ export default function materiBelajar(props: any) {
     setSubMateris(subMaterisFilter);
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="w-full mx-auto text-center">
-        <h1 className="text-3xl font-bold text-blue-dark">Materi Belajar</h1>
-        <h3 className="text-xl">Kelas 10</h3>
-        <div className="mt-2">
-          <select
-            id="bab"
-            name="bab"
-            onChange={selectHandler}
-            className="block max-w-[420px] w-full rounded-md border-2 p-1.5 text-gray-900 border-blue-dark mx-auto"
-          >
-            <option>---Pilih Bab---</option>
-            {materis.length > 0 &&
-              materis.map((mat) => (
-                <option key={mat._id} value={mat._id}>
-                  {mat.title}
-                </option>
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="w-full mx-auto text-center">
+            <h1 className="text-3xl font-bold text-blue-dark">
+              Materi Belajar
+            </h1>
+            <h3 className="text-xl">Kelas 10</h3>
+            <div className="mt-2">
+              <select
+                id="bab"
+                name="bab"
+                onChange={selectHandler}
+                className="block max-w-[420px] w-full rounded-md border-2 p-1.5 text-gray-900 border-blue-dark mx-auto"
+              >
+                <option>---Pilih Bab---</option>
+                {materis.length > 0 &&
+                  materis.map((mat) => (
+                    <option key={mat._id} value={mat._id}>
+                      {mat.title}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+          <div>
+            {subMateris.length > 0 &&
+              subMateris.map((sub) => (
+                <CardHorizontal
+                  key={sub._id}
+                  title={sub.title}
+                  materiTitle={sub.materi_title}
+                  image={sub.image}
+                  description={sub.description}
+                  id={sub._id}
+                />
               ))}
-          </select>
+          </div>
         </div>
-      </div>
-      <div>
-        {subMateris.length > 0 &&
-          subMateris.map((sub) => (
-            <CardHorizontal
-              key={sub._id}
-              title={sub.title}
-              materiTitle={sub.materi_title}
-              image={sub.image}
-              description={sub.description}
-              id={sub._id}
-            />
-          ))}
-      </div>
-    </div>
+      )}
+    </>
   );
 }

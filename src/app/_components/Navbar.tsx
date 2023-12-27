@@ -197,6 +197,8 @@ export default function Navbar() {
 
   const [windowWidth, setWindowWidth] = useState<number>();
 
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     if (status === "unauthenticated") {
       typeof window !== "undefined"
@@ -216,38 +218,61 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return (
-    <nav
-      className={`bg-lightgray ${
-        pathname === "/login" || pathname === "/register" ? "hidden" : "block"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto py-4 flex items-center px-4">
-        <div className="">
-          <span className="text-blue-dark text-xl font-bold">JagoMektek</span>
-        </div>
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
 
-        {windowWidth !== undefined &&
-          (windowWidth > 800 ? (
-            <DesktopNavbar
-              pathname={pathname}
-              username={ctx?.username}
-              status={status}
-              onClick={() => {
-                signOut({ callbackUrl: "/" });
-              }}
-            />
-          ) : (
-            <MobileNavbar
-              pathname={pathname}
-              username={ctx?.username}
-              status={status}
-              onClick={() => {
-                signOut({ callbackUrl: "/" });
-              }}
-            />
-          ))}
-      </div>
-    </nav>
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <>
+      {loading ? (
+        ""
+      ) : (
+        <nav
+          className={`bg-lightgray ${
+            pathname === "/login" || pathname === "/register"
+              ? "hidden"
+              : "block"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto py-4 flex items-center px-4">
+            <div className="">
+              <span
+                className="text-blue-dark text-xl font-bold cursor-pointer"
+                onClick={() => {
+                  window.location.href = "/";
+                }}
+              >
+                JagoMektek
+              </span>
+            </div>
+
+            {windowWidth !== undefined &&
+              (windowWidth > 800 ? (
+                <DesktopNavbar
+                  pathname={pathname}
+                  username={ctx?.username}
+                  status={status}
+                  onClick={() => {
+                    signOut({ callbackUrl: "/" });
+                  }}
+                />
+              ) : (
+                <MobileNavbar
+                  pathname={pathname}
+                  username={ctx?.username}
+                  status={status}
+                  onClick={() => {
+                    signOut({ callbackUrl: "/" });
+                  }}
+                />
+              ))}
+          </div>
+        </nav>
+      )}
+    </>
   );
 }
