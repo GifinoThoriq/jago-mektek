@@ -4,6 +4,10 @@ import mongoose from "mongoose";
 const TanyaJawabSchema = new mongoose.Schema<TanyaJawabTypes>({
   id_user_post: String,
   post: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 export default mongoose.models.TanyaJawabs ||

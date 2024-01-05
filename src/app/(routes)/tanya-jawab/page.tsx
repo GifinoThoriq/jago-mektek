@@ -30,6 +30,7 @@ interface TanyaJawabUpdatedType {
   id_user_post: string;
   name_user_post: string;
   post: string;
+  createdAt: Date;
   replies: ReplyType[];
 }
 
@@ -62,11 +63,7 @@ export default function TanyaJawab() {
   }, []);
 
   useEffect(() => {
-    if (
-      tanyajawabsFetch.length > 0 &&
-      usersFetch.length > 0 &&
-      repliesFetch.length > 0
-    ) {
+    if (tanyajawabsFetch.length > 0 && usersFetch.length > 0) {
       const tanyaJawabsUpdated: TanyaJawabUpdatedType[] = tanyajawabsFetch.map(
         (tanyaJawab) => {
           const user = usersFetch.find(
@@ -85,6 +82,7 @@ export default function TanyaJawab() {
             id_user_post: tanyaJawab.id_user_post,
             name_user_post: user ? user.username : "",
             post: tanyaJawab.post,
+            createdAt: tanyaJawab.createdAt,
             replies: userReplies ? userReplies : [],
           };
         }
@@ -173,99 +171,106 @@ export default function TanyaJawab() {
     }
   };
 
-  if (tanyajawabs.length > 0) {
-    return (
-      <>
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="max-w-7xl mx-auto px-4">
-            <Modal
-              isOpen={modalIsOpen}
-              onClose={() => setModalIsOpen(false)}
-              message={errorMsg}
-            />
-            <h1 className="text-3xl font-bold text-blue-dark text-center">
-              Tanya Jawab
-            </h1>
-            <form onSubmit={postSubmitHandler}>
-              <div className="text-center flex mx-auto flex-col max-w-[500px] mt-4 gap-4">
-                <textarea
-                  rows={4}
-                  cols={50}
-                  name="post"
-                  className="p-2 rounded border-2 border-gray"
-                  placeholder="tulis pertanyaanmu"
-                />
-                <div>
-                  <Button type="submit" style="solid" loading={loadingBtn}>
-                    Post
-                  </Button>
-                </div>
+  return (
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="max-w-7xl mx-auto px-4">
+          <Modal
+            isOpen={modalIsOpen}
+            onClose={() => setModalIsOpen(false)}
+            message={errorMsg}
+          />
+          <h1 className="text-3xl font-bold text-blue-dark text-center">
+            Tanya Jawab
+          </h1>
+          <form onSubmit={postSubmitHandler}>
+            <div className="text-center flex mx-auto flex-col max-w-[500px] mt-4 gap-4">
+              <textarea
+                rows={4}
+                cols={50}
+                name="post"
+                className="p-2 rounded border-2 border-gray"
+                placeholder="tulis pertanyaanmu"
+              />
+              <div>
+                <Button type="submit" style="solid" loading={loadingBtn}>
+                  Post
+                </Button>
               </div>
-            </form>
-            {tanyajawabs.map((item) => (
-              <div key={item._id}>
-                <div className="">
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-4 ">
-                      <Image
-                        src={"/icons/avatar.svg"}
-                        width={36}
-                        height={36}
-                        alt="avatar"
-                      />
-                      <span className="font-bold text-blue-dark">
-                        {item.name_user_post}
-                      </span>
-                    </div>
+            </div>
+          </form>
 
-                    <span className="text-base">{item.post}</span>
-                    <hr className="my-2" />
-                    {item.replies.map((rep) => (
-                      <div className="flex flex-row gap-2 my-4" key={rep._id}>
+          {tanyajawabs.length > 0 && (
+            <>
+              {tanyajawabs.map((item) => (
+                <div key={item._id}>
+                  <div className="">
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-4 ">
                         <Image
                           src={"/icons/avatar.svg"}
                           width={36}
                           height={36}
                           alt="avatar"
                         />
-                        <div className="flex flex-col">
-                          <span className="font-bold text-blue-dark">
-                            {rep.name_user_reply}
-                          </span>
-                          <span className="text-base">{rep.reply}</span>
-                        </div>
+                        <span className="font-bold text-blue-dark">
+                          {item.name_user_post}
+                        </span>
                       </div>
-                    ))}
 
-                    <form onSubmit={replySubmitHandler}>
-                      <div className="flex flex-col gap-2 my-2">
-                        <input type="hidden" name="id_post" value={item._id} />
-                        <input
-                          className="p-2 rounded border-2 border-gray"
-                          type="text"
-                          name="reply"
-                          placeholder="tulis balasan"
-                        />
-                        <div className="self-end">
-                          <Button
-                            type="submit"
-                            loading={loadingBtn}
-                            style="solid"
-                          >
-                            Reply
-                          </Button>
+                      <span className="text-base">{item.post}</span>
+                      <hr className="my-2" />
+                      {item.replies.map((rep) => (
+                        <div className="flex flex-row gap-2 my-4" key={rep._id}>
+                          <Image
+                            src={"/icons/avatar.svg"}
+                            width={36}
+                            height={36}
+                            alt="avatar"
+                          />
+                          <div className="flex flex-col">
+                            <span className="font-bold text-blue-dark">
+                              {rep.name_user_reply}
+                            </span>
+                            <span className="text-base">{rep.reply}</span>
+                          </div>
                         </div>
-                      </div>
-                    </form>
+                      ))}
+
+                      <form onSubmit={replySubmitHandler}>
+                        <div className="flex flex-col gap-2 my-2">
+                          <input
+                            type="hidden"
+                            name="id_post"
+                            value={item._id}
+                          />
+                          <input
+                            className="p-2 rounded border-2 border-gray"
+                            type="text"
+                            name="reply"
+                            placeholder="tulis balasan"
+                          />
+                          <div className="self-end">
+                            <Button
+                              type="submit"
+                              loading={loadingBtn}
+                              style="solid"
+                            >
+                              Reply
+                            </Button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </>
-    );
-  }
+              ))}
+            </>
+          )}
+        </div>
+      )}
+    </>
+  );
 }

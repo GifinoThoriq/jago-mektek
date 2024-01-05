@@ -6,7 +6,7 @@ export const GET = async () => {
   try {
     await connectDb();
 
-    const replies = await Replies.find();
+    const replies = await Replies.find().sort({ createdAt: -1 });
     return NextResponse.json({ replies });
   } catch (error: any) {
     console.error("Error in API route:", error);

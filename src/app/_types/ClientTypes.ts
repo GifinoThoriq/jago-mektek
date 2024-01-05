@@ -19,6 +19,7 @@ export interface TanyaJawabClientTypes {
   _id: string;
   id_user_post: string;
   post: string;
+  createdAt: Date;
 }
 
 export interface UserClientTypes {
@@ -32,4 +33,5 @@ export interface ReplyTypes {
   id_tanyajawab: string;
   id_user_reply: string;
   reply: string;
+  createdAt: Date;
 }

@@ -24,9 +24,11 @@ export interface RepliesTypes extends mongoose.Document {
   id_tanyajawab: string;
   id_user_reply: string;
   reply: string;
+  createdAt: Date;
 }
 
 export interface TanyaJawabTypes extends mongoose.Document {
   id_user_post: string;
   post: string;
+  createdAt: Date;
 }
