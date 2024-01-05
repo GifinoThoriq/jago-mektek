@@ -15,6 +15,8 @@ export default function materiBelajar(props: any) {
 
   const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
 
+  const [selectedMateri, setSelectedMateri] = useState<string>("");
+
   const subMaterisFetch: SubMateriClientTypes[] = GetSubMateri();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -23,6 +25,8 @@ export default function materiBelajar(props: any) {
   }
 
   function selectHandler(e: any) {
+    setSelectedMateri(e.target.value);
+
     const newSub = subMaterisFetch.map((sub) => ({
       ...sub,
       materi_title: getMateriTitle(sub.id_materi)[0],
@@ -71,19 +75,30 @@ export default function materiBelajar(props: any) {
               </select>
             </div>
           </div>
-          <div>
-            {subMateris.length > 0 &&
-              subMateris.map((sub) => (
-                <CardHorizontal
-                  key={sub._id}
-                  title={sub.title}
-                  materiTitle={sub.materi_title}
-                  image={sub.image}
-                  description={sub.description}
-                  id={sub._id}
-                />
-              ))}
-          </div>
+          {selectedMateri !== "" && subMateris.length <= 0 ? (
+            <div className="min-h-[60vh] bg-gray-900 flex flex-col items-center justify-center">
+              <h1 className="text-2xl sm:text-4xl text-blue-dark font-bold mb-8 animate-pulse">
+                Coming Soon
+              </h1>
+              <p className="text-blue-dark text-center text-base sm:text-xl mb-8">
+                We're working hard to bring you something amazing. Stay tuned!
+              </p>
+            </div>
+          ) : (
+            <div>
+              {subMateris.length > 0 &&
+                subMateris.map((sub) => (
+                  <CardHorizontal
+                    key={sub._id}
+                    title={sub.title}
+                    materiTitle={sub.materi_title}
+                    image={sub.image}
+                    description={sub.description}
+                    id={sub._id}
+                  />
+                ))}
+            </div>
+          )}
         </div>
       )}
     </>
