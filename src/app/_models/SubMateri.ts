@@ -7,6 +7,7 @@ const SubMateriSchema = new mongoose.Schema<SubMateriTypes>({
   description: String,
   image: String,
   materi_detail: String,
+  video: Array
 });
 
 export default mongoose.models.SubMateris ||

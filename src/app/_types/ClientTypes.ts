@@ -13,6 +13,7 @@ export interface SubMateriClientTypes {
   description: string;
   image: string;
   materi_detail: string;
+  video: string[];
 }
 
 export interface TanyaJawabClientTypes {

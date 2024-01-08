@@ -18,6 +18,7 @@ export interface SubMateriTypes extends mongoose.Document {
   description: string;
   image: string;
   materi_detail: string;
+  video: string[];
 }
 
 export interface RepliesTypes extends mongoose.Document {
