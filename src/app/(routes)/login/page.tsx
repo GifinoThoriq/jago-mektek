@@ -101,7 +101,9 @@ export default function login() {
                   />
                 </div>
               </div>
-
+              <div className="col-span-3">
+                Belum punya akun? Click <a href="/register" className="underline">disini</a>
+              </div>
               <div className="col-span-3 lg:col-span-1">
                 <Button
                   style="solid"

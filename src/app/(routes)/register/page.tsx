@@ -120,7 +120,9 @@ export default function register() {
                   />
                 </div>
               </div>
-
+              <div className="col-span-3">
+                Sudah punya akun? Click <a href="/login" className="underline">disini</a>
+              </div>
               <div className="col-span-3 lg:col-span-1">
                 <Button
                   style="solid"
