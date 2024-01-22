@@ -16,7 +16,10 @@ export default function login() {
 
   const { status } = useSession();
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [modal, setModal] = useState({
+    msg: "",
+    success: false
+  })
   const [loading, setLoading] = useState(false);
   console.log(status);
 
@@ -43,7 +46,10 @@ export default function login() {
       ctx?.setUser(username);
       window.location.href = "/";
     } else if (res?.status === 401) {
-      setErrorMsg("username atau password salah");
+      setModal({
+        msg: "username atau password salah",
+        success: false
+      })
       setModalIsOpen(true);
       setLoading(false);
     }
@@ -54,7 +60,8 @@ export default function login() {
       <Modal
         isOpen={modalIsOpen}
         onClose={() => setModalIsOpen(false)}
-        message={errorMsg}
+        message={modal.msg}
+        success={modal.success}
       />
       <div className="flex flex-row" style={{ minHeight: "100vh" }}>
         <div className="basis-full md:basis-1/2 px-20 self-center">
