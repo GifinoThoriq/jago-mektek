@@ -11,8 +11,22 @@ export default function register() {
   const router = useRouter();
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [modal, setModal] = useState({
+    msg: "",
+    success: false
+  })
   const [loading, setLoading] = useState(false);
+
+  const closeModalHandler  = () => {
+
+    if(modal.success === true){
+      router.push("/login");
+    } else{
+      router.push("/register");
+    }
+    setModalIsOpen(false);
+    
+  }
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -22,15 +36,19 @@ export default function register() {
     const regex = /^[a-zA-Z0-9]{1,25}$/;
 
     if (!regex.test(username)) {
-      setErrorMsg(
-        "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 25 character"
-      );
+      setModal({
+        msg: "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 25 character",
+        success: false
+      })
       setModalIsOpen(true);
       return;
     }
 
-    if (password === "") {
-      setErrorMsg("password tidak boleh kosong");
+    if (password === "" || username === "") {
+      setModal({
+        msg: "username atau password tidak boleh kosong",
+        success: false
+      });
       setModalIsOpen(true);
       return;
     }
@@ -49,20 +67,33 @@ export default function register() {
       });
       setLoading(true);
       if (res.status === 200) {
+        setModal({
+          msg: "akun kamu berhasil diregistrasi!",
+          success: true
+        })
+        setModalIsOpen(true);
         setLoading(false);
-        router.push("/login");
       } else if (res.status === 400) {
-        setErrorMsg("Akun sudah terdaftar");
+        setModal({
+          msg: "Akun sudah terdaftar",
+          success: false
+        })
         setModalIsOpen(true);
         setLoading(false);
       } else {
-        setErrorMsg("Ada sesuatu yang error, mohon daftar ulang kembali");
+        setModal({
+          msg: "Ada sesuatu yang error, mohon daftar ulang kembali",
+          success: false
+        })
         setModalIsOpen(true);
         setLoading(false);
       }
     } catch (e) {
       console.log(e);
-      setErrorMsg("Ada sesuatu yang error, mohon daftar ulang kembali");
+      setModal({
+        msg: "Ada sesuatu yang error, mohon daftar ulang kembali",
+        success: false
+      })
       setModalIsOpen(true);
       setLoading(false);
     }
@@ -72,8 +103,9 @@ export default function register() {
     <div className="">
       <Modal
         isOpen={modalIsOpen}
-        onClose={() => setModalIsOpen(false)}
-        message={errorMsg}
+        onClose={closeModalHandler}
+        message={modal.msg}
+        success={modal.success}
       />
       <div className="flex flex-row" style={{ minHeight: "100vh" }}>
         <div className="basis-full md:basis-1/2 px-20 self-center">
@@ -120,7 +152,9 @@ export default function register() {
                   />
                 </div>
               </div>
-
+              <div className="col-span-3">
+                Sudah punya akun? Click <a href="/login" className="underline">disini</a>
+              </div>
               <div className="col-span-3 lg:col-span-1">
                 <Button
                   style="solid"

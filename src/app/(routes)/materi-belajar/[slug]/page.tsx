@@ -6,6 +6,7 @@ import { CardHorizontal } from "@/app/_ui/CardHorizontal";
 import Image from "next/image";
 import { SubMateriClientTypes } from "@/app/_types/ClientTypes";
 import Loading from "@/app/_components/Loading";
+import { useSession } from "next-auth/react";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const submateris: SubMateriClientTypes[] = GetSubMateri();
@@ -18,6 +19,14 @@ export default function Page({ params }: { params: { slug: string } }) {
   );
 
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { status } = useSession();
+
+  useEffect(() => {
+    if(status === "unauthenticated"){
+      window.location.href="/login"
+    }
+  },[status])
 
   useEffect(() => {
     const submaterisFilter = submateris.filter(

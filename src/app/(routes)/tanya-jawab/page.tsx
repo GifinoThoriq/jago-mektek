@@ -52,7 +52,10 @@ export default function TanyaJawab() {
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [modal, setModal] = useState({
+    msg: "",
+    success: false
+  })
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -102,7 +105,10 @@ export default function TanyaJawab() {
     }
 
     if (post.length >= 500) {
-      setErrorMsg("tidak boleh lebih dari 500 character");
+      setModal({
+        msg: "tidak boleh lebih dari 500 character",
+        success: false
+      })
       setModalIsOpen(true);
       return;
     }
@@ -180,7 +186,8 @@ export default function TanyaJawab() {
           <Modal
             isOpen={modalIsOpen}
             onClose={() => setModalIsOpen(false)}
-            message={errorMsg}
+            message={modal.msg}
+            success={modal.success}
           />
           <h1 className="text-3xl font-bold text-blue-dark text-center">
             Tanya Jawab
