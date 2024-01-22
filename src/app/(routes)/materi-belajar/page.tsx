@@ -15,7 +15,7 @@ export default function materiBelajar(props: any) {
 
   const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
 
-  const [selectedMateri, setSelectedMateri] = useState<string>("");
+  const [selectedMateri, setSelectedMateri] = useState<string>("empty");
 
   const subMaterisFetch: SubMateriClientTypes[] = GetSubMateri();
   const [loading, setLoading] = useState<boolean>(true);
@@ -47,6 +47,7 @@ export default function materiBelajar(props: any) {
     return () => clearTimeout(timer);
   }, []);
 
+
   return (
     <>
       {loading ? (
@@ -65,7 +66,7 @@ export default function materiBelajar(props: any) {
                 onChange={selectHandler}
                 className="block max-w-[420px] w-full rounded-md border-2 p-1.5 text-gray-900 border-blue-dark mx-auto"
               >
-                <option>---Pilih Bab---</option>
+                <option value="empty">---Pilih Bab---</option>
                 {materis.length > 0 &&
                   materis.map((mat) => (
                     <option key={mat._id} value={mat._id}>
@@ -75,7 +76,7 @@ export default function materiBelajar(props: any) {
               </select>
             </div>
           </div>
-          {selectedMateri !== "" && subMateris.length <= 0 ? (
+          {subMateris.length <= 0 && selectedMateri != "empty" ? (
             <div className="min-h-[60vh] bg-gray-900 flex flex-col items-center justify-center">
               <h1 className="text-2xl sm:text-4xl text-blue-dark font-bold mb-8 animate-pulse">
                 Coming Soon
