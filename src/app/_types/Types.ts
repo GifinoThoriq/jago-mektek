@@ -33,3 +33,11 @@ export interface TanyaJawabTypes extends mongoose.Document {
   post: string;
   createdAt: Date;
 }
+
+export interface EvaluasiTypes extends mongoose.Document {
+  id_submateri: string;
+  answer: number;
+  choice_answer: string[];
+  question: string;
+  reason: string;
+}

@@ -3,13 +3,24 @@
 import { useEffect, useState } from "react";
 import GetSubMateri from "@/app/_lib/GetSubMateri";
 import { CardHorizontal } from "@/app/_ui/CardHorizontal";
-import Image from "next/image";
-import { SubMateriClientTypes } from "@/app/_types/ClientTypes";
+import {
+  SubMateriClientTypes,
+  EvaluasiClientTypes,
+} from "@/app/_types/ClientTypes";
 import Loading from "@/app/_components/Loading";
 import { useSession } from "next-auth/react";
+import GetEvaluasi from "@/app/_lib/GetEvaluasi";
+import Question from "@/app/_components/Question";
+import { Button } from "@/app/_ui/Button";
+
+interface UserAnswerType {
+  id_question: string;
+  answer: number;
+}
 
 export default function Page({ params }: { params: { slug: string } }) {
   const submateris: SubMateriClientTypes[] = GetSubMateri();
+  const evaluasis: EvaluasiClientTypes[] = GetEvaluasi(params.slug);
 
   const [submateriDetail, setSubmateriDetail] =
     useState<SubMateriClientTypes>();
@@ -18,15 +29,17 @@ export default function Page({ params }: { params: { slug: string } }) {
     []
   );
 
+  const [userAnswer, setUserAnswer] = useState<UserAnswerType[]>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const { status } = useSession();
 
   useEffect(() => {
-    if(status === "unauthenticated"){
-      window.location.href="/login"
+    if (status === "unauthenticated") {
+      window.location.href = "/login";
     }
-  },[status])
+  }, [status]);
 
   useEffect(() => {
     const submaterisFilter = submateris.filter(
@@ -49,9 +62,34 @@ export default function Page({ params }: { params: { slug: string } }) {
     return () => clearTimeout(timer);
   }, []);
 
+  const changeAnswerHandler = (v: string, id_question: string) => {
+    const newUserAnswer: UserAnswerType = {
+      id_question,
+      answer: parseInt(v),
+    };
+
+    const existUserAnswer = userAnswer.some(
+      (ans) => ans.id_question === id_question
+    );
+
+    if (!existUserAnswer) {
+      setUserAnswer((oldUserAns) => [...oldUserAns, newUserAnswer]);
+      return;
+    }
+
+    setUserAnswer((oldUserAns) =>
+      oldUserAns.map((oldAns) =>
+        oldAns.id_question === newUserAnswer.id_question
+          ? { ...oldAns, answer: newUserAnswer.answer }
+          : oldAns
+      )
+    );
+  };
+
+  const submitAnswerHandler = () => {};
+
   return (
     <>
-      \
       {loading ? (
         <Loading />
       ) : (
@@ -78,9 +116,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                       Video Pendukung
                     </h3>
                     <div className="my-4 flex md:block gap-4 md:gap-0 ">
-                      {
-                        submateriDetail.video.map((item, index) => (
-                          <iframe
+                      {submateriDetail.video.map((item, index) => (
+                        <iframe
                           width="100%"
                           className="md:mb-4"
                           height="200px"
@@ -90,92 +127,41 @@ export default function Page({ params }: { params: { slug: string } }) {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           allowFullScreen
                         ></iframe>
-                        ))
-                      }
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                <div>
-                  <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
-                    Evaluasi Pembelajaran
-                  </h2>
-                  <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
-                    <div>
-                      <span>1. contoh pertanyaan 1</span>
-                      <ul className="pl-4">
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="mt-2">
-                      <span>2. contoh pertanyaan 2</span>
-                      <ul className="pl-4">
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                            checked={true}
-                            disabled
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                            disabled
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                            disabled
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                      </ul>
-                      <div className="bg-[#8FD49A] p-4 rounded text-white mt-2">
-                        Alasan: Lorem ipsum dolor sit amet, consectetur
-                        adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.
+                {evaluasis.length > 0 && (
+                  <div>
+                    <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
+                      Evaluasi Pembelajaran
+                    </h2>
+                    <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
+                      {evaluasis.map((ev, index) => (
+                        <Question
+                          index={index}
+                          id_question={ev._id}
+                          question={ev.question}
+                          choice_answer={ev.choice_answer}
+                          reason={ev.reason}
+                          answer={ev.answer}
+                          key={ev._id}
+                          onChange={changeAnswerHandler}
+                        />
+                      ))}
+                      <div className="mt-2 text-center">
+                        <Button
+                          loading={false}
+                          style="solid"
+                          onClick={submitAnswerHandler}
+                        >
+                          Submit Jawaban
+                        </Button>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 <div>
                   <h2 className="text-xl font-bold text-blue-dark mt-8">
