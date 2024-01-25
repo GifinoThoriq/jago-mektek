@@ -33,6 +33,8 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [correction, setCorrection] = useState<boolean>(false);
+
   const { status } = useSession();
 
   useEffect(() => {
@@ -86,7 +88,9 @@ export default function Page({ params }: { params: { slug: string } }) {
     );
   };
 
-  const submitAnswerHandler = () => {};
+  const submitAnswerHandler = () => {
+    setCorrection(true);
+  };
 
   return (
     <>
@@ -148,6 +152,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                           answer={ev.answer}
                           key={ev._id}
                           onChange={changeAnswerHandler}
+                          correction={correction}
                         />
                       ))}
                       <div className="mt-2 text-center">
