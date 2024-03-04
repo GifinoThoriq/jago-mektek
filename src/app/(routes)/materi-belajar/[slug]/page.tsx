@@ -1,41 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 import GetSubMateri from "@/app/_lib/GetSubMateri";
 import { CardHorizontal } from "@/app/_ui/CardHorizontal";
 import {
   SubMateriClientTypes,
   EvaluasiClientTypes,
+  UserClientTypes,
+  UserResultTypes,
 } from "@/app/_types/ClientTypes";
 import Loading from "@/app/_components/Loading";
-import { useSession } from "next-auth/react";
 import GetEvaluasi from "@/app/_lib/GetEvaluasi";
 import Question from "@/app/_components/Question";
-import { Button } from "@/app/_ui/Button";
-
-interface UserAnswerType {
-  id_question: string;
-  answer: number;
-}
+import GetUserByName from "@/app/_lib/GetUserByName";
+import UserContext from "@/app/_context/UserContext";
+import QuestionAnswered from "@/app/_components/QuestionAnswered";
 
 export default function Page({ params }: { params: { slug: string } }) {
+  const { status } = useSession();
+
+  const router = useRouter();
+
+  const ctx = useContext(UserContext);
+
+  const username = ctx?.username === undefined ? "" : ctx.username;
+
   const submateris: SubMateriClientTypes[] = GetSubMateri();
   const evaluasis: EvaluasiClientTypes[] = GetEvaluasi(params.slug);
+  const user: UserClientTypes[] = GetUserByName(username);
 
   const [submateriDetail, setSubmateriDetail] =
     useState<SubMateriClientTypes>();
+
+  const [userResult, setUserResult] = useState([]);
 
   const [submateriRecom, setSubmateriRecom] = useState<SubMateriClientTypes[]>(
     []
   );
 
-  const [userAnswer, setUserAnswer] = useState<UserAnswerType[]>([]);
-
   const [loading, setLoading] = useState<boolean>(true);
-
-  const [correction, setCorrection] = useState<boolean>(false);
-
-  const { status } = useSession();
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -64,32 +70,56 @@ export default function Page({ params }: { params: { slug: string } }) {
     return () => clearTimeout(timer);
   }, []);
 
-  const changeAnswerHandler = (v: string, id_question: string) => {
-    const newUserAnswer: UserAnswerType = {
-      id_question,
-      answer: parseInt(v),
-    };
+  useEffect(() => {
+    const evaluasiArr: string[] = [];
 
-    const existUserAnswer = userAnswer.some(
-      (ans) => ans.id_question === id_question
-    );
-
-    if (!existUserAnswer) {
-      setUserAnswer((oldUserAns) => [...oldUserAns, newUserAnswer]);
-      return;
+    if (evaluasis.length > 0) {
+      evaluasis.map((ev) => {
+        evaluasiArr.push(ev._id);
+      });
     }
 
-    setUserAnswer((oldUserAns) =>
-      oldUserAns.map((oldAns) =>
-        oldAns.id_question === newUserAnswer.id_question
-          ? { ...oldAns, answer: newUserAnswer.answer }
-          : oldAns
-      )
-    );
-  };
+    const fetchData = async (userId: string) => {
+      try {
+        const response = await fetch(`/api/user_result/${userId}`, {
+          method: "POST",
+          body: JSON.stringify(evaluasiArr),
+        });
 
-  const submitAnswerHandler = () => {
-    setCorrection(true);
+        if (!response.ok) {
+          throw new Error("Failed to fetch documents");
+        }
+
+        const data = await response.json();
+        setUserResult(data.userresults);
+      } catch (error: any) {
+        console.error("Error fetching documents:", error.message);
+      }
+    };
+
+    if (user.length > 0) {
+      fetchData(user[0]._id);
+    }
+  }, [user, evaluasis]);
+
+  const onSubmitAnswerHandler = async (userAnswer: UserResultTypes[]) => {
+    userAnswer.map((ans) => {
+      ans.id_user = user[0]._id;
+    });
+
+    try {
+      const res = await fetch("/api/user_result", {
+        method: "POST",
+        headers: {
+          "Content-type": "application-json",
+        },
+        body: JSON.stringify(userAnswer),
+      });
+
+      if (res.status === 200) {
+        window.location.reload();
+      }
+    } catch (e) {}
   };
 
   return (
@@ -141,30 +171,17 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
                       Evaluasi Pembelajaran
                     </h2>
-                    <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
-                      {evaluasis.map((ev, index) => (
-                        <Question
-                          index={index}
-                          id_question={ev._id}
-                          question={ev.question}
-                          choice_answer={ev.choice_answer}
-                          reason={ev.reason}
-                          answer={ev.answer}
-                          key={ev._id}
-                          onChange={changeAnswerHandler}
-                          correction={correction}
-                        />
-                      ))}
-                      <div className="mt-2 text-center">
-                        <Button
-                          loading={false}
-                          style="solid"
-                          onClick={submitAnswerHandler}
-                        >
-                          Submit Jawaban
-                        </Button>
-                      </div>
-                    </div>
+                    {userResult.length > 0 ? (
+                      <QuestionAnswered
+                        evaluasis={evaluasis}
+                        userResult={userResult}
+                      />
+                    ) : (
+                      <Question
+                        evaluasis={evaluasis}
+                        onSubmitAnswer={onSubmitAnswerHandler}
+                      />
+                    )}
                   </div>
                 )}
 

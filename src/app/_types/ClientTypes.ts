@@ -45,3 +45,11 @@ export interface EvaluasiClientTypes {
   question: string;
   reason: string;
 }
+
+export interface UserResultTypes {
+  id_evaluasi: string;
+  id_user: string;
+  user_answer: number;
+  correct: boolean;
+  image: string;
+}

@@ -41,3 +41,11 @@ export interface EvaluasiTypes extends mongoose.Document {
   question: string;
   reason: string;
 }
+
+export interface UserResultTypes extends mongoose.Document {
+  id_evaluasi: string;
+  id_user: string;
+  user_answer: number;
+  correct: boolean;
+  image: string;
+}

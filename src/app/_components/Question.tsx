@@ -1,110 +1,97 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
+import { Button } from "../_ui/Button";
+import { EvaluasiClientTypes, UserResultTypes } from "../_types/ClientTypes";
 
 interface QuestionType {
-  index: number;
-  question: string;
-  choice_answer: string[];
-  reason: string;
-  answer: number;
-  id_question: string;
-  onChange: (v: string, idQuestion: string) => void;
-  correction: boolean;
-}
-
-interface ReasonsType {
-  reason: string;
-  show: boolean;
+  evaluasis: EvaluasiClientTypes[];
+  onSubmitAnswer: (userAnswer: UserResultTypes[]) => void;
 }
 
 interface AnswerListType {
-  userAnswer: string;
-  index: number;
-  indexUserAnswer: number;
-  onChangeAnswer: (v: string) => void;
-  correct: boolean;
-  correction: boolean;
+  id: string;
+  name: string;
+  value: number;
+  answer: string;
+  onChangeAnswerHandler: (e: any) => void;
 }
 
-const Reasons: FC<ReasonsType> = ({ reason, show }) => {
-  if (show) {
-    return (
-      <div className="bg-blue-light p-4 rounded text-white mt-2">
-        Alasan: {reason}
-      </div>
-    );
-  }
-};
-
 const AnswerList: FC<AnswerListType> = ({
-  userAnswer,
-  index,
-  indexUserAnswer,
-  onChangeAnswer,
-  correct,
-  correction,
+  id,
+  name,
+  value,
+  answer,
+  onChangeAnswerHandler,
 }) => {
-  const changeAnswerHandler = (e: any) => {
-    onChangeAnswer(e.target.value);
-  };
+  function changeAnswerHandler(e: any) {
+    onChangeAnswerHandler(e);
+  }
 
   return (
-    <li className="p-2" key={indexUserAnswer}>
+    <li className="p-2">
       <input
         type="radio"
-        id={userAnswer}
-        name={"jawaban" + index}
-        value={indexUserAnswer}
+        id={id}
+        name={name}
+        value={value}
         onChange={changeAnswerHandler}
       />
-      <label className="ml-2">{userAnswer}</label>
+      <label className="ml-2">{answer}</label>
     </li>
   );
 };
 
-const Question: FC<QuestionType> = ({
-  index,
-  question,
-  choice_answer,
-  reason,
-  onChange,
-  id_question,
-  correction,
-  answer,
-}) => {
-  const [userAnswer, setUserAnswer] = useState<number>(0);
+const Question: FC<QuestionType> = ({ evaluasis, onSubmitAnswer }) => {
+  const [userAnswer, setUserAnswer] = useState<UserResultTypes[]>([]);
 
-  const changeAnswerHandler = (v: string) => {
-    onChange(v, id_question);
+  function changeAnswerHandler(e: any) {
+    const userAns = {
+      id_evaluasi: e.target.name,
+      user_answer: parseInt(e.target.value),
+      correct: false,
+      image: "test", //TODO
+      id_user: "",
+    };
 
-    setUserAnswer(parseInt(v));
-  };
+    setUserAnswer((exArr) => [...exArr, userAns]);
+  }
 
-  useEffect(() => {
-    if (correction) {
-      console.log("aselole");
-    }
-  }, [correction]);
+  function submitHandler() {
+    userAnswer.map((ans) => {
+      const evalObj = evaluasis.find((ev) => ev._id === ans.id_evaluasi);
+      ans.correct = evalObj?.answer === ans.user_answer;
+    });
+
+    onSubmitAnswer(userAnswer);
+  }
 
   return (
-    <div className="mt-2">
-      <span>
-        {index + 1}. {question}
-      </span>
-      <ul className="pl-4">
-        {choice_answer.map((userAns, indexUserAns) => (
-          <AnswerList
-            onChangeAnswer={changeAnswerHandler}
-            indexUserAnswer={indexUserAns}
-            index={index}
-            userAnswer={userAns}
-            correct={true}
-            correction={correction}
-          />
-        ))}
-      </ul>
-      <Reasons reason={reason} show={correction} />
+    <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
+      {evaluasis.map((ev, index) => (
+        <div key={ev._id}>
+          <span>
+            {index + 1}. {ev.question}
+          </span>
+          <ul className="pl-4">
+            {ev.choice_answer.map((e, i) => (
+              <AnswerList
+                key={e}
+                id={e}
+                name={ev._id}
+                value={i}
+                onChangeAnswerHandler={changeAnswerHandler}
+                answer={e}
+              />
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div className="mt-2 text-center">
+        <Button loading={false} onClick={submitHandler} style="solid">
+          Kirim Jawaban
+        </Button>
+      </div>
     </div>
   );
 };
