@@ -18,6 +18,7 @@ import Question from "@/app/_components/Question";
 import GetUserByName from "@/app/_lib/GetUserByName";
 import UserContext from "@/app/_context/UserContext";
 import QuestionAnswered from "@/app/_components/QuestionAnswered";
+import { Button } from "@/app/_ui/Button";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const { status } = useSession();
@@ -42,6 +43,8 @@ export default function Page({ params }: { params: { slug: string } }) {
   );
 
   const [loading, setLoading] = useState<boolean>(true);
+
+  const [isEvaluasiOpen, setIsEvaluasiOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -171,16 +174,30 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
                       Evaluasi Pembelajaran
                     </h2>
-                    {userResult.length > 0 ? (
-                      <QuestionAnswered
-                        evaluasis={evaluasis}
-                        userResult={userResult}
-                      />
+                    {!isEvaluasiOpen ? (
+                      <div className="text-center mt-2">
+                        <Button
+                          style="solid"
+                          onClick={() => setIsEvaluasiOpen(true)}
+                          loading={false}
+                        >
+                          Siap Mengerjakan Evaluasi?
+                        </Button>
+                      </div>
                     ) : (
-                      <Question
-                        evaluasis={evaluasis}
-                        onSubmitAnswer={onSubmitAnswerHandler}
-                      />
+                      <>
+                        {userResult.length > 0 ? (
+                          <QuestionAnswered
+                            evaluasis={evaluasis}
+                            userResult={userResult}
+                          />
+                        ) : (
+                          <Question
+                            evaluasis={evaluasis}
+                            onSubmitAnswer={onSubmitAnswerHandler}
+                          />
+                        )}
+                      </>
                     )}
                   </div>
                 )}
