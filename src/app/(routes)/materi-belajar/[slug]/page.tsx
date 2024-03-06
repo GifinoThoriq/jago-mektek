@@ -139,38 +139,33 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </h1>
               </div>
               <div className="max-w-7xl px-4 mt-16 mx-auto">
-                <div className="md:h-[100vh] flex md:flex-row flex-col">
-                  <div className="md:basis-2/3 px-4">
-                    <iframe
-                      src={submateriDetail.materi_detail}
-                      allow="autoplay"
-                      className="w-[100%] h-[100vh] md:h-[100%]"
-                    ></iframe>
-                  </div>
+                <div className="px-4 w-full h-screen">
+                  <iframe
+                    src={submateriDetail.materi_detail}
+                    allow="autoplay"
+                    className="w-[100%] h-[100vh] md:h-[100%]"
+                  ></iframe>
+                </div>
 
-                  <div className="md:basis-1/3 px-4 max-w-[640px] overflow-auto">
-                    <h3 className="text-2xl font-bold mt-4 md:mt-0">
-                      Video Pendukung
-                    </h3>
-                    <div className="my-4 flex md:block gap-4 md:gap-0 ">
-                      {submateriDetail.video.map((item, index) => (
-                        <iframe
-                          width="100%"
-                          className="md:mb-4"
-                          height="200px"
-                          key={index}
-                          src={item}
-                          title="YouTube video player"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                        ></iframe>
-                      ))}
-                    </div>
+                <div className="px-4 w-full h-[50vh] mt-4">
+                  <h3 className="text-2xl font-bold mt-4 md:mt-0">
+                    Video Pendukung
+                  </h3>
+                  <div className="my-4 h-full ">
+                    <iframe
+                      width="100%"
+                      className="md:mb-4"
+                      height="100%"
+                      src="https://www.youtube.com/embed/A1V-QQ5wFU4?si=UHmwjwmH0f2hS-BU"
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
                   </div>
                 </div>
 
                 {evaluasis.length > 0 && (
-                  <div>
+                  <div className="mt-20">
                     <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
                       Evaluasi Pembelajaran
                     </h2>
