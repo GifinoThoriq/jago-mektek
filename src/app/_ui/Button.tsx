@@ -7,6 +7,7 @@ interface ButtonComponent {
   type?: "submit" | "reset" | "button";
   className?: string;
   loading: boolean;
+  disabled?: boolean;
 }
 
 export const Button: FC<ButtonComponent> = ({
@@ -16,14 +17,17 @@ export const Button: FC<ButtonComponent> = ({
   type,
   className,
   loading,
+  disabled,
 }) => {
   if (style === "solid") {
     return (
       <button
-        className={`border border-blue bg-blue-light px-8 py-3 text-sm text-white font-bold rounded transition-opacity hover:bg-opacity-80 ${className}`}
+        className={`border border-blue bg-blue-light px-8 py-3 text-sm text-white font-bold rounded transition-opacity hover:bg-opacity-80 ${
+          disabled ? "bg-opacity-80" : ""
+        } ${className}`}
         onClick={onClick}
         type={type}
-        disabled={loading}
+        disabled={disabled}
       >
         {loading ? (
           <div className="flex justify-center gap-2">

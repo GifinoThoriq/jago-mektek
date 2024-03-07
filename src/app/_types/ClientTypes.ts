@@ -36,3 +36,20 @@ export interface ReplyTypes {
   reply: string;
   createdAt: Date;
 }
+
+export interface EvaluasiClientTypes {
+  _id: string;
+  id_submateri: string;
+  answer: number;
+  choice_answer: string[];
+  question: string;
+  reason: string;
+}
+
+export interface UserResultTypes {
+  id_evaluasi: string;
+  id_user: string;
+  user_answer: number;
+  correct: boolean;
+  image: string;
+}

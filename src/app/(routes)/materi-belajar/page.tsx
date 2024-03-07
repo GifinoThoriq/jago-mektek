@@ -15,7 +15,7 @@ export default function materiBelajar(props: any) {
 
   const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
 
-  const [selectedMateri, setSelectedMateri] = useState<string>("empty");
+  const [selectedMateri, setSelectedMateri] = useState<string>("");
 
   const subMaterisFetch: SubMateriClientTypes[] = GetSubMateri();
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,18 +26,13 @@ export default function materiBelajar(props: any) {
 
   function selectHandler(e: any) {
     setSelectedMateri(e.target.value);
-
-    const newSub = subMaterisFetch.map((sub) => ({
-      ...sub,
-      materi_title: getMateriTitle(sub.id_materi)[0],
-    }));
-
-    const subMaterisFilter = newSub.filter(
-      (sub) => sub.id_materi === e.target.value
-    );
-
-    setSubMateris(subMaterisFilter);
   }
+
+  useEffect(() => {
+    if (materis.length > 0) {
+      setSelectedMateri(materis[0]._id);
+    }
+  }, [materis]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,6 +42,20 @@ export default function materiBelajar(props: any) {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (selectedMateri !== "" && materis.length > 0) {
+      const newSub = subMaterisFetch.map((sub) => ({
+        ...sub,
+        materi_title: getMateriTitle(sub.id_materi)[0],
+      }));
+
+      const subMaterisFilter = newSub.filter(
+        (sub) => sub.id_materi === selectedMateri
+      );
+
+      setSubMateris(subMaterisFilter);
+    }
+  }, [selectedMateri, materis]);
 
   return (
     <>
@@ -66,7 +75,6 @@ export default function materiBelajar(props: any) {
                 onChange={selectHandler}
                 className="block max-w-[420px] w-full rounded-md border-2 p-1.5 text-gray-900 border-blue-dark mx-auto"
               >
-                <option value="empty">---Pilih Bab---</option>
                 {materis.length > 0 &&
                   materis.map((mat) => (
                     <option key={mat._id} value={mat._id}>
@@ -76,7 +84,7 @@ export default function materiBelajar(props: any) {
               </select>
             </div>
           </div>
-          {subMateris.length <= 0 && selectedMateri != "empty" ? (
+          {subMateris.length <= 0 && selectedMateri !== "" ? (
             <div className="min-h-[60vh] bg-gray-900 flex flex-col items-center justify-center">
               <h1 className="text-2xl sm:text-4xl text-blue-dark font-bold mb-8 animate-pulse">
                 Coming Soon
@@ -87,17 +95,16 @@ export default function materiBelajar(props: any) {
             </div>
           ) : (
             <div>
-              {subMateris.length > 0 &&
-                subMateris.map((sub) => (
-                  <CardHorizontal
-                    key={sub._id}
-                    title={sub.title}
-                    materiTitle={sub.materi_title}
-                    image={sub.image}
-                    description={sub.description}
-                    id={sub._id}
-                  />
-                ))}
+              {subMateris.map((sub) => (
+                <CardHorizontal
+                  key={sub._id}
+                  title={sub.title}
+                  materiTitle={sub.materi_title}
+                  image={sub.image}
+                  description={sub.description}
+                  id={sub._id}
+                />
+              ))}
             </div>
           )}
         </div>

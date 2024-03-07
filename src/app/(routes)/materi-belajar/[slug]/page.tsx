@@ -1,18 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import GetSubMateri from "@/app/_lib/GetSubMateri";
-import { CardHorizontal } from "@/app/_ui/CardHorizontal";
-import Image from "next/image";
-import { SubMateriClientTypes } from "@/app/_types/ClientTypes";
-import Loading from "@/app/_components/Loading";
+import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+import GetSubMateri from "@/app/_lib/GetSubMateri";
+import { CardHorizontal } from "@/app/_ui/CardHorizontal";
+import {
+  SubMateriClientTypes,
+  EvaluasiClientTypes,
+  UserClientTypes,
+  UserResultTypes,
+} from "@/app/_types/ClientTypes";
+import Loading from "@/app/_components/Loading";
+import GetEvaluasi from "@/app/_lib/GetEvaluasi";
+import Question from "@/app/_components/Question";
+import GetUserByName from "@/app/_lib/GetUserByName";
+import UserContext from "@/app/_context/UserContext";
+import QuestionAnswered from "@/app/_components/QuestionAnswered";
+import { Button } from "@/app/_ui/Button";
+
 export default function Page({ params }: { params: { slug: string } }) {
+  const { status } = useSession();
+
+  const router = useRouter();
+
+  const ctx = useContext(UserContext);
+
+  const username = ctx?.username === undefined ? "" : ctx.username;
+
   const submateris: SubMateriClientTypes[] = GetSubMateri();
+  const evaluasis: EvaluasiClientTypes[] = GetEvaluasi(params.slug);
+  const user: UserClientTypes[] = GetUserByName(username);
 
   const [submateriDetail, setSubmateriDetail] =
     useState<SubMateriClientTypes>();
+
+  const [userResult, setUserResult] = useState([]);
 
   const [submateriRecom, setSubmateriRecom] = useState<SubMateriClientTypes[]>(
     []
@@ -20,13 +44,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { status } = useSession();
+  const [isEvaluasiOpen, setIsEvaluasiOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if(status === "unauthenticated"){
-      window.location.href="/login"
+    if (status === "unauthenticated") {
+      window.location.href = "/login";
     }
-  },[status])
+  }, [status]);
 
   useEffect(() => {
     const submaterisFilter = submateris.filter(
@@ -49,9 +73,60 @@ export default function Page({ params }: { params: { slug: string } }) {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const evaluasiArr: string[] = [];
+
+    if (evaluasis.length > 0) {
+      evaluasis.map((ev) => {
+        evaluasiArr.push(ev._id);
+      });
+    }
+
+    const fetchData = async (userId: string) => {
+      try {
+        const response = await fetch(`/api/user_result/${userId}`, {
+          method: "POST",
+          body: JSON.stringify(evaluasiArr),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch documents");
+        }
+
+        const data = await response.json();
+        setUserResult(data.userresults);
+      } catch (error: any) {
+        console.error("Error fetching documents:", error.message);
+      }
+    };
+
+    if (user.length > 0) {
+      fetchData(user[0]._id);
+    }
+  }, [user, evaluasis]);
+
+  const onSubmitAnswerHandler = async (userAnswer: UserResultTypes[]) => {
+    userAnswer.map((ans) => {
+      ans.id_user = user[0]._id;
+    });
+
+    try {
+      const res = await fetch("/api/user_result", {
+        method: "POST",
+        headers: {
+          "Content-type": "application-json",
+        },
+        body: JSON.stringify(userAnswer),
+      });
+
+      if (res.status === 200) {
+        window.location.reload();
+      }
+    } catch (e) {}
+  };
+
   return (
     <>
-      \
       {loading ? (
         <Loading />
       ) : (
@@ -64,118 +139,63 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </h1>
               </div>
               <div className="max-w-7xl px-4 mt-16 mx-auto">
-                <div className="md:h-[100vh] flex md:flex-row flex-col">
-                  <div className="md:basis-2/3 px-4">
+                <div className="px-4 w-full h-screen">
+                  <iframe
+                    src={submateriDetail.materi_detail}
+                    allow="autoplay"
+                    className="w-[100%] h-[100vh] md:h-[100%]"
+                  ></iframe>
+                </div>
+
+                <div className="px-4 w-full h-[50vh] mt-4">
+                  <h3 className="text-2xl font-bold mt-4 md:mt-0">
+                    Video Pendukung
+                  </h3>
+                  <div className="my-4 h-full ">
                     <iframe
-                      src={submateriDetail.materi_detail}
-                      allow="autoplay"
-                      className="w-[100%] h-[100vh] md:h-[100%]"
+                      width="100%"
+                      className="md:mb-4"
+                      height="100%"
+                      src="https://www.youtube.com/embed/A1V-QQ5wFU4?si=UHmwjwmH0f2hS-BU"
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
                     ></iframe>
                   </div>
-
-                  <div className="md:basis-1/3 px-4 max-w-[640px] overflow-auto">
-                    <h3 className="text-2xl font-bold mt-4 md:mt-0">
-                      Video Pendukung
-                    </h3>
-                    <div className="my-4 flex md:block gap-4 md:gap-0 ">
-                      {
-                        submateriDetail.video.map((item, index) => (
-                          <iframe
-                          width="100%"
-                          className="md:mb-4"
-                          height="200px"
-                          key={index}
-                          src={item}
-                          title="YouTube video player"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                        ></iframe>
-                        ))
-                      }
-                    </div>
-                  </div>
                 </div>
 
-                <div>
-                  <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
-                    Evaluasi Pembelajaran
-                  </h2>
-                  <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
-                    <div>
-                      <span>1. contoh pertanyaan 1</span>
-                      <ul className="pl-4">
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="mt-2">
-                      <span>2. contoh pertanyaan 2</span>
-                      <ul className="pl-4">
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                            checked={true}
-                            disabled
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                            disabled
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                        <li>
-                          <input
-                            type="radio"
-                            id="jawaban1"
-                            name="jawaban1"
-                            value="jawaban1"
-                            disabled
-                          />
-                          <label className="ml-2">Jawaban 1</label>
-                        </li>
-                      </ul>
-                      <div className="bg-[#8FD49A] p-4 rounded text-white mt-2">
-                        Alasan: Lorem ipsum dolor sit amet, consectetur
-                        adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.
+                {evaluasis.length > 0 && (
+                  <div className="mt-20">
+                    <h2 className="text-xl font-bold text-center text-blue-dark mt-4">
+                      Evaluasi Pembelajaran
+                    </h2>
+                    {!isEvaluasiOpen ? (
+                      <div className="text-center mt-2">
+                        <Button
+                          style="solid"
+                          onClick={() => setIsEvaluasiOpen(true)}
+                          loading={false}
+                        >
+                          Siap Mengerjakan Evaluasi?
+                        </Button>
                       </div>
-                    </div>
+                    ) : (
+                      <>
+                        {userResult.length > 0 ? (
+                          <QuestionAnswered
+                            evaluasis={evaluasis}
+                            userResult={userResult}
+                          />
+                        ) : (
+                          <Question
+                            evaluasis={evaluasis}
+                            onSubmitAnswer={onSubmitAnswerHandler}
+                          />
+                        )}
+                      </>
+                    )}
                   </div>
-                </div>
+                )}
 
                 <div>
                   <h2 className="text-xl font-bold text-blue-dark mt-8">
