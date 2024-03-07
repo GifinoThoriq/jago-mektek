@@ -28,7 +28,13 @@ export const Card: FC<CardComponent> = ({ title, description, url, image }) => {
           <span className="text-base text-gray">{description}</span>
         </div>
         <div>
-          <Button loading={false} style="outline" onClick={() => window.location.href = "/materi-belajar"}>
+          <Button
+            loading={false}
+            style="outline"
+            onClick={() =>
+              (window.location.href = `/materi-belajar/materi/${url}`)
+            }
+          >
             Pelajari Lanjut
           </Button>
         </div>

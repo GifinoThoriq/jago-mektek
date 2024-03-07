@@ -126,6 +126,7 @@ export default function Home() {
                       title={mat.title}
                       description={mat.description}
                       image={mat.image}
+                      url={mat._id}
                     />
                   ))}
                 </div>

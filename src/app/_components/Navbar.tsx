@@ -22,7 +22,7 @@ const nav = [
   {
     id: 1,
     title: "Materi Belajar",
-    pathname: "/materi-belajar",
+    pathname: "/materi-belajar/materi/657164ee835b95af9d306395",
   },
   {
     id: 2,
