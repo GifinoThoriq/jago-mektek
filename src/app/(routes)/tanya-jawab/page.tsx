@@ -16,6 +16,8 @@ import UserContext from "@/app/_context/UserContext";
 import Loading from "@/app/_components/Loading";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/_components/Modal";
+import { useEdgeStore } from "@/app/_lib/edgestore";
+import { CameraIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface ReplyType {
   _id: string;
@@ -41,6 +43,8 @@ export default function TanyaJawab() {
   const usersFetch: UserClientTypes[] = GetUser();
   const repliesFetch: ReplyTypes[] = GetReply();
 
+  const { edgestore } = useEdgeStore();
+
   const [tanyajawabs, setTanyaJawabs] = useState<TanyaJawabUpdatedType[]>([]);
 
   const ctx = useContext(UserContext);
@@ -56,6 +60,10 @@ export default function TanyaJawab() {
     msg: "",
     success: false,
   });
+
+  const [files, setFiles] = useState<File[]>([]);
+  const [thumbImage, setThumbImage] = useState<string[]>([]);
+  const [openRemove, setOpenRemove] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -103,6 +111,8 @@ export default function TanyaJawab() {
       window.location.href = "/login";
       return;
     }
+
+    //TODO: upload to edgestore first and then store to DB
 
     if (post.length >= 500) {
       setModal({
@@ -177,6 +187,38 @@ export default function TanyaJawab() {
     }
   };
 
+  const inputImageHandler = (e: any) => {
+    if (e.target.files?.[0]) {
+      if (e.target.files?.[0].size > 3000000) {
+        setModal({
+          msg: "Gambar tidak boleh lebih dari 3 MB",
+          success: false,
+        });
+        setModalIsOpen(true);
+        return;
+      }
+
+      if (files.length > 3) {
+        setModal({
+          msg: "Tidak boleh lebih dari 4 gambar",
+          success: false,
+        });
+        setModalIsOpen(true);
+        return;
+      }
+      setFiles([e.target.files?.[0], ...files]);
+      const convertImage = URL.createObjectURL(e.target.files?.[0]);
+      setThumbImage([convertImage, ...thumbImage]);
+    }
+  };
+
+  const removeImgHandler = (i: number) => {
+    const deletedFiles = files.filter((f, index) => i !== index);
+    const deletedThumb = thumbImage.filter((t, index) => i !== index);
+    setFiles(deletedFiles);
+    setThumbImage(deletedThumb);
+  };
+
   return (
     <>
       {loading ? (
@@ -193,15 +235,61 @@ export default function TanyaJawab() {
             Tanya Jawab
           </h1>
           <form onSubmit={postSubmitHandler}>
-            <div className="text-center flex mx-auto flex-col max-w-[500px] mt-4 gap-4">
+            <div className="flex mx-auto flex-col max-w-[500px] mt-4">
               <textarea
-                rows={4}
+                rows={5}
                 cols={50}
                 name="post"
-                className="p-2 rounded border-2 border-gray"
+                className="p-2"
                 placeholder="tulis pertanyaanmu"
+                style={{ resize: "none" }}
               />
-              <div>
+              {thumbImage.length > 0 && (
+                <div className="flex gap-2 my-2">
+                  {thumbImage.map((thumb, i) => (
+                    <div
+                      key={i}
+                      className="relative"
+                      onMouseEnter={() => setOpenRemove(true)}
+                      onMouseLeave={() => setOpenRemove(false)}
+                    >
+                      <img
+                        className="w-36 h-20 object-cover"
+                        src={thumb}
+                        alt={`Thumbnail ${i + 1}`}
+                      />
+                      <button
+                        className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full ${
+                          openRemove
+                            ? "opacity-100 transition-opacity duration-300"
+                            : "opacity-0"
+                        }`}
+                        onClick={() => removeImgHandler(i)}
+                      >
+                        <XCircleIcon className="h-8 w-8" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="flex">
+                <img />
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="file-input">
+                  <label htmlFor="file-upload" className="file-label">
+                    <CameraIcon
+                      className="h-6 w-6 text-gray"
+                      onClick={inputImageHandler}
+                    />
+                  </label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={inputImageHandler}
+                  />
+                </div>
                 <Button type="submit" style="solid" loading={loadingBtn}>
                   Post
                 </Button>

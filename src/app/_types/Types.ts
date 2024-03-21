@@ -32,6 +32,7 @@ export interface TanyaJawabTypes extends mongoose.Document {
   id_user_post: string;
   post: string;
   createdAt: Date;
+  image: string[];
 }
 
 export interface EvaluasiTypes extends mongoose.Document {

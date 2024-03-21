@@ -17,13 +17,14 @@ export const GET = async () => {
 };
 
 export const POST = async (request: any) => {
-  const { id_user_post, post } = await request.json();
+  const { id_user_post, post, image } = await request.json();
 
   await connectDb();
 
   const newPost = new TanyaJawab({
     id_user_post,
     post,
+    image
   });
 
   try {

@@ -21,6 +21,7 @@ export interface TanyaJawabClientTypes {
   id_user_post: string;
   post: string;
   createdAt: Date;
+  image: string[];
 }
 
 export interface UserClientTypes {
