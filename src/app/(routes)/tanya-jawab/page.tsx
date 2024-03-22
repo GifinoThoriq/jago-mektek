@@ -36,6 +36,7 @@ interface TanyaJawabUpdatedType {
   createdAt: Date;
   replies: ReplyType[];
   image: string[];
+  isReply: boolean;
 }
 
 type FileState = {
@@ -106,6 +107,7 @@ export default function TanyaJawab() {
             createdAt: tanyaJawab.createdAt,
             image: tanyaJawab.image,
             replies: userReplies ? userReplies : [],
+            isReply: false,
           };
         }
       );
@@ -274,6 +276,18 @@ export default function TanyaJawab() {
     setThumbImage(deletedThumb);
   };
 
+  const replyShowHandler = (id: string) => {
+    console.log("aselole");
+    const updatedTanyaJawabs = tanyajawabs.map((tj) => {
+      if (tj._id === id) {
+        return { ...tj, isReply: true };
+      }
+      return { ...tj, isReply: false };
+    });
+
+    setTanyaJawabs(updatedTanyaJawabs);
+  };
+
   return (
     <>
       {loading ? (
@@ -420,32 +434,48 @@ export default function TanyaJawab() {
                         </div>
                       ))}
 
-                      <form onSubmit={replySubmitHandler}>
-                        <div className="flex flex-col gap-2 my-2">
-                          <input
-                            type="hidden"
-                            name="id_post"
-                            value={item._id}
-                          />
-                          <input
-                            className="p-2 rounded border-2 border-gray"
-                            type="text"
-                            name="reply"
-                            placeholder="tulis balasan"
-                            onChange={(e) => setInputTextReply(e.target.value)}
-                          />
-                          <div className="self-end">
-                            <Button
-                              type="submit"
-                              loading={loadingBtn}
-                              disabled={loadingBtn || inputTextReply === ""}
-                              style="solid"
-                            >
-                              Reply
-                            </Button>
-                          </div>
+                      {!item.isReply && (
+                        <div className="my-4">
+                          <Button
+                            loading={false}
+                            style="solid"
+                            onClick={() => replyShowHandler(item._id)}
+                          >
+                            Balas
+                          </Button>
                         </div>
-                      </form>
+                      )}
+
+                      {item.isReply && (
+                        <form onSubmit={replySubmitHandler}>
+                          <div className="flex flex-col gap-2 my-2">
+                            <input
+                              type="hidden"
+                              name="id_post"
+                              value={item._id}
+                            />
+                            <input
+                              className="p-2 rounded border-2 border-gray"
+                              type="text"
+                              name="reply"
+                              placeholder="tulis balasan"
+                              onChange={(e) =>
+                                setInputTextReply(e.target.value)
+                              }
+                            />
+                            <div className="self-end">
+                              <Button
+                                type="submit"
+                                loading={loadingBtn}
+                                disabled={loadingBtn || inputTextReply === ""}
+                                style="solid"
+                              >
+                                Kirim Balasan
+                              </Button>
+                            </div>
+                          </div>
+                        </form>
+                      )}
                     </div>
                   </div>
                 </div>
