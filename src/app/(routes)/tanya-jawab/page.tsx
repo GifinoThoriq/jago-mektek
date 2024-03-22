@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Modal from "@/app/_components/Modal";
 import { useEdgeStore } from "@/app/_lib/edgestore";
 import { CameraIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 interface ReplyType {
   _id: string;
@@ -34,7 +35,14 @@ interface TanyaJawabUpdatedType {
   post: string;
   createdAt: Date;
   replies: ReplyType[];
+  image: string[];
 }
+
+type FileState = {
+  file: File;
+  key: string;
+  progress: "PENDING" | "COMPLETE" | "ERROR" | number;
+};
 
 export default function TanyaJawab() {
   const router = useRouter();
@@ -61,9 +69,11 @@ export default function TanyaJawab() {
     success: false,
   });
 
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<FileState[]>([]);
   const [thumbImage, setThumbImage] = useState<string[]>([]);
   const [openRemove, setOpenRemove] = useState(false);
+  const [inputTextPost, setInputTextPost] = useState("");
+  const [inputTextReply, setInputTextReply] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -94,6 +104,7 @@ export default function TanyaJawab() {
             name_user_post: user ? user.username : "",
             post: tanyaJawab.post,
             createdAt: tanyaJawab.createdAt,
+            image: tanyaJawab.image,
             replies: userReplies ? userReplies : [],
           };
         }
@@ -102,8 +113,25 @@ export default function TanyaJawab() {
     }
   }, [tanyajawabsFetch, usersFetch, repliesFetch]);
 
+  function updateFileProgress(key: string, progress: FileState["progress"]) {
+    setFiles((file) => {
+      const newFileStates = structuredClone(file);
+      const fileState = newFileStates.find(
+        (fileState) => fileState.key === key
+      );
+      if (fileState) {
+        fileState.progress = progress;
+      }
+      return newFileStates;
+    });
+  }
+
   const postSubmitHandler = async (e: any) => {
     e.preventDefault();
+
+    let urlImages: string[] = [];
+
+    setLoadingBtn(true);
 
     const post = e.target["post"].value;
 
@@ -111,8 +139,6 @@ export default function TanyaJawab() {
       window.location.href = "/login";
       return;
     }
-
-    //TODO: upload to edgestore first and then store to DB
 
     if (post.length >= 500) {
       setModal({
@@ -123,30 +149,54 @@ export default function TanyaJawab() {
       return;
     }
 
-    const user = usersFetch.find((u) => u.username === ctx?.username);
-
-    if (user && post !== "") {
+    const uploadImage = files.map(async (addedFileState) => {
       try {
-        const res = await fetch("/api/tanyajawab", {
-          method: "POST",
-          headers: {
-            "Content-type": "application-json",
+        const res = await edgestore.myPublicImages.upload({
+          file: addedFileState.file,
+          onProgressChange: async (progress) => {
+            updateFileProgress(addedFileState.key, progress);
+            if (progress === 100) {
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              updateFileProgress(addedFileState.key, "COMPLETE");
+            }
           },
-          body: JSON.stringify({
-            id_user_post: user._id,
-            post,
-          }),
         });
+        urlImages.push(res.url);
+      } catch (err) {
+        setLoadingBtn(false);
+        updateFileProgress(addedFileState.key, "ERROR");
+      }
+    });
 
-        setLoadingBtn(true);
+    Promise.all(uploadImage)
+      .then(async () => {
+        setLoadingBtn(false);
 
-        if (res.status === 200) {
-          window.location.reload();
+        const user = usersFetch.find((u) => u.username === ctx?.username);
+
+        if (user && post !== "") {
+          try {
+            const res = await fetch("/api/tanyajawab", {
+              method: "POST",
+              headers: {
+                "Content-type": "application-json",
+              },
+              body: JSON.stringify({
+                id_user_post: user._id,
+                post,
+                image: urlImages,
+              }),
+            });
+
+            if (res.status === 200) {
+              window.location.reload();
+            }
+          } catch (e) {}
         }
-
-        setLoading(false);
-      } catch (e) {}
-    }
+      })
+      .catch((error) => {
+        console.error("Error during file uploads:", error);
+      });
   };
 
   const replySubmitHandler = async (e: any) => {
@@ -206,7 +256,12 @@ export default function TanyaJawab() {
         setModalIsOpen(true);
         return;
       }
-      setFiles([e.target.files?.[0], ...files]);
+      const addedFiles = {
+        file: e.target.files?.[0],
+        key: Math.random().toString(36).slice(2),
+        progress: "PENDING" as const,
+      };
+      setFiles([addedFiles, ...files]);
       const convertImage = URL.createObjectURL(e.target.files?.[0]);
       setThumbImage([convertImage, ...thumbImage]);
     }
@@ -224,7 +279,7 @@ export default function TanyaJawab() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 min-h-screen">
           <Modal
             isOpen={modalIsOpen}
             onClose={() => setModalIsOpen(false)}
@@ -243,6 +298,7 @@ export default function TanyaJawab() {
                 className="p-2"
                 placeholder="tulis pertanyaanmu"
                 style={{ resize: "none" }}
+                onChange={(e) => setInputTextPost(e.target.value)}
               />
               {thumbImage.length > 0 && (
                 <div className="flex gap-2 my-2">
@@ -258,6 +314,18 @@ export default function TanyaJawab() {
                         src={thumb}
                         alt={`Thumbnail ${i + 1}`}
                       />
+
+                      {typeof files[i].progress === "number" && (
+                        <div className="h-[6px] w-full border rounded overflow-hidden mt-2">
+                          <div
+                            className="h-full bg-blue-dark transition-all duration-150"
+                            style={{
+                              width: `${files[i].progress}%`,
+                            }}
+                          ></div>
+                        </div>
+                      )}
+
                       <button
                         className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full ${
                           openRemove
@@ -290,7 +358,12 @@ export default function TanyaJawab() {
                     onChange={inputImageHandler}
                   />
                 </div>
-                <Button type="submit" style="solid" loading={loadingBtn}>
+                <Button
+                  type="submit"
+                  style="solid"
+                  loading={loadingBtn}
+                  disabled={loadingBtn || inputTextPost === ""}
+                >
                   Post
                 </Button>
               </div>
@@ -316,6 +389,19 @@ export default function TanyaJawab() {
                       </div>
 
                       <span className="text-base">{item.post}</span>
+                      {item.image && (
+                        <div className="flex flex-row gap-4 mt-2">
+                          {item.image.map((src) => (
+                            <Link href={src} target="_blank">
+                              <img
+                                src={src}
+                                className="w-36 h-20 object-cover"
+                              />
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
                       <hr className="my-2" />
                       {item.replies.map((rep) => (
                         <div className="flex flex-row gap-2 my-4" key={rep._id}>
@@ -346,11 +432,13 @@ export default function TanyaJawab() {
                             type="text"
                             name="reply"
                             placeholder="tulis balasan"
+                            onChange={(e) => setInputTextReply(e.target.value)}
                           />
                           <div className="self-end">
                             <Button
                               type="submit"
                               loading={loadingBtn}
+                              disabled={loadingBtn || inputTextReply === ""}
                               style="solid"
                             >
                               Reply

@@ -21,10 +21,12 @@ export const POST = async (request: any) => {
 
   await connectDb();
 
+  console.log(image);
+
   const newPost = new TanyaJawab({
     id_user_post,
     post,
-    image
+    image,
   });
 
   try {
