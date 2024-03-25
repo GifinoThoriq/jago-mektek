@@ -19,6 +19,7 @@ import Modal from "@/app/_components/Modal";
 import { useEdgeStore } from "@/app/_lib/edgestore";
 import { CameraIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import styles from "./tanyajawab.module.css";
 
 interface ReplyType {
   _id: string;
@@ -47,8 +48,6 @@ type FileState = {
 };
 
 export default function TanyaJawab() {
-  const router = useRouter();
-
   const tanyajawabsFetch: TanyaJawabClientTypes[] = GetTanyaJawab();
   const usersFetch: UserClientTypes[] = GetUser();
   const repliesFetch: ReplyTypes[] = GetReply();
@@ -73,7 +72,6 @@ export default function TanyaJawab() {
 
   const [files, setFiles] = useState<FileState[]>([]);
   const [thumbImage, setThumbImage] = useState<string[]>([]);
-  const [openRemove, setOpenRemove] = useState(false);
   const [inputTextPost, setInputTextPost] = useState("");
 
   const [filesReply, setFilesReply] = useState<FileState[]>([]);
@@ -404,9 +402,7 @@ export default function TanyaJawab() {
                   {thumbImage.map((thumb, i) => (
                     <div
                       key={i}
-                      className="relative"
-                      onMouseEnter={() => setOpenRemove(true)}
-                      onMouseLeave={() => setOpenRemove(false)}
+                      className={`relative ${styles["img-wrapper"]}`}
                     >
                       <img
                         className="w-36 h-20 object-cover"
@@ -426,11 +422,7 @@ export default function TanyaJawab() {
                       )}
 
                       <button
-                        className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full ${
-                          openRemove
-                            ? "opacity-100 transition-opacity duration-300"
-                            : "opacity-0"
-                        }`}
+                        className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full opacity-0`}
                         onClick={() =>
                           removeImgHandler(i, "post", files, thumbImage)
                         }
@@ -566,9 +558,7 @@ export default function TanyaJawab() {
                                 {thumbImageReply.map((thumb, i) => (
                                   <div
                                     key={i}
-                                    className="relative"
-                                    onMouseEnter={() => setOpenRemove(true)}
-                                    onMouseLeave={() => setOpenRemove(false)}
+                                    className={`relative ${styles["img-wrapper"]}`}
                                   >
                                     <img
                                       className="w-36 h-20 object-cover"
@@ -589,11 +579,7 @@ export default function TanyaJawab() {
                                     )}
 
                                     <button
-                                      className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full ${
-                                        openRemove
-                                          ? "opacity-100 transition-opacity duration-300"
-                                          : "opacity-0"
-                                      }`}
+                                      className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full opacity-0`}
                                       onClick={() =>
                                         removeImgHandler(
                                           i,
