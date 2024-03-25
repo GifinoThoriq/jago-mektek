@@ -26,6 +26,7 @@ interface ReplyType {
   id_user_reply: string;
   name_user_reply: string;
   reply: string;
+  image: string[];
 }
 
 interface TanyaJawabUpdatedType {
@@ -74,6 +75,9 @@ export default function TanyaJawab() {
   const [thumbImage, setThumbImage] = useState<string[]>([]);
   const [openRemove, setOpenRemove] = useState(false);
   const [inputTextPost, setInputTextPost] = useState("");
+
+  const [filesReply, setFilesReply] = useState<FileState[]>([]);
+  const [thumbImageReply, setThumbImageReply] = useState<string[]>([]);
   const [inputTextReply, setInputTextReply] = useState("");
 
   useEffect(() => {
@@ -115,17 +119,36 @@ export default function TanyaJawab() {
     }
   }, [tanyajawabsFetch, usersFetch, repliesFetch]);
 
-  function updateFileProgress(key: string, progress: FileState["progress"]) {
-    setFiles((file) => {
-      const newFileStates = structuredClone(file);
-      const fileState = newFileStates.find(
-        (fileState) => fileState.key === key
-      );
-      if (fileState) {
-        fileState.progress = progress;
-      }
-      return newFileStates;
-    });
+  function updateFileProgress(
+    key: string,
+    progress: FileState["progress"],
+    form: "post" | "reply"
+  ) {
+    if (form === "post") {
+      setFiles((file) => {
+        const newFileStates = structuredClone(file);
+        const fileState = newFileStates.find(
+          (fileState) => fileState.key === key
+        );
+        if (fileState) {
+          fileState.progress = progress;
+        }
+        return newFileStates;
+      });
+    }
+
+    if (form === "reply") {
+      setFilesReply((file) => {
+        const newFileStates = structuredClone(file);
+        const fileState = newFileStates.find(
+          (fileState) => fileState.key === key
+        );
+        if (fileState) {
+          fileState.progress = progress;
+        }
+        return newFileStates;
+      });
+    }
   }
 
   const postSubmitHandler = async (e: any) => {
@@ -156,17 +179,17 @@ export default function TanyaJawab() {
         const res = await edgestore.myPublicImages.upload({
           file: addedFileState.file,
           onProgressChange: async (progress) => {
-            updateFileProgress(addedFileState.key, progress);
+            updateFileProgress(addedFileState.key, progress, "post");
             if (progress === 100) {
               await new Promise((resolve) => setTimeout(resolve, 1000));
-              updateFileProgress(addedFileState.key, "COMPLETE");
+              updateFileProgress(addedFileState.key, "COMPLETE", "post");
             }
           },
         });
         urlImages.push(res.url);
       } catch (err) {
         setLoadingBtn(false);
-        updateFileProgress(addedFileState.key, "ERROR");
+        updateFileProgress(addedFileState.key, "ERROR", "post");
       }
     });
 
@@ -204,6 +227,10 @@ export default function TanyaJawab() {
   const replySubmitHandler = async (e: any) => {
     e.preventDefault();
 
+    let urlImages: string[] = [];
+
+    setLoadingBtn(true);
+
     const reply = e.target["reply"].value;
     const id_post = e.target["id_post"].value;
 
@@ -212,34 +239,71 @@ export default function TanyaJawab() {
       return;
     }
 
-    const user = usersFetch.find((u) => u.username === ctx?.username);
-
-    if (user && reply !== "") {
-      try {
-        const res = await fetch("/api/reply", {
-          method: "POST",
-          headers: {
-            "Content-type": "application-json",
-          },
-          body: JSON.stringify({
-            id_tanyajawab: id_post,
-            id_user_reply: user._id,
-            reply,
-          }),
-        });
-
-        setLoadingBtn(true);
-
-        if (res.status === 200) {
-          window.location.reload();
-        }
-
-        setLoading(false);
-      } catch (e) {}
+    if (reply.length >= 500) {
+      setModal({
+        msg: "tidak boleh lebih dari 500 character",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
     }
+
+    const uploadImage = filesReply.map(async (addedFileState) => {
+      try {
+        const res = await edgestore.myPublicImages.upload({
+          file: addedFileState.file,
+          onProgressChange: async (progress) => {
+            updateFileProgress(addedFileState.key, progress, "reply");
+            if (progress === 100) {
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              updateFileProgress(addedFileState.key, "COMPLETE", "reply");
+            }
+          },
+        });
+        urlImages.push(res.url);
+      } catch (err) {
+        setLoadingBtn(false);
+        updateFileProgress(addedFileState.key, "ERROR", "reply");
+      }
+    });
+
+    Promise.all(uploadImage)
+      .then(async () => {
+        setLoadingBtn(false);
+
+        const user = usersFetch.find((u) => u.username === ctx?.username);
+
+        if (user && reply !== "") {
+          try {
+            const res = await fetch("/api/reply", {
+              method: "POST",
+              headers: {
+                "Content-type": "application-json",
+              },
+              body: JSON.stringify({
+                id_tanyajawab: id_post,
+                id_user_reply: user._id,
+                reply,
+                image: urlImages,
+              }),
+            });
+
+            setLoadingBtn(true);
+
+            if (res.status === 200) {
+              window.location.reload();
+            }
+
+            setLoading(false);
+          } catch (e) {}
+        }
+      })
+      .catch((error) => {
+        console.error("Error during file uploads:", error);
+      });
   };
 
-  const inputImageHandler = (e: any) => {
+  const inputImageHandler = (e: any, form: "post" | "reply") => {
     if (e.target.files?.[0]) {
       if (e.target.files?.[0].size > 3000000) {
         setModal({
@@ -263,21 +327,42 @@ export default function TanyaJawab() {
         key: Math.random().toString(36).slice(2),
         progress: "PENDING" as const,
       };
-      setFiles([addedFiles, ...files]);
+
       const convertImage = URL.createObjectURL(e.target.files?.[0]);
-      setThumbImage([convertImage, ...thumbImage]);
+
+      if (form === "post") {
+        setFiles([addedFiles, ...files]);
+        setThumbImage([convertImage, ...thumbImage]);
+      }
+
+      if (form === "reply") {
+        setFilesReply([addedFiles, ...filesReply]);
+        setThumbImageReply([convertImage, ...thumbImageReply]);
+      }
     }
   };
 
-  const removeImgHandler = (i: number) => {
-    const deletedFiles = files.filter((f, index) => i !== index);
-    const deletedThumb = thumbImage.filter((t, index) => i !== index);
-    setFiles(deletedFiles);
-    setThumbImage(deletedThumb);
+  const removeImgHandler = (
+    i: number,
+    form: "post" | "reply",
+    file: FileState[],
+    thumb: string[]
+  ) => {
+    const deletedFiles = file.filter((f, index) => i !== index);
+    const deletedThumb = thumb.filter((t, index) => i !== index);
+
+    if (form === "post") {
+      setFiles(deletedFiles);
+      setThumbImage(deletedThumb);
+    }
+
+    if (form === "reply") {
+      setFilesReply(deletedFiles);
+      setThumbImageReply(deletedThumb);
+    }
   };
 
   const replyShowHandler = (id: string) => {
-    console.log("aselole");
     const updatedTanyaJawabs = tanyajawabs.map((tj) => {
       if (tj._id === id) {
         return { ...tj, isReply: true };
@@ -346,7 +431,9 @@ export default function TanyaJawab() {
                             ? "opacity-100 transition-opacity duration-300"
                             : "opacity-0"
                         }`}
-                        onClick={() => removeImgHandler(i)}
+                        onClick={() =>
+                          removeImgHandler(i, "post", files, thumbImage)
+                        }
                       >
                         <XCircleIcon className="h-8 w-8" />
                       </button>
@@ -354,22 +441,21 @@ export default function TanyaJawab() {
                   ))}
                 </div>
               )}
-              <div className="flex">
-                <img />
-              </div>
               <div className="flex justify-between items-center">
                 <div className="file-input">
                   <label htmlFor="file-upload" className="file-label">
                     <CameraIcon
                       className="h-6 w-6 text-gray"
-                      onClick={inputImageHandler}
+                      onClick={(e) => inputImageHandler(e, "post")}
                     />
                   </label>
                   <input
                     id="file-upload"
+                    name="file-upload"
                     type="file"
+                    accept="image/png, image/jpeg, image/jpg"
                     style={{ display: "none" }}
-                    onChange={inputImageHandler}
+                    onChange={(e) => inputImageHandler(e, "post")}
                   />
                 </div>
                 <Button
@@ -406,7 +492,7 @@ export default function TanyaJawab() {
                       {item.image && (
                         <div className="flex flex-row gap-4 mt-2">
                           {item.image.map((src) => (
-                            <Link href={src} target="_blank">
+                            <Link key={src} href={src} target="_blank">
                               <img
                                 src={src}
                                 className="w-36 h-20 object-cover"
@@ -430,6 +516,18 @@ export default function TanyaJawab() {
                               {rep.name_user_reply}
                             </span>
                             <span className="text-base">{rep.reply}</span>
+                            {rep.image && (
+                              <div className="flex flex-row gap-4 mt-2">
+                                {rep.image.map((src) => (
+                                  <Link key={src} href={src} target="_blank">
+                                    <img
+                                      src={src}
+                                      className="w-36 h-20 object-cover"
+                                    />
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -463,12 +561,84 @@ export default function TanyaJawab() {
                                 setInputTextReply(e.target.value)
                               }
                             />
-                            <div className="self-end">
+                            {thumbImageReply.length > 0 && (
+                              <div className="flex gap-2 my-2">
+                                {thumbImageReply.map((thumb, i) => (
+                                  <div
+                                    key={i}
+                                    className="relative"
+                                    onMouseEnter={() => setOpenRemove(true)}
+                                    onMouseLeave={() => setOpenRemove(false)}
+                                  >
+                                    <img
+                                      className="w-36 h-20 object-cover"
+                                      src={thumb}
+                                      alt={`Thumbnail ${i + 1}`}
+                                    />
+
+                                    {typeof filesReply[i].progress ===
+                                      "number" && (
+                                      <div className="h-[6px] w-full border rounded overflow-hidden mt-2">
+                                        <div
+                                          className="h-full bg-blue-dark transition-all duration-150"
+                                          style={{
+                                            width: `${filesReply[i].progress}%`,
+                                          }}
+                                        ></div>
+                                      </div>
+                                    )}
+
+                                    <button
+                                      className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full ${
+                                        openRemove
+                                          ? "opacity-100 transition-opacity duration-300"
+                                          : "opacity-0"
+                                      }`}
+                                      onClick={() =>
+                                        removeImgHandler(
+                                          i,
+                                          "reply",
+                                          filesReply,
+                                          thumbImageReply
+                                        )
+                                      }
+                                    >
+                                      <XCircleIcon className="h-8 w-8" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            <div className="flex justify-end items-center gap-4">
+                              <div className="file-input">
+                                <label
+                                  htmlFor="file-upload-reply"
+                                  className="file-label"
+                                >
+                                  <CameraIcon
+                                    className="h-6 w-6 text-gray"
+                                    onClick={(e) =>
+                                      inputImageHandler(e, "reply")
+                                    }
+                                  />
+                                </label>
+                                <input
+                                  id="file-upload-reply"
+                                  name="file-upload-reply"
+                                  type="file"
+                                  accept="image/png, image/jpeg, image/jpg"
+                                  style={{ display: "none" }}
+                                  onChange={(e) =>
+                                    inputImageHandler(e, "reply")
+                                  }
+                                />
+                              </div>
                               <Button
                                 type="submit"
+                                style="solid"
                                 loading={loadingBtn}
                                 disabled={loadingBtn || inputTextReply === ""}
-                                style="solid"
                               >
                                 Kirim Balasan
                               </Button>

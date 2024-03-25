@@ -35,6 +35,7 @@ export interface ReplyTypes {
   id_tanyajawab: string;
   id_user_reply: string;
   reply: string;
+  image: string[];
   createdAt: Date;
 }
 

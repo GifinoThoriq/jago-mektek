@@ -17,12 +17,13 @@ export const GET = async () => {
 };
 
 export const POST = async (request: any) => {
-  const { id_tanyajawab, id_user_reply, reply } = await request.json();
+  const { id_tanyajawab, id_user_reply, reply, image } = await request.json();
 
   const newReply = new Replies({
     id_tanyajawab,
     id_user_reply,
     reply,
+    image,
   });
 
   try {

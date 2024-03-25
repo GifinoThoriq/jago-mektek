@@ -5,6 +5,7 @@ const RepliesSchema = new mongoose.Schema<RepliesTypes>({
   id_tanyajawab: String,
   id_user_reply: String,
   reply: String,
+  image: { type: [String] },
   createdAt: {
     type: Date,
     default: Date.now,
