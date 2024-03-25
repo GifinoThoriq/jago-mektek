@@ -1,38 +1,55 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { CardHorizontal } from "@/app/_ui/CardHorizontal";
+import Loading from "@/app/_components/Loading";
 import GetMateri from "@/app/_lib/GetMateri";
+import GetSubMateri from "@/app/_lib/GetSubMateri";
 import {
   MateriClientTypes,
   SubMateriClientTypes,
 } from "@/app/_types/ClientTypes";
-import GetSubMateri from "@/app/_lib/GetSubMateri";
-import Loading from "@/app/_components/Loading";
+import { CardHorizontal } from "@/app/_ui/CardHorizontal";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
-export default function materiBelajar(props: any) {
+export default function MateriBelajarList({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  console.log(params.slug);
+
+  const router = useRouter();
+
   const materis: MateriClientTypes[] = GetMateri();
-
-  const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
-
-  const [selectedMateri, setSelectedMateri] = useState<string>("");
-
   const subMaterisFetch: SubMateriClientTypes[] = GetSubMateri();
+
   const [loading, setLoading] = useState<boolean>(true);
+  const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
+  const [selectedMateri, setSelectedMateri] = useState<string>("");
 
   function getMateriTitle(id: string) {
     return materis.filter((m) => m._id === id).map((m) => m.title);
   }
 
   function selectHandler(e: any) {
-    setSelectedMateri(e.target.value);
+    router.push(`/materi-belajar/materi/${e.target.value}`);
   }
 
   useEffect(() => {
-    if (materis.length > 0) {
-      setSelectedMateri(materis[0]._id);
-    }
-  }, [materis]);
+    const newSub = subMaterisFetch.map((sub) => ({
+      ...sub,
+      materi_title: getMateriTitle(sub.id_materi)[0],
+    }));
+
+    const subMaterisFilter = newSub.filter(
+      (sub) => sub.id_materi === params.slug
+    );
+
+    setSubMateris(subMaterisFilter);
+
+    console.log(subMateris);
+  }, [subMaterisFetch]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -41,21 +58,6 @@ export default function materiBelajar(props: any) {
 
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (selectedMateri !== "" && materis.length > 0) {
-      const newSub = subMaterisFetch.map((sub) => ({
-        ...sub,
-        materi_title: getMateriTitle(sub.id_materi)[0],
-      }));
-
-      const subMaterisFilter = newSub.filter(
-        (sub) => sub.id_materi === selectedMateri
-      );
-
-      setSubMateris(subMaterisFilter);
-    }
-  }, [selectedMateri, materis]);
 
   return (
     <>
@@ -74,6 +76,7 @@ export default function materiBelajar(props: any) {
                 name="bab"
                 onChange={selectHandler}
                 className="block max-w-[420px] w-full rounded-md border-2 p-1.5 text-gray-900 border-blue-dark mx-auto"
+                defaultValue={params.slug}
               >
                 {materis.length > 0 &&
                   materis.map((mat) => (
@@ -84,7 +87,7 @@ export default function materiBelajar(props: any) {
               </select>
             </div>
           </div>
-          {subMateris.length <= 0 && selectedMateri !== "" ? (
+          {subMateris.length === 0 ? (
             <div className="min-h-[60vh] bg-gray-900 flex flex-col items-center justify-center">
               <h1 className="text-2xl sm:text-4xl text-blue-dark font-bold mb-8 animate-pulse">
                 Coming Soon

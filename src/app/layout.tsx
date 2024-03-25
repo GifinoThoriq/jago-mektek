@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "@/app/_lib/SessionProvider";
 import UserProvider from "./_context/UserProvider";
 import { headers } from "next/headers";
+import { EdgeStoreProvider } from "./_lib/edgestore";
 
 const monstserrat = Montserrat({ weight: ["400", "700"], subsets: ["latin"] });
 
@@ -28,7 +29,9 @@ export default async function RootLayout({
         <UserProvider>
           <SessionProvider session={session}>
             <Navbar />
-            {children}
+            <EdgeStoreProvider>
+              {children}
+            </EdgeStoreProvider>
             <Footer />
           </SessionProvider>
         </UserProvider>
