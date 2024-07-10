@@ -3,9 +3,22 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Loading from "@/app/_components/Loading";
+import { SumberMateriClientTypes } from "@/app/_types/ClientTypes";
+import GetSumberMateri from "@/app/_lib/GetSumberMateri";
+import EmblaCarousel from "@/app/_components/SumberBelajarCarousel";
+import { EmblaOptionsType } from "embla-carousel";
 
 export default function SumberBelajar() {
+  const OPTIONS: EmblaOptionsType = {
+    align: "start",
+    dragFree: true,
+    direction: "rtl",
+    loop: true,
+  };
+
   const [loading, setLoading] = useState<boolean>(true);
+
+  const sumberMateris: SumberMateriClientTypes[] = GetSumberMateri();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,114 +38,31 @@ export default function SumberBelajar() {
             Sumber Belajar
           </h1>
           <div className="mt-8">
-            <h3 className="text-2xl text-blue-dark font-bold">
+            <h3 className="text-2xl text-blue-dark font-bold mb-5">
               Buku Pembelajaran
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 mt-6 gap-6 px-6 md:px-0">
-              <div className="flex flex-col items-center">
-                <Image
-                  src={"/images/buku.png"}
-                  width={222}
-                  height={346}
-                  alt="buku"
-                />
-                <span className="text-base md:text-xl text-blue-dark font-medium text-center mt-4">
-                  Fundamentals of Structural Dynamics
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Image
-                  src={"/images/buku.png"}
-                  width={222}
-                  height={346}
-                  alt="buku"
-                />
-                <span className="text-base md:text-xl text-blue-dark font-medium text-center mt-4">
-                  Fundamentals of Structural Dynamics
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Image
-                  src={"/images/buku.png"}
-                  width={222}
-                  height={346}
-                  alt="buku"
-                />
-                <span className="text-base md:text-xl text-blue-dark font-medium text-center mt-4">
-                  Fundamentals of Structural Dynamics
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Image
-                  src={"/images/buku.png"}
-                  width={222}
-                  height={346}
-                  alt="buku"
-                />
-                <span className="text-base md:text-xl text-blue-dark font-medium text-center mt-4">
-                  Fundamentals of Structural Dynamics
-                </span>
-              </div>
-            </div>
+
+            {sumberMateris.length > 0 && (
+              <EmblaCarousel
+                slides={sumberMateris.filter(
+                  (sumber) => sumber.type === "book"
+                )}
+                options={OPTIONS}
+              />
+            )}
           </div>
           <div className="mt-8">
-            <h3 className="text-2xl text-blue-dark font-bold">
+            <h3 className="text-2xl text-blue-dark font-bold mb-5">
               Video Pembalajaran
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-4 mt-6 gap-6 px-6 md:px-0">
-              <div className="flex flex-col items-center">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/A1V-QQ5wFU4?si=UHmwjwmH0f2hS-BU"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-                <span className="text-xl text-blue-dark font-medium text-center mt-4">
-                  Mechanical Engineering
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/A1V-QQ5wFU4?si=UHmwjwmH0f2hS-BU"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-                <span className="text-xl text-blue-dark font-medium text-center mt-4">
-                  Mechanical Engineering
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/A1V-QQ5wFU4?si=UHmwjwmH0f2hS-BU"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-                <span className="text-xl text-blue-dark font-medium text-center mt-4">
-                  Mechanical Engineering
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/A1V-QQ5wFU4?si=UHmwjwmH0f2hS-BU"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-                <span className="text-xl text-blue-dark font-medium text-center mt-4">
-                  Mechanical Engineering
-                </span>
-              </div>
-            </div>
+            {sumberMateris.length > 0 && (
+              <EmblaCarousel
+                slides={sumberMateris.filter(
+                  (sumber) => sumber.type === "video"
+                )}
+                options={OPTIONS}
+              />
+            )}
           </div>
         </div>
       )}
