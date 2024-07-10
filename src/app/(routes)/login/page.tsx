@@ -18,8 +18,8 @@ export default function login() {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [modal, setModal] = useState({
     msg: "",
-    success: false
-  })
+    success: false,
+  });
   const [loading, setLoading] = useState(false);
   console.log(status);
 
@@ -48,8 +48,8 @@ export default function login() {
     } else if (res?.status === 401) {
       setModal({
         msg: "username atau password salah",
-        success: false
-      })
+        success: false,
+      });
       setModalIsOpen(true);
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export default function login() {
             <span>back to home</span>
           </div>
 
-          <h1 className="text-3xl text-blue-dark font-bold">Login</h1>
+          <h1 className="text-3xl text-blue-dark font-bold">Masuk</h1>
           <form onSubmit={submitHandler}>
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-3">
@@ -109,7 +109,10 @@ export default function login() {
                 </div>
               </div>
               <div className="col-span-3">
-                Belum punya akun? Click <a href="/register" className="underline">disini</a>
+                Belum punya akun? Click{" "}
+                <a href="/register" className="underline">
+                  disini
+                </a>
               </div>
               <div className="col-span-3 lg:col-span-1">
                 <Button
@@ -118,7 +121,7 @@ export default function login() {
                   className="w-full lg:w-auto"
                   loading={loading}
                 >
-                  Login
+                  Masuk
                 </Button>
               </div>
             </div>

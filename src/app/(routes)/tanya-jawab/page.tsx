@@ -456,7 +456,7 @@ export default function TanyaJawab() {
                   loading={loadingBtn}
                   disabled={loadingBtn || inputTextPost === ""}
                 >
-                  Post
+                  Unggah
                 </Button>
               </div>
             </div>

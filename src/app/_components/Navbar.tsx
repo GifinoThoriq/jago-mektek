@@ -90,7 +90,7 @@ const MobileNavbar: FC<NavbarComponent> = ({
                 }}
                 loading={false}
               >
-                Login
+                Masuk
               </Button>
               <Button
                 style="solid"
@@ -168,7 +168,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({
               }}
               loading={false}
             >
-              Login
+              Masuk
             </Button>
             <Button
               style="solid"

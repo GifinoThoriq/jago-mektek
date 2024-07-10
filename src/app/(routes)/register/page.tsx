@@ -13,20 +13,18 @@ export default function register() {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [modal, setModal] = useState({
     msg: "",
-    success: false
-  })
+    success: false,
+  });
   const [loading, setLoading] = useState(false);
 
-  const closeModalHandler  = () => {
-
-    if(modal.success === true){
+  const closeModalHandler = () => {
+    if (modal.success === true) {
       router.push("/login");
-    } else{
+    } else {
       router.push("/register");
     }
     setModalIsOpen(false);
-    
-  }
+  };
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -38,8 +36,8 @@ export default function register() {
     if (!regex.test(username)) {
       setModal({
         msg: "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 25 character",
-        success: false
-      })
+        success: false,
+      });
       setModalIsOpen(true);
       return;
     }
@@ -47,7 +45,7 @@ export default function register() {
     if (password === "" || username === "") {
       setModal({
         msg: "username atau password tidak boleh kosong",
-        success: false
+        success: false,
       });
       setModalIsOpen(true);
       return;
@@ -69,22 +67,22 @@ export default function register() {
       if (res.status === 200) {
         setModal({
           msg: "akun kamu berhasil diregistrasi!",
-          success: true
-        })
+          success: true,
+        });
         setModalIsOpen(true);
         setLoading(false);
       } else if (res.status === 400) {
         setModal({
           msg: "Akun sudah terdaftar",
-          success: false
-        })
+          success: false,
+        });
         setModalIsOpen(true);
         setLoading(false);
       } else {
         setModal({
           msg: "Ada sesuatu yang error, mohon daftar ulang kembali",
-          success: false
-        })
+          success: false,
+        });
         setModalIsOpen(true);
         setLoading(false);
       }
@@ -92,8 +90,8 @@ export default function register() {
       console.log(e);
       setModal({
         msg: "Ada sesuatu yang error, mohon daftar ulang kembali",
-        success: false
-      })
+        success: false,
+      });
       setModalIsOpen(true);
       setLoading(false);
     }
@@ -153,7 +151,10 @@ export default function register() {
                 </div>
               </div>
               <div className="col-span-3">
-                Sudah punya akun? Click <a href="/login" className="underline">disini</a>
+                Sudah punya akun? Click{" "}
+                <a href="/login" className="underline">
+                  disini
+                </a>
               </div>
               <div className="col-span-3 lg:col-span-1">
                 <Button
@@ -162,7 +163,7 @@ export default function register() {
                   className="w-full lg:w-auto"
                   loading={loading}
                 >
-                  Register
+                  Daftar
                 </Button>
               </div>
             </div>
