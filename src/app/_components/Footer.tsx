@@ -26,7 +26,7 @@ export default function Footer() {
         ""
       ) : (
         <footer
-          className={`px-4 lg:px-0 mt-40 ${
+          className={`px-4 lg:px-0 px-4 lg:px-0 mt-0 md:mt-40  ${
             pathname === "/login" || pathname === "/register" ? "hidden" : ""
           }`}
         >

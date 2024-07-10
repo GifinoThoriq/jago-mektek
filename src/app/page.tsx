@@ -71,7 +71,7 @@ export default function Home() {
           </section>
           <section id="about">
             <div className="max-w-7xl mx-auto  my-32">
-              <div className="grid grid-cols-2 pt-16 px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 pt-16 px-8">
                 <div>
                   <hr
                     className="mb-8 border-t-8 border-blue-light"
