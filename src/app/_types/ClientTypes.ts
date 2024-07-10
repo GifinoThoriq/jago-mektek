@@ -55,3 +55,11 @@ export interface UserResultTypes {
   correct: boolean;
   image: string;
 }
+
+export interface SumberMateriClientTypes{
+  _id: string;
+  title: string;
+  image: string;
+  link: string;
+  type: string;
+}

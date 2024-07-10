@@ -51,3 +51,10 @@ export interface UserResultTypes extends mongoose.Document {
   correct: boolean;
   image: string;
 }
+
+export interface SumberMateriTypes extends mongoose.Document{
+  title: string;
+  image: string;
+  link: string;
+  type: string;
+}
