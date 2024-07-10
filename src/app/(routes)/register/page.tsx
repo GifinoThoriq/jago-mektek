@@ -174,8 +174,9 @@ export default function register() {
             <Image
               src={"/images/register.png"}
               alt="static-log"
-              width={800}
-              height={800}
+              width={400}
+              height={600}
+              className="my-0 mx-auto"
             />
           </div>
         </div>
