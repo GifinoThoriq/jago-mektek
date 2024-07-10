@@ -8,7 +8,6 @@ import {
   SubMateriClientTypes,
 } from "@/app/_types/ClientTypes";
 import { CardHorizontal } from "@/app/_ui/CardHorizontal";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
