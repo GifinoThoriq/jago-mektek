@@ -172,10 +172,10 @@ export default function register() {
         <div className="hidden md:block basis-1/2 bg-blue-light px-20">
           <div className="flex h-full items-center">
             <Image
-              src={"/images/logreg.png"}
+              src={"/images/register.png"}
               alt="static-log"
-              width={1290}
-              height={1290}
+              width={800}
+              height={800}
             />
           </div>
         </div>
