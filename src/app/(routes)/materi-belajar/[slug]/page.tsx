@@ -142,33 +142,31 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </h1>
               </div>
               <div className="max-w-7xl px-4 mt-16 mx-auto">
-                <div className="flex h-[100vh] ">
-                  <div className="px-4 w-full h-screen basis-3/5">
-                    <iframe
-                      src={submateriDetail.materi_detail}
-                      allow="autoplay"
-                      className="w-[100%] md:h-[100%]"
-                    ></iframe>
-                  </div>
+                <div className="px-4 w-full h-screen">
+                  <iframe
+                    src={submateriDetail.materi_detail}
+                    allow="autoplay"
+                    className="w-[100%] md:h-[100%]"
+                  ></iframe>
+                </div>
 
-                  <div className="px-4 w-full mt-4  basis-2/5">
-                    <h3 className="text-2xl font-bold mt-4 md:mt-0 ">
-                      Video Pendukung
-                    </h3>
-                    {submateriDetail.video.map((vid) => (
-                      <div className="my-4 ">
-                        <iframe
-                          width="100%"
-                          className="md:mb-4"
-                          height="100%"
-                          src={vid}
-                          title="YouTube video player"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                        ></iframe>
-                      </div>
-                    ))}
-                  </div>
+                <div className="px-4 w-full mt-6">
+                  <h3 className="text-2xl font-bold mt-4 md:mt-0 ">
+                    Video Pendukung
+                  </h3>
+                  {submateriDetail.video.map((vid) => (
+                    <div className="my-4 w-full h-[60vh]">
+                      <iframe
+                        width="100%"
+                        className="md:mb-4"
+                        height="100%"
+                        src={vid}
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  ))}
                 </div>
 
                 {evaluasis.length > 0 && (
