@@ -30,6 +30,8 @@ export default function register() {
     e.preventDefault();
     const username = e.target["username"].value;
     const password = e.target["password"].value;
+    const school = e.target["school"].value;
+    const user_class = e.target["class"].value;
 
     const regex = /^[a-zA-Z0-9]{1,25}$/;
 
@@ -42,9 +44,36 @@ export default function register() {
       return;
     }
 
-    if (password === "" || username === "") {
+    if (username === "") {
       setModal({
-        msg: "username atau password tidak boleh kosong",
+        msg: "Username tidak boleh kosong",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
+    }
+
+    if (password === "") {
+      setModal({
+        msg: "Password tidak boleh kosong",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
+    }
+
+    if (school === "") {
+      setModal({
+        msg: "Asal sekolah tidak boleh kosong",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
+    }
+
+    if (user_class === "") {
+      setModal({
+        msg: "Kelas tidak boleh kosong",
         success: false,
       });
       setModalIsOpen(true);
@@ -60,6 +89,8 @@ export default function register() {
         body: JSON.stringify({
           username,
           password,
+          school,
+          user_class,
           role: "siswa",
         }),
       });
@@ -147,6 +178,38 @@ export default function register() {
                     name="password"
                     id="password"
                     className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div className="col-span-3">
+                <label
+                  htmlFor="school"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Asal Sekolah
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="school"
+                    id="school"
+                    className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div className="col-span-3">
+                <label
+                  htmlFor="class"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Kelas
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="class"
+                    id="class"
+                    className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>

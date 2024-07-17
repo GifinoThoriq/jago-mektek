@@ -28,6 +28,8 @@ export interface UserClientTypes {
   _id: string;
   username: string;
   role: string;
+  school: string;
+  user_class: string;
 }
 
 export interface ReplyTypes {

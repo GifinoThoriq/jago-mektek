@@ -4,6 +4,8 @@ export interface UserTypes extends mongoose.Document {
   username: string;
   password: string;
   role: "siswa" | "guru";
+  school: string;
+  user_class: string;
 }
 
 export interface MateriTypes extends mongoose.Document {
