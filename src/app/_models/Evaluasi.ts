@@ -6,7 +6,9 @@ const EvaluasiSchema = new mongoose.Schema<EvaluasiTypes>({
   answer: Number,
   choice_answer: Array,
   question: String,
-  reason: String,
+  image_question: String,
+  image_reason: String,
+  link_kahoot: String,
 });
 
 export default mongoose.models.Evaluasis ||

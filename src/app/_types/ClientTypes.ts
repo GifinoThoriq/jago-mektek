@@ -45,7 +45,9 @@ export interface EvaluasiClientTypes {
   answer: number;
   choice_answer: string[];
   question: string;
-  reason: string;
+  image_question: string;
+  image_reason: string;
+  link_kahoot: string;
 }
 
 export interface UserResultTypes {
@@ -56,7 +58,7 @@ export interface UserResultTypes {
   image: string;
 }
 
-export interface SumberMateriClientTypes{
+export interface SumberMateriClientTypes {
   _id: string;
   title: string;
   image: string;

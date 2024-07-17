@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { EvaluasiClientTypes, UserResultTypes } from "../_types/ClientTypes";
 import { Button } from "../_ui/Button";
+import Link from "next/link";
 
 interface QuestionAnsweredType {
   evaluasis: EvaluasiClientTypes[];
@@ -10,7 +11,7 @@ interface QuestionAnsweredType {
 }
 
 interface ReasonsType {
-  reason: string;
+  image_reason: string;
 }
 
 interface AnswerListType {
@@ -81,10 +82,13 @@ const AnswerList: FC<AnswerListType> = ({
   );
 };
 
-const Reasons: FC<ReasonsType> = ({ reason }) => {
+const Reasons: FC<ReasonsType> = ({ image_reason }) => {
   return (
     <div className="bg-blue-light p-4 rounded text-white mt-2">
-      Alasan: {reason}
+      Alasan dari soal di atas:
+      <Link href={image_reason} target="_blank">
+        <img className="w-full" src={image_reason} />
+      </Link>
     </div>
   );
 };
@@ -97,9 +101,11 @@ const QuestionAnswered: FC<QuestionAnsweredType> = ({
     <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
       {evaluasis.map((ev, index) => (
         <div key={ev._id}>
-          <span>
-            {index + 1}. {ev.question}
-          </span>
+          <Link href={ev.image_question} target="_blank" className="flex">
+            {index + 1}.
+            <img src={ev.image_question} />
+          </Link>
+
           <ul className="pl-4">
             {ev.choice_answer.map((e, i) => (
               <AnswerList
@@ -114,13 +120,22 @@ const QuestionAnswered: FC<QuestionAnsweredType> = ({
               />
             ))}
           </ul>
-          <Reasons reason={ev.reason} />
+          <Reasons image_reason={ev.image_reason} />
         </div>
       ))}
       <div className="mt-2 text-center">
         <Button loading={false} style="solid" disabled>
           Jawaban Terkirim
         </Button>
+      </div>
+      <div className="mt-2">
+        <span>Klik link di bawah ini untuk masuk ke soal selanjutnya: </span>
+        <br />
+        {evaluasis.map((ev, index) => (
+          <Link href={ev.link_kahoot} target="_blank">
+            <span className="mt-2 underline text-blue-light"> Link Soal </span>
+          </Link>
+        ))}
       </div>
     </div>
   );

@@ -74,6 +74,12 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, []);
 
   useEffect(() => {
+    if (userResult.length > 0) {
+      setIsEvaluasiOpen(true);
+    }
+  }, [userResult]);
+
+  useEffect(() => {
     const evaluasiArr: string[] = [];
 
     if (evaluasis.length > 0) {
@@ -124,6 +130,8 @@ export default function Page({ params }: { params: { slug: string } }) {
       }
     } catch (e) {}
   };
+
+  console.log(evaluasis);
 
   return (
     <>

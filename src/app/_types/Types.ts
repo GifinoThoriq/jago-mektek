@@ -41,7 +41,9 @@ export interface EvaluasiTypes extends mongoose.Document {
   answer: number;
   choice_answer: string[];
   question: string;
-  reason: string;
+  image_question: string;
+  image_reason: string;
+  link_kahoot: string;
 }
 
 export interface UserResultTypes extends mongoose.Document {
@@ -52,7 +54,7 @@ export interface UserResultTypes extends mongoose.Document {
   image: string;
 }
 
-export interface SumberMateriTypes extends mongoose.Document{
+export interface SumberMateriTypes extends mongoose.Document {
   title: string;
   image: string;
   link: string;
