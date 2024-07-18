@@ -29,6 +29,10 @@ export interface RepliesTypes extends mongoose.Document {
   reply: string;
   createdAt: Date;
   image: string[];
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface TanyaJawabTypes extends mongoose.Document {
@@ -36,6 +40,10 @@ export interface TanyaJawabTypes extends mongoose.Document {
   post: string;
   createdAt: Date;
   image: string[];
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface EvaluasiTypes extends mongoose.Document {

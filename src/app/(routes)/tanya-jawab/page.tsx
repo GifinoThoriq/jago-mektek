@@ -28,17 +28,24 @@ interface ReplyType {
   name_user_reply: string;
   reply: string;
   image: string[];
+  username: string;
+  school: string;
+  user_class: string;
+  role: string;
 }
 
 interface TanyaJawabUpdatedType {
   _id: string;
   id_user_post: string;
-  name_user_post: string;
   post: string;
   createdAt: Date;
   replies: ReplyType[];
   image: string[];
   isReply: boolean;
+  username: string;
+  school: string;
+  user_class: string;
+  role: string;
 }
 
 type FileState = {
@@ -90,10 +97,6 @@ export default function TanyaJawab() {
     if (tanyajawabsFetch.length > 0 && usersFetch.length > 0) {
       const tanyaJawabsUpdated: TanyaJawabUpdatedType[] = tanyajawabsFetch.map(
         (tanyaJawab) => {
-          const user = usersFetch.find(
-            (u) => u._id === tanyaJawab.id_user_post
-          );
-
           const userReplies: ReplyType[] = repliesFetch
             .filter((reply) => reply.id_tanyajawab === tanyaJawab._id)
             .map((rep) => {
@@ -104,10 +107,13 @@ export default function TanyaJawab() {
           return {
             _id: tanyaJawab._id,
             id_user_post: tanyaJawab.id_user_post,
-            name_user_post: user ? user.username : "",
             post: tanyaJawab.post,
             createdAt: tanyaJawab.createdAt,
             image: tanyaJawab.image,
+            username: tanyaJawab.username,
+            role: tanyaJawab.role,
+            school: tanyaJawab.school,
+            user_class: tanyaJawab.user_class,
             replies: userReplies ? userReplies : [],
             isReply: false,
           };
@@ -225,6 +231,10 @@ export default function TanyaJawab() {
                 id_user_post: user._id,
                 post,
                 image: urlImages,
+                username: user.username,
+                role: user.role,
+                school: user.school,
+                user_class: user.user_class,
               }),
             });
 
@@ -245,6 +255,8 @@ export default function TanyaJawab() {
     let urlImages: string[] = [];
 
     setLoadingBtn(true);
+
+    const user = usersFetch.find((u) => u.username === ctx?.profile?.username);
 
     const reply = e.target["reply"].value;
     const id_post = e.target["id_post"].value;
@@ -302,6 +314,10 @@ export default function TanyaJawab() {
                 id_user_reply: user._id,
                 reply,
                 image: urlImages,
+                username: user.username,
+                role: user.role,
+                school: user.school,
+                user_class: user.user_class,
               }),
             });
 
@@ -485,7 +501,7 @@ export default function TanyaJawab() {
             <>
               {tanyajawabs.map((item) => (
                 <div key={item._id}>
-                  <div className="">
+                  <div className="mt-5">
                     <div className="flex flex-col">
                       <div className="flex items-center gap-4 ">
                         <Image
@@ -494,12 +510,19 @@ export default function TanyaJawab() {
                           height={36}
                           alt="avatar"
                         />
-                        <span className="font-bold text-blue-dark">
-                          {item.name_user_post}
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="font-bold text-blue-dark capitalize">
+                            {item.username}
+                          </span>
+                          <span className="font-bold text-gray capitalize">
+                            {item.role === "siswa"
+                              ? `${item.school} - ${item.user_class}`
+                              : item.role}
+                          </span>
+                        </div>
                       </div>
 
-                      <span className="text-base">{item.post}</span>
+                      <span className="mt-4 text-base">{item.post}</span>
                       {item.image && (
                         <div className="flex flex-row gap-4 mt-2">
                           {item.image.map((src) => (
@@ -515,31 +538,39 @@ export default function TanyaJawab() {
 
                       <hr className="my-2" />
                       {item.replies.map((rep) => (
-                        <div className="flex flex-row gap-2 my-4" key={rep._id}>
-                          <Image
-                            src={"/icons/avatar.svg"}
-                            width={36}
-                            height={36}
-                            alt="avatar"
-                          />
-                          <div className="flex flex-col">
-                            <span className="font-bold text-blue-dark">
-                              {rep.name_user_reply}
-                            </span>
-                            <span className="text-base">{rep.reply}</span>
-                            {rep.image && (
-                              <div className="flex flex-row gap-4 mt-2">
-                                {rep.image.map((src) => (
-                                  <Link key={src} href={src} target="_blank">
-                                    <img
-                                      src={src}
-                                      className="w-36 h-20 object-cover"
-                                    />
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
+                        <div className="my-4 ml-4" key={rep._id}>
+                          <div className="flex flex-row gap-2">
+                            <Image
+                              src={"/icons/avatar.svg"}
+                              width={36}
+                              height={36}
+                              alt="avatar"
+                            />
+
+                            <div className="flex flex-col mb-1">
+                              <span className="font-bold text-blue-dark capitalize">
+                                {rep.username}
+                              </span>
+                              <span className="font-bold text-gray capitalize">
+                                {rep.role === "siswa"
+                                  ? `${rep.school} - ${rep.user_class}`
+                                  : rep.role}
+                              </span>
+                            </div>
                           </div>
+                          <span className="text-base ml-4">{rep.reply}</span>
+                          {rep.image && (
+                            <div className="flex flex-row gap-4 mt-2">
+                              {rep.image.map((src) => (
+                                <Link key={src} href={src} target="_blank">
+                                  <img
+                                    src={src}
+                                    className="w-36 h-20 object-cover"
+                                  />
+                                </Link>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
 

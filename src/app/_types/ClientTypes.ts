@@ -22,6 +22,10 @@ export interface TanyaJawabClientTypes {
   post: string;
   createdAt: Date;
   image: string[];
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface UserClientTypes {
@@ -39,6 +43,10 @@ export interface ReplyTypes {
   reply: string;
   image: string[];
   createdAt: Date;
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface EvaluasiClientTypes {
