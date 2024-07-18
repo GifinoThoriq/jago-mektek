@@ -4,6 +4,8 @@ export interface UserTypes extends mongoose.Document {
   username: string;
   password: string;
   role: "siswa" | "guru";
+  school: string;
+  user_class: string;
 }
 
 export interface MateriTypes extends mongoose.Document {
@@ -27,6 +29,10 @@ export interface RepliesTypes extends mongoose.Document {
   reply: string;
   createdAt: Date;
   image: string[];
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface TanyaJawabTypes extends mongoose.Document {
@@ -34,6 +40,10 @@ export interface TanyaJawabTypes extends mongoose.Document {
   post: string;
   createdAt: Date;
   image: string[];
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface EvaluasiTypes extends mongoose.Document {
@@ -41,7 +51,9 @@ export interface EvaluasiTypes extends mongoose.Document {
   answer: number;
   choice_answer: string[];
   question: string;
-  reason: string;
+  image_question: string;
+  image_reason: string;
+  link_kahoot: string;
 }
 
 export interface UserResultTypes extends mongoose.Document {
@@ -52,7 +64,7 @@ export interface UserResultTypes extends mongoose.Document {
   image: string;
 }
 
-export interface SumberMateriTypes extends mongoose.Document{
+export interface SumberMateriTypes extends mongoose.Document {
   title: string;
   image: string;
   link: string;

@@ -1,8 +1,9 @@
 import { createContext } from "react";
+import { UserClientTypes } from "../_types/ClientTypes";
 
 interface UserContextType {
-  username: string;
-  setUser: (newUname: string) => void;
+  profile: UserClientTypes | null;
+  setUser: (newProfile: UserClientTypes) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);

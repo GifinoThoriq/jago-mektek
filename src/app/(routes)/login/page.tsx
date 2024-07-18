@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { Button } from "@/app/_ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import UserContext from "@/app/_context/UserContext";
 import Modal from "@/app/_components/Modal";
+import GetUserByName from "@/app/_lib/GetUserByName";
+import { UserClientTypes } from "@/app/_types/ClientTypes";
 
 export default function login() {
   const router = useRouter();
@@ -24,7 +26,7 @@ export default function login() {
   console.log(status);
 
   useEffect(() => {
-    if (status === "authenticated" || ctx?.username) {
+    if (status === "authenticated" || ctx?.profile) {
       window.location.href = "/";
     }
   }, []);
@@ -43,8 +45,20 @@ export default function login() {
     setLoading(true);
 
     if (res?.status === 200) {
-      ctx?.setUser(username);
+      try {
+        const response = await fetch(`/api/userbyname/${username}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch documents");
+        }
+
+        const data = await response.json();
+        ctx?.setUser(data.users[0]);
+      } catch (error: any) {
+        console.error("Error fetching documents:", error.message);
+      }
       window.location.href = "/";
+      return;
     } else if (res?.status === 401) {
       setModal({
         msg: "username atau password salah",

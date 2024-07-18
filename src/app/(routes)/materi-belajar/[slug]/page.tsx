@@ -27,7 +27,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const ctx = useContext(UserContext);
 
-  const username = ctx?.username === undefined ? "" : ctx.username;
+  const username = ctx?.profile === undefined ? "" : ctx.profile!.username;
 
   const submateris: SubMateriClientTypes[] = GetSubMateri();
   const evaluasis: EvaluasiClientTypes[] = GetEvaluasi(params.slug);
@@ -72,6 +72,12 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (userResult.length > 0) {
+      setIsEvaluasiOpen(true);
+    }
+  }, [userResult]);
 
   useEffect(() => {
     const evaluasiArr: string[] = [];
@@ -124,6 +130,8 @@ export default function Page({ params }: { params: { slug: string } }) {
       }
     } catch (e) {}
   };
+
+  console.log(evaluasis);
 
   return (
     <>

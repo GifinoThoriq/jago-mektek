@@ -3,6 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { Button } from "../_ui/Button";
 import { EvaluasiClientTypes, UserResultTypes } from "../_types/ClientTypes";
+import Link from "next/link";
 
 interface QuestionType {
   evaluasis: EvaluasiClientTypes[];
@@ -70,9 +71,10 @@ const Question: FC<QuestionType> = ({ evaluasis, onSubmitAnswer }) => {
     <div className="max-w-[800px] border rounded-3xl border-gray p-6 mx-auto mt-4">
       {evaluasis.map((ev, index) => (
         <div key={ev._id}>
-          <span>
-            {index + 1}. {ev.question}
-          </span>
+          <Link href={ev.image_question} target="_blank" className="flex">
+            {index + 1}.
+            <img src={ev.image_question} />
+          </Link>
           <ul className="pl-4">
             {ev.choice_answer.map((e, i) => (
               <AnswerList

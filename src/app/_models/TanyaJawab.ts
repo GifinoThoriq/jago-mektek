@@ -5,6 +5,10 @@ const TanyaJawabSchema = new mongoose.Schema<TanyaJawabTypes>({
   id_user_post: String,
   post: String,
   image: { type: [String] },
+  username: String,
+  role: String,
+  school: String,
+  user_class: String,
   createdAt: {
     type: Date,
     default: Date.now,

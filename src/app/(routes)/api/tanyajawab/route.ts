@@ -17,7 +17,8 @@ export const GET = async () => {
 };
 
 export const POST = async (request: any) => {
-  const { id_user_post, post, image } = await request.json();
+  const { id_user_post, post, image, username, role, school, user_class } =
+    await request.json();
 
   await connectDb();
 
@@ -27,6 +28,10 @@ export const POST = async (request: any) => {
     id_user_post,
     post,
     image,
+    username,
+    role,
+    school,
+    user_class,
   });
 
   try {

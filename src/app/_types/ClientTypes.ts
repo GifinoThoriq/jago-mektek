@@ -22,12 +22,18 @@ export interface TanyaJawabClientTypes {
   post: string;
   createdAt: Date;
   image: string[];
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface UserClientTypes {
   _id: string;
   username: string;
   role: string;
+  school: string;
+  user_class: string;
 }
 
 export interface ReplyTypes {
@@ -37,6 +43,10 @@ export interface ReplyTypes {
   reply: string;
   image: string[];
   createdAt: Date;
+  role: string;
+  username: string;
+  school: string;
+  user_class: string;
 }
 
 export interface EvaluasiClientTypes {
@@ -45,7 +55,9 @@ export interface EvaluasiClientTypes {
   answer: number;
   choice_answer: string[];
   question: string;
-  reason: string;
+  image_question: string;
+  image_reason: string;
+  link_kahoot: string;
 }
 
 export interface UserResultTypes {
@@ -56,7 +68,7 @@ export interface UserResultTypes {
   image: string;
 }
 
-export interface SumberMateriClientTypes{
+export interface SumberMateriClientTypes {
   _id: string;
   title: string;
   image: string;
