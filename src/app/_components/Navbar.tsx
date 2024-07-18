@@ -206,13 +206,13 @@ export default function Navbar() {
   useEffect(() => {
     const user =
       typeof window !== "undefined"
-        ? window.sessionStorage.getItem("username")
-        : "";
+        ? window.sessionStorage.getItem("profile")
+        : null;
 
     if (status === "unauthenticated") {
       typeof window !== "undefined"
-        ? window.sessionStorage.removeItem("username")
-        : "";
+        ? window.sessionStorage.removeItem("profile")
+        : null;
     }
 
     if (user === "" && status === "authenticated") {
@@ -268,7 +268,7 @@ export default function Navbar() {
               (windowWidth > 800 ? (
                 <DesktopNavbar
                   pathname={pathname}
-                  username={ctx?.username}
+                  username={ctx?.profile?.username}
                   status={status}
                   onClick={() => {
                     signOut({ callbackUrl: "/" });
@@ -277,7 +277,7 @@ export default function Navbar() {
               ) : (
                 <MobileNavbar
                   pathname={pathname}
-                  username={ctx?.username}
+                  username={ctx?.profile?.username}
                   status={status}
                   onClick={() => {
                     signOut({ callbackUrl: "/" });

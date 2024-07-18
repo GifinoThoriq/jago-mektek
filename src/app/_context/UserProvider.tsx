@@ -2,31 +2,36 @@
 
 import React, { useState, FC, ReactNode, useEffect } from "react";
 import UserContext from "./UserContext";
+import { UserClientTypes } from "../_types/ClientTypes";
 
 interface UserProviderProps {
   children: ReactNode;
 }
 
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
-  const [username, setUsername] = useState<string>(() => {
-    const storedUsername =
+  const [profile, setProfile] = useState<UserClientTypes | null>(() => {
+    const storedProfile =
       typeof window !== "undefined"
-        ? window.sessionStorage.getItem("username")
-        : "";
+        ? window.sessionStorage.getItem("profile")
+        : null;
 
-    return storedUsername ? storedUsername : "";
+    return storedProfile ? JSON.parse(storedProfile) : null;
   });
 
-  const setUser = (newUname: string) => {
-    setUsername(newUname);
+  const setUser = (newProfile: UserClientTypes) => {
+    setProfile(newProfile);
   };
 
   useEffect(() => {
-    window.sessionStorage.setItem("username", username);
-  }, [username]);
+    if (profile) {
+      window.sessionStorage.setItem("profile", JSON.stringify(profile));
+    } else {
+      window.sessionStorage.removeItem("profile");
+    }
+  }, [profile]);
 
   return (
-    <UserContext.Provider value={{ username, setUser }}>
+    <UserContext.Provider value={{ profile, setUser }}>
       {children}
     </UserContext.Provider>
   );

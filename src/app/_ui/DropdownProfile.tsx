@@ -30,7 +30,7 @@ const DropdownProfile: React.FC<DropdownProps> = ({ options, onClick }) => {
             height={36}
             alt="avatar"
           />
-          <span className="text-sm cursor-pointer text-gray font-bold">
+          <span className="text-sm cursor-pointer text-gray font-bold capitalize">
             Hello, {selectedOption} !
           </span>
           <ChevronDownIcon className="h-6 w-6 text-gray" />

@@ -154,6 +154,8 @@ export default function TanyaJawab() {
 
     let urlImages: string[] = [];
 
+    const user = usersFetch.find((u) => u.username === ctx?.profile?.username);
+
     setLoadingBtn(true);
 
     const post = e.target["post"].value;
@@ -169,7 +171,24 @@ export default function TanyaJawab() {
         success: false,
       });
       setModalIsOpen(true);
+      setLoadingBtn(false);
       return;
+    }
+
+    if (tanyajawabsFetch.length > 0) {
+      const filteredTanyaJawabs = tanyajawabsFetch.filter(
+        (tj) => tj.id_user_post === user?._id
+      );
+
+      if (filteredTanyaJawabs.length > 1) {
+        setModal({
+          msg: "Maaf tidak bisa mengirim pertanyaan lagi",
+          success: false,
+        });
+        setModalIsOpen(true);
+        setLoadingBtn(false);
+        return;
+      }
     }
 
     const uploadImage = files.map(async (addedFileState) => {
@@ -194,8 +213,6 @@ export default function TanyaJawab() {
     Promise.all(uploadImage)
       .then(async () => {
         setLoadingBtn(false);
-
-        const user = usersFetch.find((u) => u.username === ctx?.username);
 
         if (user && post !== "") {
           try {
@@ -269,7 +286,9 @@ export default function TanyaJawab() {
       .then(async () => {
         setLoadingBtn(false);
 
-        const user = usersFetch.find((u) => u.username === ctx?.username);
+        const user = usersFetch.find(
+          (u) => u.username === ctx?.profile?.username
+        );
 
         if (user && reply !== "") {
           try {
