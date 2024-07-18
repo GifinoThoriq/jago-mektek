@@ -17,7 +17,11 @@ import Loading from "@/app/_components/Loading";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/_components/Modal";
 import { useEdgeStore } from "@/app/_lib/edgestore";
-import { CameraIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {
+  CameraIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import styles from "./tanyajawab.module.css";
 
@@ -46,6 +50,7 @@ interface TanyaJawabUpdatedType {
   school: string;
   user_class: string;
   role: string;
+  displayReply: boolean;
 }
 
 type FileState = {
@@ -116,6 +121,7 @@ export default function TanyaJawab() {
             user_class: tanyaJawab.user_class,
             replies: userReplies ? userReplies : [],
             isReply: false,
+            displayReply: false,
           };
         }
       );
@@ -256,10 +262,19 @@ export default function TanyaJawab() {
 
     setLoadingBtn(true);
 
-    const user = usersFetch.find((u) => u.username === ctx?.profile?.username);
-
     const reply = e.target["reply"].value;
     const id_post = e.target["id_post"].value;
+
+    const tanyaJawabsIndex = tanyajawabs.findIndex((tj) => tj._id === id_post);
+
+    if (tanyajawabs[tanyaJawabsIndex].replies.length > 4) {
+      setModal({
+        msg: "Tidak bisa mengirim balasan lagi",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
+    }
 
     if (status !== "authenticated") {
       window.location.href = "/login";
@@ -406,6 +421,39 @@ export default function TanyaJawab() {
     setTanyaJawabs(updatedTanyaJawabs);
   };
 
+  const replyCloseHandler = (id: string) => {
+    const updatedTanyaJawabs = tanyajawabs.map((tj) => {
+      if (tj._id === id) {
+        return { ...tj, isReply: false };
+      }
+      return { ...tj, isReply: false };
+    });
+
+    setTanyaJawabs(updatedTanyaJawabs);
+  };
+
+  const displayRepliesShowHandler = (id: string) => {
+    const updatedTanyaJawabs = tanyajawabs.map((tj) => {
+      if (tj._id === id) {
+        return { ...tj, displayReply: true };
+      }
+      return { ...tj, displayReply: false };
+    });
+
+    setTanyaJawabs(updatedTanyaJawabs);
+  };
+
+  const displayRepliesCloseHandler = (id: string) => {
+    const updatedTanyaJawabs = tanyajawabs.map((tj) => {
+      if (tj._id === id) {
+        return { ...tj, displayReply: false };
+      }
+      return { ...tj, displayReply: false };
+    });
+
+    setTanyaJawabs(updatedTanyaJawabs);
+  };
+
   return (
     <>
       {loading ? (
@@ -501,7 +549,7 @@ export default function TanyaJawab() {
             <>
               {tanyajawabs.map((item) => (
                 <div key={item._id}>
-                  <div className="mt-5">
+                  <div className="mt-10">
                     <div className="flex flex-col">
                       <div className="flex items-center gap-4 ">
                         <Image
@@ -535,152 +583,222 @@ export default function TanyaJawab() {
                           ))}
                         </div>
                       )}
-
-                      <hr className="my-2" />
-                      {item.replies.map((rep) => (
-                        <div className="my-4 ml-4" key={rep._id}>
-                          <div className="flex flex-row gap-2">
-                            <Image
-                              src={"/icons/avatar.svg"}
-                              width={36}
-                              height={36}
-                              alt="avatar"
-                            />
-
-                            <div className="flex flex-col mb-1">
-                              <span className="font-bold text-blue-dark capitalize">
-                                {rep.username}
-                              </span>
-                              <span className="font-bold text-gray capitalize">
-                                {rep.role === "siswa"
-                                  ? `${rep.school} - ${rep.user_class}`
-                                  : rep.role}
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-base ml-4">{rep.reply}</span>
-                          {rep.image && (
-                            <div className="flex flex-row gap-4 mt-2">
-                              {rep.image.map((src) => (
-                                <Link key={src} href={src} target="_blank">
-                                  <img
-                                    src={src}
-                                    className="w-36 h-20 object-cover"
-                                  />
-                                </Link>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-
-                      {!item.isReply && (
-                        <div className="my-4">
-                          <Button
-                            loading={false}
-                            style="solid"
-                            onClick={() => replyShowHandler(item._id)}
-                          >
-                            Balas
-                          </Button>
-                        </div>
-                      )}
-
-                      {item.isReply && (
-                        <form onSubmit={replySubmitHandler}>
-                          <div className="flex flex-col gap-2 my-2">
-                            <input
-                              type="hidden"
-                              name="id_post"
-                              value={item._id}
-                            />
-                            <input
-                              className="p-2 rounded border-2 border-gray"
-                              type="text"
-                              name="reply"
-                              placeholder="tulis balasan"
-                              onChange={(e) =>
-                                setInputTextReply(e.target.value)
-                              }
-                            />
-                            {thumbImageReply.length > 0 && (
-                              <div className="flex gap-2 my-2">
-                                {thumbImageReply.map((thumb, i) => (
-                                  <div
-                                    key={i}
-                                    className={`relative ${styles["img-wrapper"]}`}
-                                  >
-                                    <img
-                                      className="w-36 h-20 object-cover"
-                                      src={thumb}
-                                      alt={`Thumbnail ${i + 1}`}
+                      {item.displayReply ? (
+                        <>
+                          <hr className="my-2" />
+                          {item.replies.length > 0 ? (
+                            <>
+                              {item.replies.map((rep) => (
+                                <div className="my-4 ml-4" key={rep._id}>
+                                  <div className="flex flex-row gap-2">
+                                    <Image
+                                      src={"/icons/avatar.svg"}
+                                      width={36}
+                                      height={36}
+                                      alt="avatar"
                                     />
 
-                                    {typeof filesReply[i].progress ===
-                                      "number" && (
-                                      <div className="h-[6px] w-full border rounded overflow-hidden mt-2">
-                                        <div
-                                          className="h-full bg-blue-dark transition-all duration-150"
-                                          style={{
-                                            width: `${filesReply[i].progress}%`,
-                                          }}
-                                        ></div>
-                                      </div>
-                                    )}
-
-                                    <button
-                                      className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full opacity-0`}
-                                      onClick={() =>
-                                        removeImgHandler(
-                                          i,
-                                          "reply",
-                                          filesReply,
-                                          thumbImageReply
-                                        )
-                                      }
-                                    >
-                                      <XCircleIcon className="h-8 w-8" />
-                                    </button>
+                                    <div className="flex flex-col mb-1">
+                                      <span className="font-bold text-blue-dark capitalize">
+                                        {rep.username}
+                                      </span>
+                                      <span className="font-bold text-gray capitalize">
+                                        {rep.role === "siswa"
+                                          ? `${rep.school} - ${rep.user_class}`
+                                          : rep.role}
+                                      </span>
+                                    </div>
                                   </div>
-                                ))}
-                              </div>
-                            )}
+                                  <span className="text-base ml-4">
+                                    {rep.reply}
+                                  </span>
+                                  {rep.image && (
+                                    <div className="flex flex-row gap-4 mt-2">
+                                      {rep.image.map((src) => (
+                                        <Link
+                                          key={src}
+                                          href={src}
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src={src}
+                                            className="w-36 h-20 object-cover"
+                                          />
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <div>
+                              <span>
+                                {item.isReply ? "" : "belum ada balasan"}
+                              </span>
+                            </div>
+                          )}
 
-                            <div className="flex justify-end items-center gap-4">
-                              <div className="file-input">
-                                <label
-                                  htmlFor="file-upload-reply"
-                                  className="file-label"
-                                >
-                                  <CameraIcon
-                                    className="h-6 w-6 text-gray"
-                                    onClick={(e) =>
-                                      inputImageHandler(e, "reply")
+                          {!item.isReply && (
+                            <div className="my-4">
+                              {item.replies.length > 4 ? (
+                                <div>
+                                  <Button
+                                    loading={false}
+                                    style="solid"
+                                    onClick={() =>
+                                      displayRepliesCloseHandler(item._id)
                                     }
-                                  />
-                                </label>
+                                    className="bg-red mr-4"
+                                  >
+                                    Tutup
+                                  </Button>
+                                  <Button
+                                    loading={false}
+                                    style="solid"
+                                    disabled={true}
+                                  >
+                                    Pertanyaan Ditutup
+                                  </Button>
+                                </div>
+                              ) : (
+                                <div>
+                                  <Button
+                                    loading={false}
+                                    style="solid"
+                                    onClick={() =>
+                                      displayRepliesCloseHandler(item._id)
+                                    }
+                                    className="bg-red mr-4"
+                                  >
+                                    Tutup
+                                  </Button>
+                                  <Button
+                                    loading={false}
+                                    style="solid"
+                                    onClick={() => replyShowHandler(item._id)}
+                                  >
+                                    Balas
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {item.isReply && (
+                            <form onSubmit={replySubmitHandler}>
+                              <div className="flex flex-col gap-2 my-2">
+                                <XMarkIcon
+                                  className="h-6 w-6 text-gray self-end"
+                                  onClick={() => replyCloseHandler(item._id)}
+                                />
                                 <input
-                                  id="file-upload-reply"
-                                  name="file-upload-reply"
-                                  type="file"
-                                  accept="image/png, image/jpeg, image/jpg"
-                                  style={{ display: "none" }}
+                                  type="hidden"
+                                  name="id_post"
+                                  value={item._id}
+                                />
+                                <input
+                                  className="p-2 rounded border-2 border-gray"
+                                  type="text"
+                                  name="reply"
+                                  placeholder="tulis balasan"
                                   onChange={(e) =>
-                                    inputImageHandler(e, "reply")
+                                    setInputTextReply(e.target.value)
                                   }
                                 />
+                                {thumbImageReply.length > 0 && (
+                                  <div className="flex gap-2 my-2">
+                                    {thumbImageReply.map((thumb, i) => (
+                                      <div
+                                        key={i}
+                                        className={`relative ${styles["img-wrapper"]}`}
+                                      >
+                                        <img
+                                          className="w-36 h-20 object-cover"
+                                          src={thumb}
+                                          alt={`Thumbnail ${i + 1}`}
+                                        />
+
+                                        {typeof filesReply[i].progress ===
+                                          "number" && (
+                                          <div className="h-[6px] w-full border rounded overflow-hidden mt-2">
+                                            <div
+                                              className="h-full bg-blue-dark transition-all duration-150"
+                                              style={{
+                                                width: `${filesReply[i].progress}%`,
+                                              }}
+                                            ></div>
+                                          </div>
+                                        )}
+
+                                        <button
+                                          className={`absolute top-0 right-0 p-1 bg-white text-red-500 rounded-full opacity-0`}
+                                          onClick={() =>
+                                            removeImgHandler(
+                                              i,
+                                              "reply",
+                                              filesReply,
+                                              thumbImageReply
+                                            )
+                                          }
+                                        >
+                                          <XCircleIcon className="h-8 w-8" />
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+
+                                <div className="flex justify-end items-center gap-4">
+                                  <div className="file-input">
+                                    <label
+                                      htmlFor="file-upload-reply"
+                                      className="file-label"
+                                    >
+                                      <CameraIcon
+                                        className="h-6 w-6 text-gray"
+                                        onClick={(e) =>
+                                          inputImageHandler(e, "reply")
+                                        }
+                                      />
+                                    </label>
+                                    <input
+                                      id="file-upload-reply"
+                                      name="file-upload-reply"
+                                      type="file"
+                                      accept="image/png, image/jpeg, image/jpg"
+                                      style={{ display: "none" }}
+                                      onChange={(e) =>
+                                        inputImageHandler(e, "reply")
+                                      }
+                                    />
+                                  </div>
+                                  <Button
+                                    type="submit"
+                                    style="solid"
+                                    loading={loadingBtn}
+                                    disabled={
+                                      loadingBtn || inputTextReply === ""
+                                    }
+                                  >
+                                    Kirim Balasan
+                                  </Button>
+                                </div>
                               </div>
-                              <Button
-                                type="submit"
-                                style="solid"
-                                loading={loadingBtn}
-                                disabled={loadingBtn || inputTextReply === ""}
-                              >
-                                Kirim Balasan
-                              </Button>
-                            </div>
-                          </div>
-                        </form>
+                            </form>
+                          )}
+                        </>
+                      ) : (
+                        <div>
+                          <Button
+                            type="submit"
+                            style="solid"
+                            loading={false}
+                            onClick={() => displayRepliesShowHandler(item._id)}
+                          >
+                            Lihat Balasan
+                          </Button>
+                        </div>
                       )}
                     </div>
                   </div>
