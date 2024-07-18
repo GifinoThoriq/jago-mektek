@@ -13,7 +13,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const storedProfile =
       typeof window !== "undefined"
         ? window.sessionStorage.getItem("profile")
-        : null;
+        : "";
 
     return storedProfile ? JSON.parse(storedProfile) : null;
   });
@@ -26,7 +26,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (profile) {
       window.sessionStorage.setItem("profile", JSON.stringify(profile));
     } else {
-      window.sessionStorage.removeItem("profile");
+      window.sessionStorage.setItem("profile", "");
     }
   }, [profile]);
 

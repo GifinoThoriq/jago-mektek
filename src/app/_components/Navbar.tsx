@@ -207,12 +207,12 @@ export default function Navbar() {
     const user =
       typeof window !== "undefined"
         ? window.sessionStorage.getItem("profile")
-        : null;
+        : "";
 
     if (status === "unauthenticated") {
       typeof window !== "undefined"
         ? window.sessionStorage.removeItem("profile")
-        : null;
+        : "";
     }
 
     if (user === "" && status === "authenticated") {
