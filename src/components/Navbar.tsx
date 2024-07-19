@@ -14,6 +14,7 @@ import { ArrowLeftOnRectangleIcon } from "@heroicons/react/20/solid";
 interface NavbarComponent {
   pathname: string;
   username: string | undefined;
+  role: string | undefined;
   status: string;
   onClick: () => void;
 }
@@ -34,12 +35,18 @@ const nav = [
     title: "Tanya Jawab",
     pathname: "/tanya-jawab",
   },
+  {
+    id: 4,
+    title: "Portal Guru",
+    pathname: "/admin",
+  },
 ];
 
 const MobileNavbar: FC<NavbarComponent> = ({
   pathname,
   username,
   status,
+  role,
   onClick,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -64,17 +71,23 @@ const MobileNavbar: FC<NavbarComponent> = ({
           onClick={() => setIsOpen(!isOpen)}
         />
         <ul className="flex flex-col pt-12 items-center gap-3.5">
-          {nav.map((n) => (
-            <li
-              key={n.id}
-              className="text-sm text-gray font-bold"
-              onClick={() => {
-                window.location.href = n.pathname;
-              }}
-            >
-              {n.title}
-            </li>
-          ))}
+          {nav
+            .filter((n) => {
+              if (!(role === "guru" || role === undefined) && n.id === 4)
+                return false;
+              return true;
+            })
+            .map((n) => (
+              <li
+                key={n.id}
+                className="text-sm text-gray font-bold"
+                onClick={() => {
+                  window.location.href = n.pathname;
+                }}
+              >
+                {n.title}
+              </li>
+            ))}
         </ul>
         <div
           className={`flex gap-3 flex-col px-8 ${
@@ -138,24 +151,31 @@ const DesktopNavbar: FC<NavbarComponent> = ({
   pathname,
   username,
   status,
+  role,
   onClick,
 }) => {
   return (
     <div className="w-full flex flex-row ml-8">
       <ul className="flex items-center gap-3.5">
-        {nav.map((n) => (
-          <li
-            key={n.id}
-            className={`text-sm cursor-pointer ${
-              pathname === n.pathname ? "text-blue-dark" : "text-gray "
-            } font-bold`}
-            onClick={() => {
-              window.location.href = n.pathname;
-            }}
-          >
-            {n.title}
-          </li>
-        ))}
+        {nav
+          .filter((n) => {
+            if (!(role === "guru" || role === undefined) && n.id === 4)
+              return false;
+            return true;
+          })
+          .map((n) => (
+            <li
+              key={n.id}
+              className={`text-sm cursor-pointer ${
+                pathname === n.pathname ? "text-blue-dark" : "text-gray "
+              } font-bold`}
+              onClick={() => {
+                window.location.href = n.pathname;
+              }}
+            >
+              {n.title}
+            </li>
+          ))}
       </ul>
 
       <div className="flex gap-3 ml-auto">
@@ -217,7 +237,7 @@ export default function Navbar() {
 
     if (user === "" && status === "authenticated") {
       console.log("masuk");
-      signOut({ callbackUrl: "/" });
+      signOut({ callbackUrl: "/", redirect: true });
     }
   }, [status]);
 
@@ -270,6 +290,7 @@ export default function Navbar() {
                   pathname={pathname}
                   username={ctx?.profile?.username}
                   status={status}
+                  role={ctx?.profile?.role}
                   onClick={() => {
                     signOut({ callbackUrl: "/" });
                   }}
@@ -278,6 +299,7 @@ export default function Navbar() {
                 <MobileNavbar
                   pathname={pathname}
                   username={ctx?.profile?.username}
+                  role={ctx?.profile?.role}
                   status={status}
                   onClick={() => {
                     signOut({ callbackUrl: "/" });
