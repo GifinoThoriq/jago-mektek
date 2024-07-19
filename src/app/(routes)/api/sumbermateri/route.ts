@@ -1,4 +1,4 @@
-import SumberMateri from "@/app/_models/SumberMateri";
+import SumberMateri from "@/models/SumberMateri";
 import connectDb from "@/lib/connect-db";
 import { NextResponse } from "next/server";
 

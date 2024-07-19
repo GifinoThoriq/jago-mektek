@@ -1,5 +1,5 @@
 import connectDb from "@/lib/connect-db";
-import UserResult from "@/app/_models/UserResult";
+import UserResult from "@/models/UserResult";
 import { NextResponse } from "next/server";
 
 export const POST = async (
