@@ -1,4 +1,4 @@
-import { TanyaJawabTypes } from "../types/Types";
+import { TanyaJawabTypes } from "@/types/Types";
 import mongoose from "mongoose";
 
 const TanyaJawabSchema = new mongoose.Schema<TanyaJawabTypes>({

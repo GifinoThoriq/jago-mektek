@@ -1,4 +1,4 @@
-import { MateriTypes } from "../_types/Types";
+import { MateriTypes } from "@/types/Types";
 import mongoose from "mongoose";
 
 const MateriSchema = new mongoose.Schema<MateriTypes>({

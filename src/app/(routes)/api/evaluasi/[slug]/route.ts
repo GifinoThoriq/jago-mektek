@@ -1,4 +1,4 @@
-import Evaluasi from "@/app/_models/Evaluasi";
+import Evaluasi from "@/models/Evaluasi";
 import connectDb from "@/lib/connect-db";
 import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";

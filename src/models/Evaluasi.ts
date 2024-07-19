@@ -1,4 +1,4 @@
-import { EvaluasiTypes } from "../_types/Types";
+import { EvaluasiTypes } from "@/types/Types";
 import mongoose from "mongoose";
 
 const EvaluasiSchema = new mongoose.Schema<EvaluasiTypes>({

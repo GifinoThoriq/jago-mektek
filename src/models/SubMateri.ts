@@ -1,4 +1,4 @@
-import { SubMateriTypes } from "../_types/Types";
+import { SubMateriTypes } from "@/types/Types";
 import mongoose from "mongoose";
 
 const SubMateriSchema = new mongoose.Schema<SubMateriTypes>({

@@ -1,5 +1,5 @@
 import connectDb from "@/lib/connect-db";
-import SubMateri from "@/app/_models/SubMateri";
+import SubMateri from "@/models/SubMateri";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {

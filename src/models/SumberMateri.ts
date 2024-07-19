@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-import { SumberMateriTypes } from "../_types/Types";
+import { SumberMateriTypes } from "@/types/Types";
 
 const SumberMateriSchema = new mongoose.Schema<SumberMateriTypes>({
     title: String,

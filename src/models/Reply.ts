@@ -1,4 +1,4 @@
-import { RepliesTypes } from "../types/Types";
+import { RepliesTypes } from "@/types/Types";
 import mongoose from "mongoose";
 
 const RepliesSchema = new mongoose.Schema<RepliesTypes>({

@@ -1,4 +1,4 @@
-import Materi from "@/app/_models/Materi";
+import Materi from "@/models/Materi";
 import connectDb from "@/lib/connect-db";
 import { NextResponse } from "next/server";
 
