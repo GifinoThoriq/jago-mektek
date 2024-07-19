@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
-import { Button } from "@/app/_ui/Button";
+import { Button } from "@/ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import UserContext from "@/app/_context/UserContext";
-import Modal from "@/app/_components/Modal";
-import GetUserByName from "@/app/_lib/GetUserByName";
-import { UserClientTypes } from "@/app/_types/ClientTypes";
+import UserContext from "@/context/UserContext";
+import Modal from "@/components/Modal";
+import GetUserByName from "@/lib/GetUserByName";
+import { UserClientTypes } from "@/types/ClientTypes";
 
 export default function login() {
   const router = useRouter();

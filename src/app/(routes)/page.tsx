@@ -1,13 +1,13 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Button } from "./_ui/Button";
-import { Card } from "./_ui/Card";
+import { Button } from "../../ui/Button";
+import { Card } from "../../ui/Card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import GetMateri from "./_lib/GetMateri";
-import { MateriClientTypes } from "./_types/ClientTypes";
-import Loading from "./_components/Loading";
+import GetMateri from "../../lib/GetMateri";
+import { MateriClientTypes } from "../../types/ClientTypes";
+import Loading from "../../components/Loading";
 
 export default function Home() {
   const { status } = useSession();

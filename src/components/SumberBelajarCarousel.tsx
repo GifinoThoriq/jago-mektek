@@ -1,13 +1,13 @@
 import React from "react";
 import { EmblaOptionsType } from "embla-carousel";
-import { DotButton, useDotButton } from "../_ui/EmblaCarouselDotButton";
+import { DotButton, useDotButton } from "../ui/EmblaCarouselDotButton";
 import {
   PrevButton,
   NextButton,
   usePrevNextButtons,
-} from "../_ui/EmblaCarouseArrowButtons";
+} from "../ui/EmblaCarouseArrowButtons";
 import useEmblaCarousel from "embla-carousel-react";
-import { SumberMateriClientTypes } from "../_types/ClientTypes";
+import { SumberMateriClientTypes } from "../types/ClientTypes";
 import Image from "next/image";
 import Link from "next/link";
 

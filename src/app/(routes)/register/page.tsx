@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/app/_ui/Button";
+import { Button } from "@/ui/Button";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import Modal from "@/app/_components/Modal";
+import Modal from "@/components/Modal";
 import { useState } from "react";
 
 export default function register() {

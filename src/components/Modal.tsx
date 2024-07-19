@@ -1,5 +1,5 @@
 import React, { useState, ReactNode, FC } from "react";
-import { Button } from "../_ui/Button";
+import { Button } from "../ui/Button";
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 interface ModalType {

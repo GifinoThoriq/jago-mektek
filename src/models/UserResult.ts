@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserResultTypes } from "../_types/Types";
+import { UserResultTypes } from "@/types/Types";
 
 const UserResultSchema = new mongoose.Schema<UserResultTypes>({
   id_evaluasi: String,

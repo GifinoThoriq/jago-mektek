@@ -1,12 +1,12 @@
 "use client";
 
-import Loading from "@/app/_components/Loading";
-import GetMateri from "@/app/_lib/GetMateri";
-import GetSubMateri from "@/app/_lib/GetSubMateri";
+import Loading from "@/components/Loading";
+import GetMateri from "@/lib/GetMateri";
+import GetSubMateri from "@/lib/GetSubMateri";
 import {
   MateriClientTypes,
   SubMateriClientTypes,
-} from "@/app/_types/ClientTypes";
+} from "@/types/ClientTypes";
 import { CardHorizontal } from "@/app/_ui/CardHorizontal";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";

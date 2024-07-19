@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-import "./globals.css";
-import Navbar from "./_components/Navbar";
-import Footer from "./_components/Footer";
+import "../globals.css";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import { getServerSession } from "next-auth";
-import SessionProvider from "@/app/_lib/SessionProvider";
-import UserProvider from "./_context/UserProvider";
+import SessionProvider from "@/lib/SessionProvider";
+import UserProvider from "../../context/UserProvider";
 import { headers } from "next/headers";
-import { EdgeStoreProvider } from "./_lib/edgestore";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 import Head from "next/head";
 
 const monstserrat = Montserrat({ weight: ["400", "700"], subsets: ["latin"] });
@@ -22,6 +22,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   const session = await getServerSession();
 
   return (

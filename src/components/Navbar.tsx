@@ -2,13 +2,13 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect, FC, useContext } from "react";
-import { Button } from "../_ui/Button";
+import { Button } from "../ui/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/20/solid";
-import UserContext from "../_context/UserContext";
+import UserContext from "../context/UserContext";
 import Image from "next/image";
-import DropdownProfile from "../_ui/DropdownProfile";
+import DropdownProfile from "../ui/DropdownProfile";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/20/solid";
 
 interface NavbarComponent {

@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import Loading from "@/app/_components/Loading";
-import { SumberMateriClientTypes } from "@/app/_types/ClientTypes";
-import GetSumberMateri from "@/app/_lib/GetSumberMateri";
-import EmblaCarousel from "@/app/_components/SumberBelajarCarousel";
+import Loading from "@/components/Loading";
+import { SumberMateriClientTypes } from "@/types/ClientTypes";
+import GetSumberMateri from "@/lib/GetSumberMateri";
+import EmblaCarousel from "@/components/SumberBelajarCarousel";
 import { EmblaOptionsType } from "embla-carousel";
 
 export default function SumberBelajar() {

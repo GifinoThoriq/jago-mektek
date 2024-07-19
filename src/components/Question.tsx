@@ -1,8 +1,8 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import { Button } from "../_ui/Button";
-import { EvaluasiClientTypes, UserResultTypes } from "../_types/ClientTypes";
+import { Button } from "../ui/Button";
+import { EvaluasiClientTypes, UserResultTypes } from "../types/ClientTypes";
 import Link from "next/link";
 
 interface QuestionType {

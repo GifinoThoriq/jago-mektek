@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Button } from "./Button";
+import { Button } from "../../ui/Button";
 import Link from "next/link";
 
 interface CardComponent {

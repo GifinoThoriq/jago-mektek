@@ -1,5 +1,5 @@
-import connectDb from "@/app/_lib/connect-db";
-import TanyaJawab from "@/app/_models/TanyaJawab";
+import connectDb from "@/lib/connect-db";
+import TanyaJawab from "@/models/TanyaJawab";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {

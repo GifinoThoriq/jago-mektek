@@ -2,7 +2,7 @@
 
 import React, { useState, FC, ReactNode, useEffect } from "react";
 import UserContext from "./UserContext";
-import { UserClientTypes } from "../_types/ClientTypes";
+import { UserClientTypes } from "../types/ClientTypes";
 
 interface UserProviderProps {
   children: ReactNode;

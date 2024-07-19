@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { UserClientTypes } from "../_types/ClientTypes";
+import { UserClientTypes } from "../types/ClientTypes";
 
 interface UserContextType {
   profile: UserClientTypes | null;

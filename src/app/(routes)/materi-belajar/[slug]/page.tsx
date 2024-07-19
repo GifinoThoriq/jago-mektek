@@ -4,21 +4,21 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import GetSubMateri from "@/app/_lib/GetSubMateri";
-import { CardHorizontal } from "@/app/_ui/CardHorizontal";
+import GetSubMateri from "@/lib/GetSubMateri";
+import { CardHorizontal } from "@/ui/CardHorizontal";
 import {
   SubMateriClientTypes,
   EvaluasiClientTypes,
   UserClientTypes,
   UserResultTypes,
-} from "@/app/_types/ClientTypes";
-import Loading from "@/app/_components/Loading";
-import GetEvaluasi from "@/app/_lib/GetEvaluasi";
-import Question from "@/app/_components/Question";
-import GetUserByName from "@/app/_lib/GetUserByName";
-import UserContext from "@/app/_context/UserContext";
-import QuestionAnswered from "@/app/_components/QuestionAnswered";
-import { Button } from "@/app/_ui/Button";
+} from "@/types/ClientTypes";
+import Loading from "@/components/Loading";
+import GetEvaluasi from "@/lib/GetEvaluasi";
+import Question from "@/components/Question";
+import GetUserByName from "@/lib/GetUserByName";
+import UserContext from "@/context/UserContext";
+import QuestionAnswered from "@/components/QuestionAnswered";
+import { Button } from "@/ui/Button";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const { status } = useSession();
