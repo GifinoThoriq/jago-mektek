@@ -60,11 +60,13 @@ const MobileNavbar: FC<NavbarComponent> = ({
         className={` ${
           isOpen ? "bg-[rgba(0,0,0,0.6)] block " : "bg-[rgba(0,0,0,0)] hidden"
         } fixed top-0 right-0 w-full h-full transition-all`}
+        style={{ zIndex: 9999 }}
       ></div>
       <div
         className={` ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        }  w-64 fixed right-0 top-0 h-full flex flex-col bg-white transition-transform delay-100`}
+        }  w-72 fixed right-0 top-0 h-full flex flex-col bg-white transition-transform delay-100`}
+        style={{ zIndex: 9999 }}
       >
         <XMarkIcon
           className="h-6 w-6 self-end mr-2 mt-2"

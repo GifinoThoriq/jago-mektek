@@ -144,7 +144,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 className="bg-cover bg-center flex items-center justify-center h-[30vh]"
                 style={{ backgroundImage: `url(${submateriDetail.image})` }}
               >
-                <h1 className="text-3xl text-center font-bold text-white align-middle">
+                <h1 className="md:text-3xl text-2xl text-center font-bold text-white align-middle">
                   {submateriDetail.title}
                 </h1>
               </div>
@@ -153,7 +153,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <iframe
                     src={submateriDetail.materi_detail}
                     allow="autoplay"
-                    className="w-[100%] md:h-[100%]"
+                    className="w-[100%] h-[100%]"
                   ></iframe>
                 </div>
 
