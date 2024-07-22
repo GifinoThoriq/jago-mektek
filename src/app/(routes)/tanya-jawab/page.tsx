@@ -14,7 +14,6 @@ import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import UserContext from "@/context/UserContext";
 import Loading from "@/components/Loading";
-import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import { useEdgeStore } from "@/lib/edgestore";
 import {
