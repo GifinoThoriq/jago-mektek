@@ -28,16 +28,30 @@ export default function register() {
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
+    const user_id = e.target["user_id"].value;
     const username = e.target["username"].value;
     const password = e.target["password"].value;
     const school = e.target["school"].value;
     const user_class = e.target["class"].value;
 
-    const regex = /^[a-zA-Z0-9]{1,25}$/;
+    //only word and number allowed, can't be longer that 12 characters
+    const regex = /^[a-zA-Z0-9]{1,12}$/;
 
-    if (!regex.test(username)) {
+    //can't be longer than 15 characters
+    const regex2 = /^.{0,15}$/;
+
+    if (user_id === "") {
       setModal({
-        msg: "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 25 character",
+        msg: "user_id tidak boleh kosong",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
+    }
+
+    if (!regex.test(user_id)) {
+      setModal({
+        msg: "user_id hanya boleh huruf dan angka, dan tidak boleh lebih dari 12 character",
         success: false,
       });
       setModalIsOpen(true);
@@ -47,6 +61,15 @@ export default function register() {
     if (username === "") {
       setModal({
         msg: "Username tidak boleh kosong",
+        success: false,
+      });
+      setModalIsOpen(true);
+      return;
+    }
+
+    if (!regex2.test(username)) {
+      setModal({
+        msg: "user_id hanya boleh huruf dan angka, dan tidak boleh lebih dari 12 character",
         success: false,
       });
       setModalIsOpen(true);
@@ -87,6 +110,7 @@ export default function register() {
           "Content-type": "application-json",
         },
         body: JSON.stringify({
+          user_id,
           username,
           password,
           school,
@@ -149,6 +173,22 @@ export default function register() {
           <h1 className="text-3xl text-blue-dark font-bold">Register</h1>
           <form onSubmit={submitHandler}>
             <div className="grid grid-cols-3 gap-4">
+              <div className="col-span-3">
+                <label
+                  htmlFor="user_id"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  User ID
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="user_id"
+                    id="user_id"
+                    className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
               <div className="col-span-3">
                 <label
                   htmlFor="username"

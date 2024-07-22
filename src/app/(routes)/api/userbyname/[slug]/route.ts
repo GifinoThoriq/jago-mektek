@@ -12,7 +12,7 @@ export const GET = async (
     await connectDb();
 
     const users = await User.find({
-      username: slug,
+      user_id: slug,
     });
     return NextResponse.json({ users });
   } catch (error: any) {

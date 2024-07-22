@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface UserTypes extends mongoose.Document {
+  user_id: string;
   username: string;
   password: string;
   role: "siswa" | "guru";

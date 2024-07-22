@@ -33,12 +33,12 @@ export default function login() {
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
-    const username = e.target["username"].value;
+    const user_id = e.target["user_id"].value;
     const password = e.target["password"].value;
 
     const res = await signIn("credentials", {
       redirect: false,
-      username,
+      user_id,
       password,
     });
 
@@ -46,7 +46,7 @@ export default function login() {
 
     if (res?.status === 200) {
       try {
-        const response = await fetch(`/api/userbyname/${username}`);
+        const response = await fetch(`/api/userbyname/${user_id}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch documents");
@@ -92,16 +92,16 @@ export default function login() {
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-3">
                 <label
-                  htmlFor="username"
+                  htmlFor="user_id"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Username
+                  User ID
                 </label>
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="username"
-                    id="username"
+                    name="user_id"
+                    id="user_id"
                     className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
