@@ -22,9 +22,17 @@ import { Button } from "@/ui/Button";
 export default function Page({ params }: { params: { slug: string } }) {
   const { status } = useSession();
 
+  console.log(status);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      window.location.href = "/login";
+    }
+  }, [status]);
+
   const ctx = useContext(UserContext);
 
-  const username = ctx?.profile === undefined ? "" : ctx.profile!.username;
+  const username = ctx?.profile === null ? "" : ctx!.profile!.username;
 
   const submateris: SubMateriClientTypes[] = GetSubMateri();
   const evaluasis: EvaluasiClientTypes[] = GetEvaluasi(params.slug);
@@ -42,12 +50,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [isEvaluasiOpen, setIsEvaluasiOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      window.location.href = "/login";
-    }
-  }, [status]);
 
   useEffect(() => {
     const submaterisFilter = submateris.filter(
