@@ -1,22 +1,22 @@
 "use client";
 
-import { Button } from "@/app/_ui/Button";
+import { Button } from "@/ui/Button";
 import Image from "next/image";
-import GetTanyaJawab from "@/app/_lib/GetTanyaJawab";
-import GetUser from "@/app/_lib/GetUser";
-import GetReply from "@/app/_lib/GetReply";
+import GetTanyaJawab from "@/lib/GetTanyaJawab";
+import GetUser from "@/lib/GetUser";
+import GetReply from "@/lib/GetReply";
 import {
   TanyaJawabClientTypes,
   UserClientTypes,
   ReplyTypes,
-} from "@/app/_types/ClientTypes";
+} from "@/types/ClientTypes";
 import { useEffect, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
-import UserContext from "@/app/_context/UserContext";
-import Loading from "@/app/_components/Loading";
+import UserContext from "@/context/UserContext";
+import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
-import Modal from "@/app/_components/Modal";
-import { useEdgeStore } from "@/app/_lib/edgestore";
+import Modal from "@/components/Modal";
+import { useEdgeStore } from "@/lib/edgestore";
 import {
   CameraIcon,
   XCircleIcon,

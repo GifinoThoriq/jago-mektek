@@ -1,5 +1,5 @@
-import User from "@/app/_models/User";
-import connectDb from "@/app/_lib/connect-db";
+import User from "@/models/User";
+import connectDb from "@/lib/connect-db";
 import { NextResponse } from "next/server";
 
 export const GET = async (
@@ -12,7 +12,7 @@ export const GET = async (
     await connectDb();
 
     const users = await User.find({
-      username: slug,
+      user_id: slug,
     });
     return NextResponse.json({ users });
   } catch (error: any) {
