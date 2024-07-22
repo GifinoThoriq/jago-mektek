@@ -1,7 +1,6 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import GetSubMateri from "@/lib/GetSubMateri";
@@ -22,8 +21,6 @@ import { Button } from "@/ui/Button";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const { status } = useSession();
-
-  const router = useRouter();
 
   const ctx = useContext(UserContext);
 

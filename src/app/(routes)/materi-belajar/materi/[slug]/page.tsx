@@ -3,11 +3,8 @@
 import Loading from "@/components/Loading";
 import GetMateri from "@/lib/GetMateri";
 import GetSubMateri from "@/lib/GetSubMateri";
-import {
-  MateriClientTypes,
-  SubMateriClientTypes,
-} from "@/types/ClientTypes";
-import { CardHorizontal } from "@/app/_ui/CardHorizontal";
+import { MateriClientTypes, SubMateriClientTypes } from "@/types/ClientTypes";
+import { CardHorizontal } from "@/ui/CardHorizontal";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
