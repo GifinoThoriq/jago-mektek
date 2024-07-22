@@ -159,7 +159,7 @@ const DesktopNavbar: FC<NavbarComponent> = ({
       <ul className="flex items-center gap-3.5">
         {nav
           .filter((n) => {
-            if (!(role === "guru" || role === undefined) && n.id === 4)
+            if (!(role === "guru" && status === "authenticated") && n.id === 4)
               return false;
             return true;
           })
