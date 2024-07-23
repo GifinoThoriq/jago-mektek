@@ -8,8 +8,6 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import UserContext from "@/context/UserContext";
 import Modal from "@/components/Modal";
-import GetUserByName from "@/lib/GetUserByName";
-import { UserClientTypes } from "@/types/ClientTypes";
 
 export default function login() {
   const router = useRouter();
