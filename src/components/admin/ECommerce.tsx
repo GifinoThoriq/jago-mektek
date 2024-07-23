@@ -1,20 +1,10 @@
 "use client";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
-import ChartOne from "@/components/admin/Charts/ChartOne";
-import ChartTwo from "@/components/admin/Charts/ChartTwo";
-import ChatCard from "@/components/admin/ChatCard";
 import TableOne from "@/components/admin/Tables/TableOne";
 import CardDataStats from "@/components/admin/CardDataStats";
 import { UserTypes } from "@/types/Types";
 import GetUser from "@/lib/GetUser";
-
-const ChartThree = dynamic(
-  () => import("@/components/admin/Charts/ChartThree"),
-  {
-    ssr: false,
-  }
-);
 
 const ECommerce: React.FC = () => {
   const userFetch: UserTypes[] = GetUser();
@@ -51,14 +41,6 @@ const ECommerce: React.FC = () => {
       <div className="col-span-12 xl:col-span-8 mt-5">
         <TableOne />
       </div>
-      {/* 
-      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne />
-        <ChartTwo />
-        <ChartThree />
-        <MapOne />
-        <ChatCard />
-      </div> */}
     </>
   );
 };

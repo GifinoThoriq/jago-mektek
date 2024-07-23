@@ -18,11 +18,5 @@ export default function admin() {
     }
   }, []);
 
-  return (
-    <>
-      <DefaultLayout>
-        <ECommerce />
-      </DefaultLayout>
-    </>
-  );
+  return <ECommerce />;
 }
