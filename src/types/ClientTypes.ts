@@ -34,6 +34,7 @@ export interface UserClientTypes {
   role: string;
   school: string;
   user_class: string;
+  user_id: string;
 }
 
 export interface ReplyTypes {

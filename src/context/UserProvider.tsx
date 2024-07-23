@@ -19,7 +19,15 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
   });
 
   const setUser = (newProfile: UserClientTypes) => {
-    setProfile(newProfile);
+    const profile = {
+      _id: newProfile._id,
+      username: newProfile.username,
+      role: newProfile.role,
+      school: newProfile.school,
+      user_class: newProfile.user_class,
+      user_id: newProfile.user_id,
+    };
+    setProfile(profile);
   };
 
   useEffect(() => {

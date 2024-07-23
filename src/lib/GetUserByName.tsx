@@ -2,13 +2,13 @@
 
 import { useState, useEffect, FC } from "react";
 
-const GetUserByName = (username: string) => {
+const GetUserByName = (user_id: string) => {
   const [usersByName, setUsersByName] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/userbyname/${username}`);
+        const response = await fetch(`/api/userbyname/${user_id}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch documents");
@@ -22,7 +22,7 @@ const GetUserByName = (username: string) => {
     };
 
     fetchData();
-  }, [username]);
+  }, [user_id]);
 
   return usersByName;
 };
