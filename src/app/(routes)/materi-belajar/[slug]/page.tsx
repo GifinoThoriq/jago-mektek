@@ -32,7 +32,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const ctx = useContext(UserContext);
 
-  const username = ctx?.profile === null ? "" : ctx!.profile!.username;
+  const username = ctx?.profile === null ? "" : ctx!.profile!.user_id;
 
   const submateris: SubMateriClientTypes[] = GetSubMateri();
   const evaluasis: EvaluasiClientTypes[] = GetEvaluasi(params.slug);
@@ -129,8 +129,6 @@ export default function Page({ params }: { params: { slug: string } }) {
       }
     } catch (e) {}
   };
-
-  console.log(evaluasis);
 
   return (
     <>

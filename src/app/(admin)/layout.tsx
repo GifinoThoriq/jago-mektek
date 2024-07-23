@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "@/lib/SessionProvider";
 import UserProvider from "../../context/UserProvider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import DefaultLayout from "@/components/admin/DefaultLayout";
 
 const monstserrat = Montserrat({ weight: ["400", "700"], subsets: ["latin"] });
 
@@ -18,7 +19,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const session = await getServerSession();
 
   return (
@@ -26,7 +26,9 @@ export default async function RootLayout({
       <body className={monstserrat.className}>
         <UserProvider>
           <SessionProvider session={session}>
-            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+            <EdgeStoreProvider>
+              <DefaultLayout>{children}</DefaultLayout>
+            </EdgeStoreProvider>
           </SessionProvider>
         </UserProvider>
       </body>
