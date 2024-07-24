@@ -2,7 +2,7 @@ interface IUserResult {
   _id: string;
   title: string;
   user_answer: string | null;
-  correct: string | null;
+  correct: boolean | null;
   text_answer: string | null;
   text_real_answer: string | null;
 }
