@@ -4,12 +4,21 @@ import TableTwo from "@/components/admin/Tables/TableTwo";
 import { useEffect, useState } from "react";
 import { UserClientTypes } from "@/types/ClientTypes";
 
+interface IUserResult {
+  _id: string;
+  title: string;
+  user_answer: string | null;
+  correct: boolean | null;
+  text_answer: string | null;
+  text_real_answer: string | null;
+}
+
 export default function StudentDetail({
   params,
 }: {
   params: { slug: string };
 }) {
-  const [userResult, setUserResult] = useState([]);
+  const [userResult, setUserResult] = useState<IUserResult[]>([]);
   const [user, setUser] = useState<UserClientTypes[]>([]);
 
   useEffect(() => {
@@ -38,16 +47,28 @@ export default function StudentDetail({
 
         const data = await response.json();
         setUser(data.users);
+        calculateScoreHandler();
       } catch (error: any) {
         console.error("Error fetching documents:", error.message);
       }
     };
 
+    const calculateScoreHandler = () => {};
+
     fetchUserData();
     fetchData();
   }, []);
 
-  console.log(user);
+  let score = 0;
+
+  if (userResult.length > 0) {
+    const correctResult = userResult.filter((res) => res.correct !== null);
+    correctResult.forEach((res) => {
+      if (res.correct === true) {
+        score += 25;
+      }
+    });
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -62,6 +83,8 @@ export default function StudentDetail({
       <div className="col-span-12 xl:col-span-8 mt-5">
         {userResult.length > 0 && <TableTwo userResult={userResult} />}
       </div>
+
+      <div>Score Siswa: {score} / 100</div>
     </div>
   );
 }
