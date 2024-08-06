@@ -5,6 +5,7 @@ import GetMateri from "@/lib/GetMateri";
 import GetSubMateri from "@/lib/GetSubMateri";
 import { MateriClientTypes, SubMateriClientTypes } from "@/types/ClientTypes";
 import { CardHorizontal } from "@/ui/CardHorizontal";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -23,9 +24,14 @@ export default function MateriBelajarList({
   const [loading, setLoading] = useState<boolean>(true);
   const [subMateris, setSubMateris] = useState<SubMateriClientTypes[]>([]);
   const [selectedMateri, setSelectedMateri] = useState<string>("");
+  const [materiLinkEval, setMateriLinkEval] = useState<string[]>([""]);
 
   function getMateriTitle(id: string) {
     return materis.filter((m) => m._id === id).map((m) => m.title);
+  }
+
+  function getMateriLinkEvaluasi(id: string){
+    setMateriLinkEval(materis.filter((m) => m._id === id).map((m) => m.link_evaluasi));
   }
 
   function selectHandler(e: any) {
@@ -41,10 +47,10 @@ export default function MateriBelajarList({
     const subMaterisFilter = newSub.filter(
       (sub) => sub.id_materi === params.slug
     );
-
+    
+    getMateriLinkEvaluasi(params.slug);
     setSubMateris(subMaterisFilter);
 
-    console.log(subMateris);
   }, [subMaterisFetch]);
 
   useEffect(() => {
@@ -105,6 +111,13 @@ export default function MateriBelajarList({
                   id={sub._id}
                 />
               ))}
+              <div className="mt-10">
+                <span><strong>Klik link di bawah ini untuk masuk ke soal selanjutnya: </strong></span>
+                <br />
+                <Link href={materiLinkEval[0]} target="_blank">
+                  <span className="mt-2 underline text-blue-light"> Link Soal </span>
+                </Link>
+              </div>
             </div>
           )}
         </div>

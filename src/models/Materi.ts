@@ -5,6 +5,7 @@ const MateriSchema = new mongoose.Schema<MateriTypes>({
   title: String,
   description: String,
   image: String,
+  link_evaluasi: String
 });
 
 export default mongoose.models.Materis ||

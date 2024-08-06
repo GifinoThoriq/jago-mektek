@@ -13,6 +13,7 @@ export interface MateriTypes extends mongoose.Document {
   title: string;
   description: string;
   image: string;
+  link_evaluasi: string;
 }
 
 export interface SubMateriTypes extends mongoose.Document {
