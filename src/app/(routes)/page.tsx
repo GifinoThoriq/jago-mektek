@@ -133,6 +133,40 @@ export default function Home() {
               )}
             </div>
           </section>
+          
+          <section id="profile">
+            <div className="max-w-7xl mx-auto py-16 px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 pt-16 px-8">
+                <div>
+                  <Image
+                    src={"/images/profile.jpg"}
+                    width={504}
+                    height={424}
+                    alt="about"
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <hr
+                    className="mb-8 border-t-8 border-blue-light mt-8 md:mt-0"
+                    style={{ maxWidth: "30%" }}
+                  />
+                  <h2 className="text-2xl  md:text-3xl text-blue-dark font-bold mb-8 ">
+                    Salam Kenal!
+                  </h2>
+                  <h3 className="text-xl text-gray mb-8">
+                  Saya adalah mahasiswa Teknik Sipil Universitas Negeri Malang yang sedang menempuh tugas akhir skripsi untuk mendapatkan gelar Sarjana. Saya harap website yang saya kembangkan dapat bermanfaat bagi proses belajar mengajar banyak orang.
+                  </h3>
+                  <h3 className="text-xl text-gray">
+                   Ayestha Wilga Claryan
+                  </h3>
+                  <h3 className="text-xl text-bluw mb-8">
+                   <strong>Mahasiswa</strong>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </section>
         </>
       )}
     </>

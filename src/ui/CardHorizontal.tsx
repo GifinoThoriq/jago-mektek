@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { Button } from "./Button";
 import Link from "next/link";
+import DOMPurify from 'dompurify';
 
 interface CardComponent {
   materiTitle?: string;
@@ -19,6 +20,14 @@ export const CardHorizontal: FC<CardComponent> = ({
   id,
   image,
 }) => {
+
+  const config = {
+    ALLOWED_TAGS: ['strong']
+  };
+
+  const sanitizedDescription = DOMPurify.sanitize(description!, config);
+  
+
   return (
     <div className="w-full flex flex-col sm:flex-row mt-12 h-[360px] sm:h-[280px]">
       <div
@@ -35,8 +44,7 @@ export const CardHorizontal: FC<CardComponent> = ({
           <h2 className="text-blue-dark text-base md:text-xl font-bold mb-1">
             {title}{" "}
           </h2>
-          <span className="block text-base max-w-[600px] truncate sm:whitespace-normal">
-            {description}
+          <span className="block text-base max-w-[600px] truncate sm:whitespace-normal"  dangerouslySetInnerHTML={{ __html: sanitizedDescription }}>
           </span>
         </div>
         <div className="mt-4 sm:mt-0">

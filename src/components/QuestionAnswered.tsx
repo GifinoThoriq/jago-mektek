@@ -128,7 +128,7 @@ const QuestionAnswered: FC<QuestionAnsweredType> = ({
           Jawaban Terkirim
         </Button>
       </div>
-      <div className="mt-2">
+      {/* <div className="mt-2">
         <span>Klik link di bawah ini untuk masuk ke soal selanjutnya: </span>
         <br />
         {evaluasis.map((ev, index) => (
@@ -136,7 +136,7 @@ const QuestionAnswered: FC<QuestionAnsweredType> = ({
             <span className="mt-2 underline text-blue-light"> Link Soal </span>
           </Link>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

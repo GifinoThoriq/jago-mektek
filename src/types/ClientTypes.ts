@@ -3,6 +3,7 @@ export interface MateriClientTypes {
   title: string;
   description: string;
   image: string;
+  link_evaluasi: string;
 }
 
 export interface SubMateriClientTypes {
