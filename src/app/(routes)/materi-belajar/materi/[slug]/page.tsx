@@ -111,7 +111,7 @@ export default function MateriBelajarList({
                   id={sub._id}
                 />
               ))}
-              <div className="mt-10">
+              <div className="mt-10 border rounded p-8 border-blue-light">
                 <span><strong>Klik link di bawah ini untuk masuk ke soal selanjutnya: </strong></span>
                 <br />
                 <Link href={materiLinkEval[0]} target="_blank">
