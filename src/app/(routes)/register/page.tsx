@@ -69,7 +69,7 @@ export default function register() {
 
     if (!regex2.test(username)) {
       setModal({
-        msg: "user_id hanya boleh huruf dan angka, dan tidak boleh lebih dari 12 character",
+        msg: "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 12 character",
         success: false,
       });
       setModalIsOpen(true);
