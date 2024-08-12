@@ -28,7 +28,7 @@ export default function Home() {
 
   const mulaiHandler = () => {
     if (status === "authenticated") {
-      window.location.href = "/materi-belajar";
+      window.location.href = "/materi-belajar/materi/657164ee835b95af9d306395";
     } else {
       window.location.href = "/login";
     }
