@@ -60,7 +60,7 @@ export default function register() {
 
     if (username === "") {
       setModal({
-        msg: "Username tidak boleh kosong",
+        msg: "Nama Lengkap tidak boleh kosong",
         success: false,
       });
       setModalIsOpen(true);
@@ -69,7 +69,7 @@ export default function register() {
 
     if (!regex2.test(username)) {
       setModal({
-        msg: "username hanya boleh huruf dan angka, dan tidak boleh lebih dari 12 character",
+        msg: "Nama Lengkap hanya boleh huruf dan angka, dan tidak boleh lebih dari 12 character",
         success: false,
       });
       setModalIsOpen(true);
